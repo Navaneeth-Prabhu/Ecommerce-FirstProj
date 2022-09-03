@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">Create new Account</h2>
+                <form action="/signup" method="post" id="signup" name="signup">
+                    <div class="form-group">
+                        <label for="Password">Name</label>
+                        <input type="text" name="Name" id="" class="form-control" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email Address</label>
+                        <input type="email" name="Email" id="" class="form-control" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Phone</label>
+                        <input type="number" name="number" id="" class="form-control" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" name="Password" id="" class="form-control" placeholder="Password">
+                    </div>
+                    <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already have account ?</a>
+                    <button type="submit" class="btn btn-primary float-right">Signup</button>
+                </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <!-- <script src="/validation.js"></script> -->
+
+
+    <script>
+        $(document).ready(function () {
+    console.log("started");
+    jQuery.validator.addMethod(
+      "testUsername",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+      },
+      "Use only alphabets and undersore"
+    );
+    jQuery.validator.addMethod(
+      "testName",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+      },
+      "Use only alphabets"
+    );
+    
+    jQuery.validator.addMethod(
+      "minlength",
+      function (value, element, params) {
+        return this.optional(element) || value.trim().length >= params;
+      },
+      jQuery.validator.format("Please enter at least {0} characters.")
+    );
+    $("#signup").validate({
+      rules: {
+        Name: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        number: {
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+          number : true,
+        },
+        Email: {
+          required: true,
+          email: true,
+        },
+        Password: {
+          required: true,
+          minlength: 8,
+        },
+      },
+      submitHandler: function (form) {
+        // form.preventDefault();
+        console.log("recieved");
+        $.ajax({
+          url: "/route/signup",
+          data: $("#signup").serialize(),
+          method: "POST",
+          success: function (response) {  
+            window.location.reload();
+          },
+          error: function (err) {
+            err = jQuery.parseJSON(err.responseText);
+            console.log(err.message);
+            $("#error").text(err.message);
+          },
+        });
+      },
+    });
+  });
+    </script>

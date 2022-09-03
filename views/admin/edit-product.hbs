@@ -1,0 +1,118 @@
+
+
+
+
+</form>
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">edit Product Data</h2>
+            
+                <form action="/admin/edit-product/?id={{product._id}}" method="post" enctype="multipart/form-data">
+                
+                   <div class="form-group">
+                    <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
+                    <div class="col">
+                    <input id="" name="product_title" class="form-control" required="" type="text" value="{{product.product_title}}">
+                        
+                    </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
+                    <div class="col">                     
+                        {{!-- <textarea class="form-control" id="" name="product_description" value="{{product.product_description}}"></textarea> --}}
+                        <input id="" name="product_description" class="form-control" required="" type="text" value="{{product.product_description}}">
+                    </div>
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">STOCK</label>  
+                    <div class="col">
+                    <input id="" name="stock"  class="form-control" required="" type="text" value="{{product.stock}}">
+                        
+                    </div>
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">PRICE</label>  
+                    <div class="col">
+                    <input id="" name="price" placeholder="PRICE" class="form-control" required="" type="number" value="{{product.price}}">
+                        
+                    </div>
+                    </div>
+
+
+                 
+                    <!-- Text input-->
+                    {{!-- <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">images</label>  
+                    <div class="col">
+                    <input id="" name="img_link" placeholder="imagelink" class="form-control" required="" type="text" value="{{product.img_link}}">
+                        
+                    </div>
+                    </div> --}}
+
+                    {{!-- <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="online_date"> DATE</label>  
+                    <div class="col-md-4">
+                    <input id="online_date" name="online_date" placeholder="ONLINE DATE" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div> --}}
+
+                    <!-- Text input-->
+                    {{!-- <div class="form-group">
+                    <label class="col-md-4 control-label" for="author">AUTHOR</label>  
+                    <div class="col-md-4">
+                    <input id="author" name="author" placeholder="AUTHOR" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div> --}}
+
+    
+                    <!-- File Button --> 
+                    {{!-- <div class="form-group">
+                    <label class="col-md-4 control-label" for="filebutton">main_image</label>
+                    <div class="col-md-4">
+                        <input id="filebutton" name="filebutton" class="input-file" type="file">
+                    </div>
+                    </div> --}}
+                    <!-- File Button --> 
+                    <img src="/product-images/{{product._id}}.jpg" alt="" style="height: 100px;" id="imgView">
+                    <!-- File Button --> 
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="filebutton">images</label>
+                    <div class="col-md-4">
+                        <input id="Image" name="Image" class="input-file" type="file" onchange="viewImage(event)">
+                    </div>
+                    </div>
+
+                    {{!-- <!-- Button -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
+                    <div class="col-md-4">
+                        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+                    </div>
+                    </div>
+                    <center> --}}
+                            <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
+                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin">Cancel</a></button>
+                    </center>
+                    
+                </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>

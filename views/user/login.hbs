@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">Login</h2>
+                <form action="/login" method="post">
+                {{#if loginErr}}
+                <div class="alert alert-danger" role="alert">
+                    {{loginErr}}
+                </div>
+                {{/if}}
+                {{#if blocked}}
+                <div class="alert alert-danger" role="alert">
+                    User Blocked
+                </div>
+                {{/if}}
+                {{#if creationFailed}}
+                <div class="alert alert-danger" role="alert">
+                    {{creationFailed}}
+                </div>
+                {{/if}}
+                    <div class="form-group">
+                        <label for="">Email Address</label>
+                        <input type="email" name="Email" id="" class="form-control" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" name="Password" id="" class="form-control" placeholder="Password">
+                    </div>
+                    <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/signup">Create new Account</a>
+                    <button type="submit" class="btn btn-primary float-right">Login</button>
+                </form>
+            
+        </div>
+    </div>
+</div>

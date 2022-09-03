@@ -1,0 +1,128 @@
+
+
+</fieldset>
+</form>
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">ADD Product Data</h2>
+                <form action="/admin/add-product/" method="post" enctype="multipart/form-data" >
+                   <div class="form-group">
+                    <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
+                    <div class="col-md-4">
+                    <input id="product_title" name="product_title" placeholder="TITLE" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
+                    <div class="col-md-4">                     
+                        <textarea class="form-control" id="product_description" name="product_description"></textarea>
+                    </div>
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">STOCK</label>  
+                    <div class="col-md-4">
+                    <input id="stock" name="stock" placeholder="STOCK" class="form-control input-md" required="" type="number">
+                        
+                    </div>
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">PRICE</label>  
+                    <div class="col-md-4">
+                    <input id="price" name="price" placeholder="PRICE" class="form-control input-md" required="" type="number">
+                        
+                    </div>
+                    </div>
+
+                    <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
+                    <select class="form-group form-select" aria-label="Default select example">
+                    <div class="col-md-4">
+                   <option selected>Select category</option>
+
+                   {{!-- {{#each category}} --}}
+                    <option value="1" name="Category">{{this.Category_name}}</option>
+                    <option value="1" name="Category">gelo</option>
+
+                    {{!-- {{/each}} --}}
+                    </select>
+                    </div>
+                    
+
+                    {{!-- <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">images</label>  
+                    <div class="col-md-4">
+                    <input id="img_link" name="img_link" placeholder="imagelink" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div> --}}
+
+
+                    {{!-- <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="online_date"> DATE</label>  
+                    <div class="col-md-4">
+                    <input id="online_date" name="online_date" placeholder="ONLINE DATE" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div> --}}
+
+                    <!-- Text input-->
+                    {{!-- <div class="form-group">
+                    <label class="col-md-4 control-label" for="author">AUTHOR</label>  
+                    <div class="col-md-4">
+                    <input id="author" name="author" placeholder="AUTHOR" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div> --}}
+
+    
+                    <!-- File Button --> 
+                    {{!-- <div class="form-group">
+                    <label class="col-md-4 control-label" for="filebutton">main_image</label>
+                    <div class="col-md-4">
+                        <input id="filebutton" name="filebutton" class="input-file" type="file">
+                    </div>
+                    </div> --}}
+                    <!-- File Button --> 
+                    <!-- File Button --> 
+
+                    
+                    <div class="form-group">
+                 <img src="{{product._id}}" alt="" style="height: 100px;" id="imgView">
+                    <label class="col-md-4 control-label" for="filebutton" >images</label>
+                    <div class="col-md-4">
+                        <input id="Image" name="Image" class="input-file" type="file" onchange="viewImage(event)">
+                    </div>
+                    </div>
+
+                    {{!-- <!-- Button -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
+                    <div class="col-md-4">
+                        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+                    </div>
+                    </div>
+                    <center> --}}
+                            <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
+                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin">Cancel</a></button>
+                    </center>
+                    
+                </form>
+        </div>
+    </div>
+</div>
+<script>
+    function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>

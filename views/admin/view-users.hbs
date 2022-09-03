@@ -1,0 +1,54 @@
+
+
+<section class="content">
+    <div class="container">
+        <h2>CUSTOMERS</h2>
+        <div class="row ">
+            {{!-- {{#if addUser === false}}
+                <div class="alert alert-danger" role="alert">
+                    Email Id exits! 
+                </div>
+            {{/if}} --}}
+            <a href="/admin/add-user" class="btn btn-primary ml-auto m-3">Add User</a>
+        </div>
+        <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
+            <thead>
+                <tr >
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Status</th>
+                    {{!-- <th scope="col">Password</th> --}}
+                    <th scope="col">edit</th>
+                    <th scope="col">delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>{{this.number}}</td>
+                    <td>{{this.blocked}}</td>
+                    {{!-- <td>{{this.Password}}</td> --}}
+                    {{!-- <td><a href="/admin/edit-user?id={{this._id}}" class="btn btn-primary">Edit</a></td> --}}
+
+                    {{#if this.blocked}}
+                    <td><a href="/admin/unblock-user?id={{this._id}}"><button type="button" class="btn btn-success">Unblock</button></a></td>
+                    {{else}}
+                    <td><a href="/admin/block-user?id={{this._id}}"><button type="button" class="btn btn-danger">Block</button></a></td>
+                    {{/if}}
+
+                    <td><a href="/admin/delete-user?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>

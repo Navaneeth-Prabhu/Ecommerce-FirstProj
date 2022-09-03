@@ -1,0 +1,43 @@
+<section class="content">
+    <div class="container">
+        <h2>CUSTOMERS</h2>
+        <div class="row ">
+            {{!-- {{#if addUser === false}}
+                <div class="alert alert-danger" role="alert">
+                    Email Id exits! 
+                </div>
+            {{/if}} --}}
+            <a href="/admin/add-category" class="btn btn-primary ml-auto m-3">Add Category</a>
+        </div>
+        <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
+            <thead>
+                <tr >
+                    <th scope="col">Date</th>
+                    <th scope="col">Category</th>
+                   
+                    <th scope="col">delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each category}}
+                <tr>
+                    <td>{{this.Date}}</td>
+                    <td>{{this.Category_name}}</td>
+   
+                    {{!-- <td>{{this.Password}}</td> --}}
+                    {{!-- <td><a href="/admin/edit-user?id={{this._id}}" class="btn btn-primary">Edit</a></td> --}}
+
+
+                    <td><a href="/admin/delete-category?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Category_name}}  ?')">Delete</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
