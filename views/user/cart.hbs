@@ -77,30 +77,36 @@
 
                     {{#each products}}
                     <tr>
-                      
+                     
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/add-to-cart/{{this.product._id}}" alt="..." width="70"/></a>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}.jpg" alt="..." width="70"/></a>
                           <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product.product_title}}</a></strong></div>
                         </div>
                       </th>
+                  
                       <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">${{this.price}}</p>
+                        <p class="mb-0 small">${{this.product.price}}</p>
                       </td>
                      
                       <td class="p-3 align-middle border-light">
                         <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                           <div class="quantity">
-                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)"><i class="fas fa-caret-left"></i></button>
+                            
+                            {{!-- {{#if quantity < 1}} --}}
+                            {{!-- <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)" disabled><i class="fas fa-caret-left"></i></button> --}}
+                        
+                            {{!-- {{/if}} --}}
+                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1)"><i class="fas fa-caret-left"></i></button>
                             {{!-- <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/> --}}
-                            {{this.quantity}}
-                            <button class="inc-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)"><i class="fas fa-caret-right"></i></button>
+                            <span id="{{this.product._id}}">{{this.quantity}}</span>
+                            <button class="inc-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1)"><i class="fas fa-caret-right"></i></button>
                           </div>
                         </div>
                       </td>
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">$250</p>
                       </td>
-                      <td class="p-3 align-middle border-light"><a class="reset-anchor" href="#!"><i class="fas fa-trash-alt small text-muted"></i></a></td>
+                      <td class="p-3 align-middle border-light"><button class="reset-anchor" onclick="proDelete('{{this._id}}','{{this.product._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
                     </tr>
                    {{/each}}
                   </tbody>
@@ -110,19 +116,19 @@
               <div class="bg-light px-4 py-3">
                 <div class="row align-items-center text-center">
                   <div class="col-md-6 mb-3 mb-md-0 text-md-start"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a></div>
-                  <div class="col-md-6 text-md-end"><a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
+                  <div class="col-md-6 text-md-end"><a class="btn btn-outline-dark btn-sm" href="/checkout">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
                 </div>
               </div>
             </div>
             <!-- ORDER TOTAL-->
-            {{!-- <div class="col-lg-4">
+            <div class="col-lg-4">
               <div class="card border-0 rounded-0 p-lg-4 bg-light">
                 <div class="card-body">
                   <h5 class="text-uppercase mb-4">Cart total</h5>
                   <ul class="list-unstyled mb-0">
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li>
                     <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>$250</span></li>
+                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{totalAmount}}</span></li>
                     <li>
                       <form action="#">
                         <div class="input-group mb-0">
@@ -134,7 +140,7 @@
                   </ul>
                 </div>
               </div>
-            </div> --}}
+            </div>
           </div>
         </section>
       </div>
@@ -220,18 +226,41 @@
 
 
 <script>
-  function changeQuantity(cartId,productId,count){
+  function changeQuantity(cartId,productId,userId,count){
+    let quantity = parseInt(document.getElementById(productId).innerHTML)
+    count = parseInt(count)
     $.ajax({
       url:'/change-product-quantity',
       data:{
+        user:userId,
         cart:cartId,
         product:productId,
         count:count
       },
       method:'post',
-      success:(response)=>{
-        alert(response)
+       success:(response)=>{
+        if(response.removeProduct){
+          alert("product removed from cart")
+          location.reload()
+        }
+        else{
+          document.getElementById(productId).innerHTML=quantity+count
+          document.getElementById('total').innerHTML=response.total
+        }
       }
     })
   }
+
+   function proDelete(productId){
+    $.ajax({
+      url:'/delete-product/'+productId,
+     
+      method:'post',
+      success:(response)=>{
+        alert(response)
+      }
+
+    })
+  } 
+
 </script>

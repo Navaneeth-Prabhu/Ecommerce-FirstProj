@@ -1,7 +1,8 @@
 var express = require('express');
 const userHelpers = require('../helpers/user-helpers');
 var router = express.Router();
-const productHelper = require('../helpers/product-helpers')
+const productHelper = require('../helpers/product-helpers');
+const { response } = require('express');
 console.log("here")
 var creationFailed;
 
@@ -108,8 +109,13 @@ router.get('/productDetails',function(req,res){
 router.get('/cart',async function(req,res){
   if(req.session.loggedIn){
     let products=await userHelpers.getCartProduct(req.session.user._id)
-    console.log(products);
-    res.render('user/cart',{products,user:req.session.user})
+    let totalAmount =0
+    if(products.length > 0){
+
+      totalAmount=await userHelpers.getTotalAmount(req.session.user._id)
+    }
+    // console.log(products);
+    res.render('user/cart',{products,user:req.session.user,totalAmount})
   }
   else{
     res.redirect('/login')
@@ -130,13 +136,51 @@ router.get('/add-to-cart/:id',(req,res)=>{
 
 router.post('/change-product-quantity',(req,res,next)=>{
   console.log(req.body);
-  userHelpers.changeProductQuantity(req.body).then(()=>{
-    
+  userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+    let total = await userHelpers.getTotalAmount(req.body.user)
+    res.json(response.total)
   })
 })
 
+router.post('/delete-product/id',(req,res,next)=>{
+  console.log(req.body);
+  console.log('delete-pro');
+  userHelpers.deleteCartProduct(req.params.id,req.session.user._id).then(()=>{
+
+  })
+})
+
+router.get('/add-to-wishlist/:id',(req,res)=>{
+  if(req.session.loggedIn){
+    
+    userHelpers.addToWishlist(req.params.id,req.session.user._id).then(()=>{
+      res.json({status:true})
+    })
+  }
+  // else{
+  //   res.redirect('/login')
+  // }
+})
 
 
+router.get('/checkout',async(req,res)=>{
+  if(req.session.loggedIn){
 
+    let total= await userHelpers.getTotalAmount(req.session.user._id)
+    res.render('user/checkout',{total,user:req.session.user})
+  }
+    else{
+    res.redirect('/login')
+  }
+})
+
+router.post('/checkout',async(req,res)=>{
+  let product = await userHelpers.getCartProductList(req.body.userId)
+  let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
+  userHelpers.placeOrder(req.body,product,totalPrice).then((response)=>{
+
+
+  })
+})
 
 module.exports = router;

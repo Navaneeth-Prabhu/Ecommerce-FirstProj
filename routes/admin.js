@@ -162,6 +162,8 @@ if (req.session.adminLoggedIn) {
 })
 
 //////////////////product////////////////
+
+
 router.get('/view-product',function(req,res,next){
 
   if (req.session.adminLoggedIn) {

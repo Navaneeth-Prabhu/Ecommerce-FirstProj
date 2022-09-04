@@ -43,38 +43,40 @@
                     </div>
                     </div>
 
+
+                    <!-- Category -->
+                    <div>
                     <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
                     <select class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
                    <option selected>Select category</option>
 
                    {{!-- {{#each category}} --}}
-                    <option value="1" name="Category">{{this.Category_name}}</option>
-                    <option value="1" name="Category">gelo</option>
+                    <option value="Men" name="Category">MEN</option>
+                    <option value="Women" name="Category">Women</option>
+                    </div>
+                    {{!-- {{/each}} --}}
+                    </select>
+                    </div>
 
+
+                    <!--Sub-Category -->
+                    <div>
+                    <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>  
+                    <select class="form-group form-select" aria-label="Default select example">
+                    <div class="col-md-4">
+                   <option selected>Select category</option>
+
+                   {{!-- {{#each category}} --}}
+                    <option value="Men" name="Category">MEN</option>
+                    <option value="Women" name="Category">Women</option>
+                    </div>
                     {{!-- {{/each}} --}}
                     </select>
                     </div>
                     
 
-                    {{!-- <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="stock_alert">images</label>  
-                    <div class="col-md-4">
-                    <input id="img_link" name="img_link" placeholder="imagelink" class="form-control input-md" required="" type="text">
-                        
-                    </div>
-                    </div> --}}
-
-
-                    {{!-- <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="online_date"> DATE</label>  
-                    <div class="col-md-4">
-                    <input id="online_date" name="online_date" placeholder="ONLINE DATE" class="form-control input-md" required="" type="text">
-                        
-                    </div>
-                    </div> --}}
+                
 
                     <!-- Text input-->
                     {{!-- <div class="form-group">

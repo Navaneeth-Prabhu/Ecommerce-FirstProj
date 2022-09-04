@@ -217,15 +217,168 @@ module.exports={
         })
     },
 
-    echangeProductQuantity:(details)=>{
-        details.count=parseInt(details.count)
+    changeProductQuantity:(details)=>{
+        count=parseInt(details.count)
+        quantity=parseInt(details.quantity)
+        
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CART_COLLECTION).updateOne({_id:objectId(details.cart),'products.item':objectId(details.product)},
-            {
-                $inc:{'products.$.quantity':details.count}
-            }).then((response)=>{
-                resolve()
+            if(count=-1 && quantity==1){
+                db.get().collection(collection.CART_COLLECTION)
+                .updateOne({_id:objectId(details.cart)},
+                {
+                    $pull:{products:{item:objectId(details.product)}}
+                }).then((response)=>{
+                    resolve({removeProduct:true})
+                })
+
+            }else{
+                
+                db.get().collection(collection.CART_COLLECTION)
+                .updateOne({_id:objectId(details.cart),'products.item':objectId(details.product)},
+                {
+                   $inc:{'products.$.quantity':count}
+                }).then((response)=>{
+                    resolve({status:true})
+                })
+            }
+        })
+    },
+
+    getTotalAmount:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let total=await db.get().collection(collection.CART_COLLECTION).aggregate([
+                 {
+                    $match:{user:objectId(userId)}
+                 },
+                 {
+                    $unwind:'$products'
+                 },
+                 {
+                    $project:{
+                        item:'$products.item',
+                        quantity:'$products.quantity'
+                    }
+                 },
+                 {
+                    $lookup:{
+                        from:collection.PRODUCT_COLLECTION,
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
+                    }
+                 },
+                 {
+                    $project:{
+                        item:1,
+                        quantity:1,
+                        product:{$arrayElemAt:['$product',0]}
+                    }
+                 },
+                 {
+                    $group:{
+                        _id:null,
+                        total:{$sum:{$multiply:[{$toInt:'$quantity'},{$toInt:'$product.price'}]}}
+                    }
+                 }
+
+            ]).toArray()
+            console.log(total[0].total);
+            resolve(total[0].total)
+        })
+    },
+
+    deleteCartProduct:(product)=>{    
+            return new Promise((resolve, reject) => {
+                db.get().collection(collection.CART_COLLECTION).deleteOne({_id:objectId(product.cart)}).then((response) => {
+                    console.log('deleting');
+                    resolve(response)
+                })
             })
+    },
+
+    ////// WISHLIST//////////////
+
+    addToWishlist:(productId,userId)=>{
+        let proObj={
+            item:objectId(productId),
+            quantity:1
+        }
+  
+        return new Promise(async(resolve,reject)=>{
+            let wishCart = await db.get().collection(collection.WISHLIST_COLLECTION).findOne({user:objectId(userId)})
+            if(wishCart){
+                let proExist=wishCart.products.findIndex(product=>product.item==productId)
+
+                // if(proExist!=-1){
+                //     db.get().collection(collection.WISHLIST_COLLECTION).deleteOne({user:objectId(userId),'products.item':objectId(productId)}).then(()=>{
+                //         resolve()
+                //     })
+                // }
+                // else{
+                //     db.get().collection(collection.WISHLIST_COLLECTION).insertOne({user:objectId(userId),'products.item':objectId(productId)}).then((response)=>{
+                //         resolve()
+                //     })
+                // }
+
+            }
+            else{
+                let wishObj = {
+                    user:objectId(userId),
+                    products:[proObj]
+                }
+               
+                db.get().collection(collection.WISHLIST_COLLECTION).insertOne(wishObj).then((response)=>{
+                    resolve()
+                })
+            }
+        })
+    },
+    // blockUser:(userId)=> {
+    //     return new Promise(async(resolve, reject) => {
+    //         db.get().collection(collection.USER_COLLECTION)
+    //             .updateOne(
+    //                 {_id:objectId(userId)},
+    //                 {$set: {blocked: true}}
+    //                 ).then((response) => {
+    //                 resolve()
+    //             })
+    // })
+    // },
+    // unblockUser:(userId) => {
+    //     return new Promise(async(resolve, reject) => {
+    //         db.get().collection(collection.USER_COLLECTION)
+    //             .updateOne({_id:objectId(userId)}, {
+    //                 $set: {
+    //                     blocked: false
+    //            }}).then((response) => {
+    //                 console.log(response);
+    //                   resolve()
+    //             })
+    // })
+    // },
+
+
+    placeOrder:(order,product,total)=>{
+        return new Promise((resolve,reject)=>{
+
+            let status = order.payment-method==='COD'?'placed':'pending'
+            let orderObj = {
+                delDetails:{
+                    mobile:order.mobile,
+                    address:order.address,
+                    pincode:order.pincode
+                }
+            }
+        })
+    },
+
+
+    getCartProductList:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            resolve(cart.products)
         })
     }
+
+
 }
