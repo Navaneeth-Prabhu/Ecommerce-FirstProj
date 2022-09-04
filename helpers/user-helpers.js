@@ -131,21 +131,38 @@ module.exports={
         })
     },
     addToCart:(productId,userId)=>{
+        let proObj={
+            item:objectId(productId),
+            quantity:1
+        }
         return new Promise(async(resolve,reject)=>{
             let userCart = await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
             if(userCart){
-                db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},
-                {
-                    $push:{products:objectId(productId)}
+                let proExist=userCart.products.findIndex(product=>product.item==productId)
+                console.log((proExist));
+                if(proExist!=-1){
+                    db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId),'products.item':objectId(productId)},
+                    {
+                        $inc:{'products.$.quantity':1}
+                    }).then(()=>{
+                        resolve()
+                    })
                 }
-                ).then((response)=>{
-                    resolve()
-                })
+                else{
+
+                    db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},
+                    {
+                        $push:{products:proObj}
+                    }
+                    ).then((response)=>{
+                        resolve()
+                    })
+                }
             }
             else{
                 let cartObj = {
                     user:objectId(userId),
-                    products:[objectId(productId)]
+                    products:[proObj]
                 }
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
                     resolve()
@@ -160,33 +177,55 @@ module.exports={
                     $match:{user:objectId(userId)}
                  },
                  {
+                    $unwind:'$products'
+                 },
+                 {
+                    $project:{
+                        item:'$products.item',
+                        quantity:'$products.quantity'
+                    }
+                 },
+                 {
                     $lookup:{
                         from:collection.PRODUCT_COLLECTION,
-                        let:{proList:'$products'},
-                        pipeline:[
-                            {
-                                $match:{
-                                    $expr:{
-                                        $in:['$_id',"$$proList"]
-                                    }
-                                }
-                            }
-                        ],
-                        as:'cartItems'
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
+                    }
+                 },
+                 {
+                    $project:{
+                        item:1,
+                        quantity:1,
+                        product:{$arrayElemAt:['$product',0]}
                     }
                  }
+
             ]).toArray()
-            resolve(cartItems[0].cartItems)
+            // console.log(cartItems);
+            resolve(cartItems)
         })
     },
     getCartCount:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             let count=0
             let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
-            // if(cart){
+            if(cart){
                 count=cart.products.length;
-            // }
+            }
             resolve(count)
+        })
+    },
+
+    echangeProductQuantity:(details)=>{
+        details.count=parseInt(details.count)
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CART_COLLECTION).updateOne({_id:objectId(details.cart),'products.item':objectId(details.product)},
+            {
+                $inc:{'products.$.quantity':details.count}
+            }).then((response)=>{
+                resolve()
+            })
         })
     }
 }

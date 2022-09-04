@@ -75,22 +75,25 @@
                   </thead>
                   <tbody class="border-0">
 
-                    {{#each product}}
+                    {{#each products}}
                     <tr>
+                      
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/add-to-cart/{{this._id}}" alt="..." width="70"/></a>
-                          <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product_title}}</a></strong></div>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/add-to-cart/{{this.product._id}}" alt="..." width="70"/></a>
+                          <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product.product_title}}</a></strong></div>
                         </div>
                       </th>
                       <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">$250</p>
+                        <p class="mb-0 small">${{this.price}}</p>
                       </td>
+                     
                       <td class="p-3 align-middle border-light">
                         <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                           <div class="quantity">
-                            <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                            <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/>
-                            <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)"><i class="fas fa-caret-left"></i></button>
+                            {{!-- <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/> --}}
+                            {{this.quantity}}
+                            <button class="inc-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',1)"><i class="fas fa-caret-right"></i></button>
                           </div>
                         </div>
                       </td>
@@ -215,23 +218,20 @@
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     </div>
 
-    {{!-- <section>
-        <div class="container">
-            <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Quantity</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {{#each product}}
-                <tr>
-                    <td><img src="/add-to-cart/{{this._id}}" alt=""></td>
-                    <td>{{this.product_title}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </div>
-    </section> --}}
+
+<script>
+  function changeQuantity(cartId,productId,count){
+    $.ajax({
+      url:'/change-product-quantity',
+      data:{
+        cart:cartId,
+        product:productId,
+        count:count
+      },
+      method:'post',
+      success:(response)=>{
+        alert(response)
+      }
+    })
+  }
+</script>

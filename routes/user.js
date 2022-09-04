@@ -105,18 +105,18 @@ router.get('/productDetails',function(req,res){
 
 
 
-router.get('/cart',function(req,res){
+router.get('/cart',async function(req,res){
   if(req.session.loggedIn){
-    let product=userHelpers.getCartProduct(req.session.user._id)
-    console.log(product +'heloo');
-    res.render('user/cart',{product,user:req.session.user})
+    let products=await userHelpers.getCartProduct(req.session.user._id)
+    console.log(products);
+    res.render('user/cart',{products,user:req.session.user})
   }
   else{
     res.redirect('/login')
   }
 })
 
-router.get('/add-to-cart/:id',async(req,res)=>{
+router.get('/add-to-cart/:id',(req,res)=>{
   if(req.session.loggedIn){
     console.log("api calling");
     userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
@@ -126,6 +126,13 @@ router.get('/add-to-cart/:id',async(req,res)=>{
   // else{
   //   res.redirect('/login')
   // }
+})
+
+router.post('/change-product-quantity',(req,res,next)=>{
+  console.log(req.body);
+  userHelpers.changeProductQuantity(req.body).then(()=>{
+    
+  })
 })
 
 
