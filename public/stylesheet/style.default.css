@@ -12048,9 +12048,9 @@ a.text-hover-dark:focus, a.text-hover-dark:hover {
   position: relative;
 }
 
-.headings-font-family {
+/* .headings-font-family {
   font-family: !important;
-}
+} */
 
 .no-select {
   cursor: default;

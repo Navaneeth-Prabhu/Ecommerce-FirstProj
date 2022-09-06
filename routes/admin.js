@@ -5,7 +5,7 @@ var userHelper = require('../helpers/user-helpers')
 var productHelper = require('../helpers/product-helpers')
 var categoryHelper = require('../helpers/category-helpers')
 var addUserError=require('../routes/user');
-const { query } = require('express');
+const { query, response } = require('express');
 console.log("here 2")
 
 /* GET users listing. */
@@ -208,9 +208,11 @@ router.get('/view-product',function(req,res,next){
 
   router.get('/add-product', function(req,res) {
     if(req.session.adminLoggedIn){
+      categoryHelper.getAllCategory().then((category)=>{
 
-      let category= categoryHelper.getAllCategory()
-    res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
+        res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
+      })
+      // console.log(category);
     req.session.fromAdmin = true;
     }else{
       res.redirect('/admin')
@@ -247,10 +249,10 @@ router.get('/view-product',function(req,res,next){
 
 
   router.post('/edit-product/',(req,res)=>{
-    let id= req.params.id
+    let id= req.query.id
     productHelper.updateProduct(req.query.id,req.body).then(()=>{
       res.redirect('/admin')      
-      if(req.files.Image){
+      if(req.files?.Image){
         let image=req.files.Image
         image.mv('./public/product-images/'+id+'.jpg')
       }
@@ -304,6 +306,12 @@ router.get('/view-product',function(req,res,next){
       }
     });
 
+    router.get('/view-orders',(req,res)=>{
+      userHelper.getAllUserOrders().then((order) => {
+        console.log(order);
+        res.render('admin/view-orders',{order})
+      })
+    });
 
 
 module.exports = router;

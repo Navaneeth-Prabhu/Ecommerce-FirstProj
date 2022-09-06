@@ -47,13 +47,15 @@
                     <!-- Category -->
                     <div>
                     <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
-                    <select class="form-group form-select" aria-label="Default select example">
+                    <select name="Category" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
-                   <option selected>Select category</option>
+                    <label for="catogery">Category</label><br />
+                   
 
-                   {{!-- {{#each category}} --}}
-                    <option value="Men" name="Category">MEN</option>
-                    <option value="Women" name="Category">Women</option>
+                   {{!-- {{#each category}}
+                    <option value="{{this.Category_name}}" name="Category">{{category.Category_name}}</option> --}}
+                    <option id="Men" value="Men" >MEN</option>
+                    <option id="Women" value="Women" >Women</option>
                     </div>
                     {{!-- {{/each}} --}}
                     </select>
@@ -63,17 +65,18 @@
                     <!--Sub-Category -->
                     <div>
                     <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>  
-                    <select class="form-group form-select" aria-label="Default select example">
+                    <select name="Category" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
-                   <option selected>Select category</option>
-
-                   {{!-- {{#each category}} --}}
-                    <option value="Men" name="Category">MEN</option>
-                    <option value="Women" name="Category">Women</option>
+                    <option selected>Select category</option>
+                    <label for="catogery">Category</label><br />
+                   {{#each category}}
+                    <option  >{{this.Category_name}}</option>
+                    {{/each}}
                     </div>
-                    {{!-- {{/each}} --}}
                     </select>
                     </div>
+
+                        
                     
 
                 

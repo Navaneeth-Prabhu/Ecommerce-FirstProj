@@ -48,7 +48,7 @@
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
                     <li class="breadcrumb-item"><a class="text-dark" href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-dark" href="cart.html">Cart</a></li>
+                    <li class="breadcrumb-item"><a class="text-dark" href="/cart">Cart</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Checkout</li>
                   </ol>
                 </nav>
@@ -61,11 +61,11 @@
           <h2 class="h5 text-uppercase mb-4">Billing details</h2>
           <div class="row">
             <div class="col-lg-8">
-              <form action="#">
+              <form action="/checkout" method="post" id="checkout" name="checkout">
                 <div class="row gy-3">
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
-                    <input class="form-control form-control-lg" type="text" id="firstName" placeholder="Enter your first name">
+                    <input class="form-control form-control-lg" type="text" id="Name" name="Name" placeholder="Enter your first name">
                   </div>
                   {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="lastName">Last name </label>
@@ -77,8 +77,9 @@
                   </div> --}}
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="phone">Phone number </label>
-                    <input class="form-control form-control-lg" type="tel" id="phone" placeholder="e.g. +02 245354745">
+                    <input class="form-control form-control-lg" type="tel" id="phone" name="number" placeholder="e.g. +02 245354745">
                   </div>
+                  <input type="text" name="userId" id="" value="{{user._id}}" hidden>
                   {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="company">Company name (optional) </label>
                     <input class="form-control form-control-lg" type="text" id="company" placeholder="Your company name">
@@ -86,12 +87,12 @@
                   <div class="col-lg-6 form-group">
                     <label class="form-label text-sm text-uppercase" for="country">Country</label>
                     <select class="country" id="country" data-customclass="form-control form-control-lg rounded-0">
-                      <option value>Choose your country</option>
+                      <option value>India</option>
                     </select>
                   </div>
                   <div class="col-lg-12">
                     <label class="form-label text-sm text-uppercase" for="address">Address line 1 </label>
-                    <input class="form-control form-control-lg" type="text" id="address" placeholder="House number and street name">
+                    <input class="form-control form-control-lg" type="text" id="address" name="Address" placeholder="House number and street name">
                   </div>
                   {{!-- <div class="col-lg-12">
                     <label class="form-label text-sm text-uppercase" for="addressalt">Address line 2 </label>
@@ -99,26 +100,26 @@
                   </div> --}}
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
-                    <input class="form-control form-control-lg" type="text" id="city">
+                    <input class="form-control form-control-lg" type="text" name="city" id="city">
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="state">State/County </label>
-                    <input class="form-control form-control-lg" type="text" id="state">
+                    <input class="form-control form-control-lg" type="text" name="state" id="state">
                   </div>
-                  <div class="col-lg-6">
+                  {{!-- <div class="col-lg-6">
                     <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse" data-bs-target="#alternateAddress">
                       <div class="form-check">
                         <input class="form-check-input" id="alternateAddressCheckbox" type="checkbox">
                         <label class="form-check-label" for="alternateAddressCheckbox">Alternate billing address</label>
                       </div>
                     </button>
-                  </div>
+                  </div> --}}
                   <label for="" class=" radio-inline">
                     <input type="radio" name="payment-method" value="COD" checked>COD
                   </label>
-                  <label for="" class="radio-inline">
-                    <input type="radio" name="payment-method" value="ONLINE" checked>Online Payment
-                  </label>
+                  {{!-- <label for="" class="radio-inline">
+                    <input type="radio" name="payment-method" value="ONLINE" >Online Payment
+                  </label> --}}
                   {{!-- <div class="collapse" id="alternateAddress">
                     <div class="row gy-3">
                       <div class="col-12 mt-4">
@@ -181,9 +182,9 @@
                 <div class="card-body">
                   <h5 class="text-uppercase mb-4">Your order</h5>
                   <ul class="list-unstyled mb-0">
-                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold">Red digital smartwatch</strong><span class="text-muted small">$250</span></li>
+                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$250</span></li>
                     <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold">Gray Nike running shoes</strong><span class="text-muted small">$351</span></li>
+                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$351</span></li>
                     <li class="border-bottom my-2"></li>
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>${{total}}</span></li>
                   </ul>
@@ -238,12 +239,7 @@
         </div>
       </footer> --}}
       <!-- JavaScript files-->
-      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="vendor/nouislider/nouislider.min.js"></script>
-      <script src="vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
-      <script src="js/front.js"></script>
+
       <script>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite - 
@@ -272,3 +268,16 @@
       <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     </div>
+{{!-- <script>
+  $("#checkout").submit((e)=>{
+    e.preventDefault()
+    $.ajax({
+      url:'/checkout',
+      method:post,
+      data:$('#checkout').serialize,
+      success:(response)=>{
+        alert(response)
+      }
+    })
+  })
+</script> --}}
