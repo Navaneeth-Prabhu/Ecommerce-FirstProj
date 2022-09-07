@@ -1,6 +1,9 @@
 var express = require('express');
 const userHelpers = require('../helpers/user-helpers');
 var router = express.Router();
+const jwt = require('jsonwebtoken')
+var auth = require('../helpers/jwt')
+require('dotenv').config()
 var userHelper = require('../helpers/user-helpers')
 var productHelper = require('../helpers/product-helpers')
 var categoryHelper = require('../helpers/category-helpers')
@@ -9,21 +12,19 @@ const { query, response } = require('express');
 console.log("here 2")
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/',auth.adminCookieJWTAuth, function(req, res, next) {
   // console.log(req.session.adminLoggedIn);
-  if (req.session.adminLoggedIn) {
+  
     userHelpers.getAllUsers().then((users) => {
       console.log(users);
       res.render('admin/dashboard', {admin: true,users, adminLoggedIn:req.session.adminLoggedIn});
-      req.session.edit=null
+      
     })
     console.log("here admin")
-  }else{
-    res.redirect('/admin/login');
-  }
+
 });
 
-router.get('/login', function(req,res) {
+router.get('/login',auth.adminLoggedIn, function(req,res) {
   if(req.session.adminLoggedIn){
     res.redirect('/admin')
   }else{
@@ -41,54 +42,53 @@ router.post('/login', function(req, res) {
   console.log(adminCredentials.email);
   if(req.body.Email == adminCredentials.email && req.body.Password == adminCredentials.password){
     console.log('admin logged in');
-    req.session.adminLoggedIn = true;
-    req.session.admin = req.body.Email;
-    res.redirect('/admin');
-    console.log(req.session);
+
+    const admintoken = jwt.sign(req.body,process.env.ADMIN_TOKEN_SECRET,{expiresIn:'12d'})
+      res.cookie('admintoken',admintoken,{
+        httpOnly:true
+      })
+      console.log('login success')
+      res.redirect('/admin')
+    
+
+
   }else{
     console.log("admin not logged in");
     req.session.adminLoginError="Invalid Username or Password"
-    res.redirect('/admin')
+    res.redirect('/login')
   }
 });
 
 router.get('/logout', function(req, res) {
-  // console.log('logout');
-  // console.log('logout',req.session.adminLoggedIn);
-  req.session.admin =null
-  req.session.adminLoggedIn = null
-  req.session.adminLoginError = null
-  res.redirect('/admin');
+
+
+  res.clearCookie('admintoken')
+  res.render('admin/login-admin');
 })
 
-router.get('/add-user', function(req,res) {
-  if(req.session.adminLoggedIn){
-  res.render('admin/add-user', {admin:true, adminLoggedIn:req.session.adminLoggedIn})
+router.get('/add-user',auth.adminCookieJWTAuth, function(req,res) {
+ 
+  res.render('admin/add-user')
   req.session.fromAdmin = true;
-  }else{
-    res.redirect('/admin')
-  }
+
 }); 
 
-router.post('/add-user', function(req,res) {
+router.post('/add-user',auth.adminCookieJWTAuth, function(req,res) {
   // console.log(req.body);
   // res.redirect('/admin');
   
   userHelper.addUser(req.body,(result) => {
-    res.render('admin/add-user',{admin:true, adminLoggedIn:req.session.adminLoggedIn})
+    res.render('admin/add-user',{admin:true})
   })
 });
 
-router.get('/delete-user/', function(req, res) {
-  if(req.session.adminLoggedIn){
+router.get('/delete-user/',auth.adminCookieJWTAuth, function(req, res) {
+  
   let userId=req.query.id
   // console.log(userId);
   userHelpers.deleteUser(userId).then((response) => {
     res.redirect('/admin')
   })
-  }else{
-    res.redirect('/admin')
-  }
 });
 
 // router.get('/edit-user/',async function(req, res) {
@@ -117,20 +117,18 @@ router.get('/delete-user/', function(req, res) {
 // }
 // })
 
-router.get('/block-user', (req,res) => {
-  if (req.session.adminLoggedIn) {
+router.get('/block-user',auth.adminCookieJWTAuth, (req,res) => {
+ 
     let userId=req.query.id;
   userHelper.blockUser(userId).then(() => {
     res.redirect('/admin/view-users')
   })
     // console.log("here admin")
-  }else{
-    res.redirect('/admin');
-  }
+
   
 });
 
-router.get('/unblock-user', (req,res) => {
+router.get('/unblock-user',auth.adminCookieJWTAuth, (req,res) => {
   let userId=req.query.id
   userHelper.unblockUser(userId).then(() => {
     res.redirect('/admin/view-users')
@@ -138,120 +136,105 @@ router.get('/unblock-user', (req,res) => {
 })
 
 //////admin dashboard//
-router.get('/dashboard',function(req,res){
-  if(req.session.adminLoggedIn){
+router.get('/dashboard',auth.adminCookieJWTAuth, function(req,res){
     res.render('admin/dashboard',{admin: true, adminLoggedIn:req.session.adminLoggedIn})
-  }
-  else{
-    res.redirect('/admin')
-  }
 })
-//////admin view user//
-router.get('/view-users',function(req,res){
 
-if (req.session.adminLoggedIn) {
+//////admin view user//
+router.get('/view-users',auth.adminCookieJWTAuth, function(req,res){
+
+
   userHelper.getAllUsers().then((users) => {
     // console.log(users);
     res.render('admin/view-users', {admin: true,users, adminLoggedIn:req.session.adminLoggedIn});
     req.session.edit=null
   })
   console.log("here admin")
-}else{
-  res.redirect('/admin');
-}
 })
 
 //////////////////product////////////////
 
 
-router.get('/view-product',function(req,res,next){
+router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
-  if (req.session.adminLoggedIn) {
+
     productHelper.getAllProducts().then((product) => {
       console.log(product);
       res.render('admin/view-product', {admin: true,product, adminLoggedIn:req.session.adminLoggedIn});
       req.session.edit=null
     })
-    // console.log("here admin")
-  }else{
-    res.redirect('/admin');
-  }
+
   })
   
 
 
 
-  router.post('/add-product', function(req,res) {
-    if(req.session.adminLoggedIn){
-      // console.log(req.body);
-      // console.log(req.files.Image);
+  router.post('/add-product',auth.adminCookieJWTAuth, function(req,res) {
+
       
-      productHelper.addProduct(req.body,(id) => {
-        let image=req.files.Image
-        console.log(id)
-        image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
-          if(!err){
-            res.render("admin/add-product")
-          }else{
-            console.log(err)
-          }
-        })
-   
+    productHelper.addProduct(req.body,(id) => {
+    let image=req.files.Image
+    console.log(id)
+    image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
+    if(!err){
+      res.render("admin/add-product")
+      }else{
+      console.log(err)
+      }
       })
-      res.redirect('/admin/add-product')
-    }
-    else{
-      res.redirect('/admin')
-    }
+   
+    })
+    res.redirect('/admin/add-product')
+
   });
   
 
-  router.get('/add-product', function(req,res) {
-    if(req.session.adminLoggedIn){
+  router.get('/add-product',auth.adminCookieJWTAuth, function(req,res) {
+
       categoryHelper.getAllCategory().then((category)=>{
 
         res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
       })
       // console.log(category);
     req.session.fromAdmin = true;
-    }else{
-      res.redirect('/admin')
-    }
+
   });
   
   
 
-  router.get('/delete-product/', function(req, res) {
-    if(req.session.adminLoggedIn){
+  router.get('/delete-product/',auth.adminCookieJWTAuth, function(req, res) {
+
     let userId=req.query.id
     // console.log(userId);
     productHelper.deleteProduct(userId).then((response) => {
       res.redirect('/admin/view-product')
     })
-    }else{
-      res.redirect('/admin')
-    }
+
   });
 
 
 
 
-  router.get('/edit-product',async(req,res)=>{
-    if(req.session.adminLoggedIn){
-      console.log("get il ethi")
+  router.get('/edit-product/',auth.adminCookieJWTAuth, async(req,res)=>{
+    
+      // let category = categoryHelper.getAllCategory(req.query.id)
+      // console.log("get il ethi")
       let product=await productHelper.getProductDetails(req.query.id)
-      res.render('admin/edit-product',{product,admin:true,adminLoggedIn:req.session.adminLoggedIn})
-    }
-    else{
-      res.redirect("/admin/view-product")
-    }
+      
+      categoryHelper.getAllCategory().then((category)=>{
+        
+        res.render('admin/edit-product',{product,admin:true,adminLoggedIn:req.session.adminLoggedIn,category})
+        // res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
+      })
+
   })
 
 
-  router.post('/edit-product/',(req,res)=>{
+  router.post('/edit-product/',auth.adminCookieJWTAuth ,(req,res)=>{
     let id= req.query.id
     productHelper.updateProduct(req.query.id,req.body).then(()=>{
       res.redirect('/admin')      
+      console.log(req.body);
       if(req.files?.Image){
         let image=req.files.Image
         image.mv('./public/product-images/'+id+'.jpg')
@@ -262,16 +245,14 @@ router.get('/view-product',function(req,res,next){
 
   ///////////////////////category///////////////
 
-  router.get('/add-category', function(req,res) {
-    if(req.session.adminLoggedIn){
+  router.get('/add-category',auth.adminCookieJWTAuth, function(req,res) {
+
     res.render('admin/add-category', {admin:true, adminLoggedIn:req.session.adminLoggedIn})
     req.session.fromAdmin = true;
-    }else{
-      res.redirect('/admin')
-    }
+
   }); 
   
-  router.post('/add-category', function(req,res) {
+  router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
     // console.log(req.body);
     // res.redirect('/admin');
     
@@ -280,36 +261,32 @@ router.get('/view-product',function(req,res,next){
     })
   });
 
-  router.get('/view-category',function(req,res,next){
+  router.get('/view-category',auth.adminCookieJWTAuth,function(req,res,next){
 
-    if (req.session.adminLoggedIn) {
+
       categoryHelper.getAllCategory().then((category) => {
         console.log(category);
         res.render('admin/view-category', {admin: true,category, adminLoggedIn:req.session.adminLoggedIn});
         req.session.edit=null
       })
       // console.log("here admin")
-    }else{
-      res.redirect('/admin');
-    }
+
     })
 
-    router.get('/delete-category/', function(req, res) {
-      if(req.session.adminLoggedIn){
+    router.get('/delete-category/',auth.adminCookieJWTAuth, function(req, res) {
+
       let catId=req.query.id
       // console.log(userId);
       categoryHelper.deleteCategory(catId).then((response) => {
         res.redirect('/admin/view-category')
       })
-      }else{
-        res.redirect('/admin')
-      }
+
     });
 
-    router.get('/view-orders',(req,res)=>{
+    router.get('/view-orders',auth.adminCookieJWTAuth,(req,res)=>{
       userHelper.getAllUserOrders().then((order) => {
         console.log(order);
-        res.render('admin/view-orders',{order})
+        res.render('admin/view-orders',{admin:true,order})
       })
     });
 

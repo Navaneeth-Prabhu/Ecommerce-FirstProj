@@ -90,10 +90,14 @@ module.exports={
                 product_title:productDetails.product_title,
                 product_description:productDetails.product_description,
                 stock:productDetails.stock,
-                price:productDetails.price
+                price:productDetails.price,
+                Category:productDetails.Category,
+                SubCategory:productDetails.SubCategory
                 // lastEdit:productDetails.today
             }
         
+
+
         }).then((response)=>{
             resolve()
         })

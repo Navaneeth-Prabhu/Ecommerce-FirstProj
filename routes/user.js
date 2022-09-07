@@ -3,10 +3,12 @@ const userHelpers = require('../helpers/user-helpers');
 var router = express.Router();
 const productHelper = require('../helpers/product-helpers');
 const { response } = require('express');
-const accountSID = 'AC0b8ce160cfc5aa57a39fa966e75e4d68';
-const awthToken ='86b67fbf32313a4ee29eaebe164d5006';
-const serviceID='VA5d375b3a6c1220606ca35341151b2cac'
-const client = require('twilio')(accountSID,awthToken)
+
+const jwt = require('jsonwebtoken')
+var auth = require('../helpers/userAwth')
+const dotenv=require('dotenv').config()
+
+const client = require('twilio')(process.env.ACCOUNT_SID,process.env.AWTH_TOKEN)
 var creationFailed;
 
 
@@ -20,13 +22,15 @@ router.get('/',async function(req, res, next) {
   // console.log("here user")
   // res.render('index', {user});
   let cartCount =null
+  let wishCount = null
   if(req.session.user){
 
     cartCount=await userHelpers.getCartCount(req.session.user._id)
+    wishCount=await userHelpers.getWishCount(req.session.user._id)
   }
   productHelper.getAllProducts().then((product)=>{
     // console.log(product);
-    res.render('user/view-products',{user,product,cartCount})
+    res.render('user/view-products',{user,product,cartCount,wishCount})
   })
 });
 router.get('/signup', function(req,res) {
@@ -66,7 +70,7 @@ router.get('/login', function(req,res) {
 });
 
 
-
+/////////////////////// OTP /////////////login
 
 
 
@@ -80,7 +84,7 @@ router.post('/OTP-login', function(req, res) {
       console.log("getting here");
         // number = req.body.number;
         client.verify
-        .services(serviceID)
+        .services(process.env.SERVICE_ID)
         .verifications.create({
           to:`+91${req.body.number}`,
           channel:'sms'
@@ -90,18 +94,46 @@ router.post('/OTP-login', function(req, res) {
 
 
 
+// router.post('/enter-otp',(req,res)=>{
+//   const otp=req.body.otp
+//   console.log('otp',otp);
+//   client.verify
+//   .services(process.env.SERVICE_ID)
+//   .verificationChecks.create({
+//     to:`+91${req.body.number}`,
+//     code:otp
+//   }).then((response)=>{
+//     console.log(response);
+//   })
+//   res.redirect('/')
+// })
+
 router.post('/enter-otp',(req,res)=>{
   const otp=req.body.otp
   console.log('otp',otp);
   client.verify
-  .services(serviceID)
+  .services(process.env.SERVICE_ID)
   .verificationChecks.create({
     to:`+91${req.body.number}`,
     code:otp
   }).then((response)=>{
-    console.log(response);
-  })
-  res.redirect('/')
+    userHelpers.doLogin(req.body).then((response) => {
+      if(response == "blocked"){
+        req.session.userBlocked = true;
+        res.redirect('/login')
+      }else if(! response){
+        req.session.loginErr="Invalid Username or Password"
+        res.redirect('/login')
+      }else{
+        if(response.status){
+          req.session.loggedIn=true
+          req.session.user=response.user
+          res.redirect('/')
+      }
+    }
+    })
+    // console.log(response);
+})
 })
 
 
@@ -198,33 +230,96 @@ router.post('/change-product-quantity',(req,res,next)=>{
   })
 })
 
-router.get('/delete-cart-product',(req,res,next)=>{
-  console.log(req.body);
-  console.log('delete-pro');
-  userHelpers.deleteCartProduct(req.query.id,req.session.user._id).then(()=>{
-
-  })
-})
-
-router.get('/wishlist',async(req,res)=>{
+router.post('/delete-cart-product',(req,res,next)=>{
   if(req.session.loggedIn){
-   let product=await userHelpers.getWishlist(req.session.user._id)
-   res.render('user/wishlist',product)
+
+    console.log(req.body);
+    console.log('delete-pro');
+    userHelpers.deleteCartProduct(req.body).then((response)=>{
+      res.json(response)
+      // res.redirect('user/cart')
+    })
+  }else{
+    res.redirect('/login')
   }
 })
+
+////////Wsihlist//////////
+router.get('/wishlist',async(req,res)=>{
+  if(req.session.loggedIn){
+
+    let products = await userHelpers.getWishPro(req.session.user._id)
+    res.render('user/wishlist',{products,user:req.session.user})
+  }else{
+    res.redirect('/login')
+  }
+})
+
 
 
 router.get('/add-to-wishlist/:id',(req,res)=>{
   if(req.session.loggedIn){
-    
+
     userHelpers.addToWishlist(req.params.id,req.session.user._id).then(()=>{
-      res.json({status:true})
+      res.redirect('/')
+      console.log('in add to wishlist');
     })
-  }
-  else{
+  }else{
     res.redirect('/login')
   }
 })
+
+router.post('/delete-wish-product',(req,res,next)=>{
+  if(req.session.loggedIn){
+
+    console.log(req.body);
+    console.log('delete-pro');
+    userHelpers.deleteWishProduct(req.body).then((response)=>{
+      res.json(response)
+      // res.redirect('user/cart')
+    })
+  }else{
+    res.redirect('/login')
+  }
+})
+
+// router.get('/delete-cart-product/', function(req, res) {
+// if(req.session.loggedIn){
+
+//   let proId=req.query.id
+//   let userId=req.session.user._id
+//   // console.log(userId);
+//   categoryHelper.deleteCartProduct(proId,userId).then((response) => {
+//     res.redirect('user/cart')
+//   })
+// }else{
+//   redirect('/login')
+// }
+
+// });
+
+
+
+// exports.deleteProduct = (req, res) => {
+//   try {
+//     userHelper.deleteProduct(req.body).then(() => {
+//       res.json({ status: true });
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+// router.get('/delete-cart-product/',function(req, res) {
+
+//   let userId=req.query.id
+//   // console.log(userId);
+//   productHelper.deleteProduct(userId).then((response) => {
+//     res.redirect('/admin/view-product')
+//   })
+
+// });
+
+
 
 
 router.get('/checkout',async(req,res)=>{
@@ -239,23 +334,47 @@ router.get('/checkout',async(req,res)=>{
 })
 
 router.post('/checkout',async(req,res)=>{
-  console.log(req.body);
+
   let products = await userHelpers.getCartProductList(req.body.userId)
   let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
   userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    console.log(req.body);
+    res.json(response)
     res.json({status:true})
+    console.log('in checkout');
   })
+// 
+    console.log(req.body);
+
 })
 
 router.get('/orderSucessfull',(req,res)=>{
-  res.render('user/orderSucessfull')
+
+    console.log('ordered sucessfull')
+    res.render('user/orderSucessfull',{user:req.session.user})
+
 })
 
 router.get('/order-history',async(req,res)=>{
-  let orders= await userHelpers.getPlacedOrders(req.session.user._id)
-  res.render('user/order-history',{user:req.session.user,orders})
-  console.log(req.body);
+ if(req.session.loggedIn){
+      let orders= await userHelpers.getUserOrders(req.session.user._id)
+      res.render('user/order-history',{user:req.session.user,orders})
+      console.log('in order histroy');
+}
+  else{
+    res.redirect('/login')
+  }
+})
+
+router.get('/view-order-products/:id',async(req,res)=>{
+  // if(req.session.loggedIn){
+
+    let products = await userHelpers.getOrderProducts(req.params.id)
+    res.render('user/view-order-products',{user:req.session.user,products})
+    console.log(products);
+  // }
+  // else{
+  //   res.redirect('/login')
+  // }
 })
 
 module.exports = router;

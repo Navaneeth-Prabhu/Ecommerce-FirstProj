@@ -47,6 +47,71 @@
                     </div>
                     </div>
 
+                                        {{!-- <!-- Category -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
+                    <select name="Category" class="form-group form-select" aria-label="Default select example">
+                    <div class="col-md-4">
+                    <label for="catogery">Category</label>
+                   
+
+                    <option selected="{{product.Category}}"></option>
+                    <option id="Men" value="Men" >MEN</option>
+                    <option id="Women" value="Women" >Women</option>
+                    </div>
+                   
+                    </select>
+                    </div> --}}
+
+                    {{!-- <div>
+                    <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
+                    <select name="Category" class="form-group form-select" aria-label="Default select example">
+                    <div class="col-md-4">
+                    <label for="catogery">Category</label>
+                   
+
+                 
+                    <option id="Men" value="Men" >MEN</option>
+                    <option id="Women" value="Women" >Women</option>
+                    </div>
+            
+                    </select>
+                    </div> --}}
+
+                    <div class="col-md-4 control-label">
+                        <p>slecteCategory</p>
+                        <select name="Category" id="">
+                            <option value="{{product.Category}}">{{product.Category}}</option>
+                             <option id="Men" value="Men" >MEN</option>
+                            <option id="Women" value="Women" >Women</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 control-label">
+                        <p>slecteCategory</p>
+                        <select name="SubCategory" id="">
+                            <option value="{{product.SubCategory}}">{{product.SubCategory}}</option>
+                            {{#each category}}
+                            <option>{{this.Category_name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+
+                    <!--Sub-Category -->
+                    {{!-- <div>
+                    <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>  
+                    <select name="Category" class="form-group form-select" aria-label="Default select example" value="{{product.Category_name}}">
+                    <div class="col-md-4">
+                    <option selected="{{product.Category}}"></option>
+                    <label for="catogery">Category</label>
+                   {{#each category}}
+                    <option  >{{this.Category_name}}</option>
+                    {{/each}}
+                    </div>
+                    </select>
+                    </div> --}}
+
 
                  
                     <!-- Text input-->

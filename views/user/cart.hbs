@@ -69,7 +69,7 @@
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th>
+                      {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th> --}}
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                     </tr>
                   </thead>
@@ -104,9 +104,13 @@
                         </div>
                       </td>
                       <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p>
+                        {{!-- <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p> --}}
                       </td>
-                      <td class="p-3 align-middle border-light"><a href="/delete-product?id={{this._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td>
+                        {{!-- <td><a href="/user/delete-cart-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.product._id}}  ?')">Delete</a></td> --}}
+                      <td class="p-3 align-middle border-light"><button onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
+                       {{!-- <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr> --}}
+                       {{!-- <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td> --}}
+                      {{!-- <td class="p-3 align-middle border-light"><a href="/user/delete-cart-product?id={{this._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
                     </tr>
                    {{/each}}
                   </tbody>
@@ -257,8 +261,50 @@
     })
   }
 
+    function productDelete(cartId,productId,prodName,userId){
 
-   function proDelete(productId){
+    swal({
+        title: "Are you sure?",
+        text: "remove "+prodName+" from cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'/delete-cart-product',
+                data:{
+                  user:userId,
+                   product:productId,
+                   cart:cartId
+               },
+               method:'post',
+               success:(response)=>{
+                location.reload()
+                   $('#tr'+productId).remove()
+                   let msg=prodName+' removed'
+                   $('#delete-msg').html(msg)
+                   
+           
+               }
+           })
+          swal(prodName+" has removed from cart", {
+            icon: "success",
+          });
+        } else {
+          swal("deletion aborted");
+        }
+      });
+
+ 
+}
+
+
+
+
+</script>
+   {{!-- function proDelete(productId){
     $.ajax({
       url:'/delete-product/'+productId,
      
@@ -268,7 +314,4 @@
       }
 
     })
-  } 
-
-</script>
-
+  }  --}}
