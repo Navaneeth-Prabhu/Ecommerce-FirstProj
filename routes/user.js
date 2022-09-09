@@ -5,7 +5,9 @@ const productHelper = require('../helpers/product-helpers');
 const { response } = require('express');
 
 const jwt = require('jsonwebtoken')
-var auth = require('../helpers/userAwth')
+var auth = require('../helpers/userAwth');
+const { updateUser } = require('../helpers/user-helpers');
+const bannerHelpers = require('../helpers/banner-helpers');
 const dotenv=require('dotenv').config()
 
 const client = require('twilio')(process.env.ACCOUNT_SID,process.env.AWTH_TOKEN)
@@ -27,12 +29,14 @@ router.get('/',async function(req, res, next) {
 
     cartCount=await userHelpers.getCartCount(req.session.user._id)
     wishCount=await userHelpers.getWishCount(req.session.user._id)
+    // banner= await bannerHelpers.getAllBanner(req.session.user._id)
   }
   productHelper.getAllProducts().then((product)=>{
     // console.log(product);
-    res.render('user/view-products',{user,product,cartCount,wishCount})
+    res.render('user/index',{user,product,cartCount,wishCount})
   })
 });
+
 router.get('/signup', function(req,res) {
   if(req.session.loggedIn){
     res.redirect('/')
@@ -62,12 +66,33 @@ router.get('/login', function(req,res) {
   if(req.session.loggedIn){
     res.redirect('/')
   }else{
+  // console.log("here it is");
   res.render('user/login', {blocked:req.session.userBlocked,loginErr:req.session.loginErr, creationFailed:creationFailed})
+  // res.send('message')
   req.session.loginErr=""
   req.session.userBlocked=""
   creationFailed=""
   }
 });
+
+router.post('/login', function(req, res) {
+  userHelpers.doLogin(req.body).then((response) => {
+    if(response == "blocked"){
+      req.session.userBlocked = true;
+      res.redirect('/login')
+    }else if(! response){
+      req.session.loginErr="Invalid Username or Password"
+      res.redirect('/login')
+    }else{
+      if(response.status){
+        req.session.loggedIn=true
+        req.session.user=response.user
+        res.redirect('/')
+    }
+  }
+  })
+});
+
 
 
 /////////////////////// OTP /////////////login
@@ -144,24 +169,6 @@ router.post('/enter-otp',(req,res)=>{
 
 
 
-router.post('/login', function(req, res) {
-  userHelpers.doLogin(req.body).then((response) => {
-    if(response == "blocked"){
-      req.session.userBlocked = true;
-      res.redirect('/login')
-    }else if(! response){
-      req.session.loginErr="Invalid Username or Password"
-      res.redirect('/login')
-    }else{
-      if(response.status){
-        req.session.loggedIn=true
-        req.session.user=response.user
-        res.redirect('/')
-    }
-  }
-  })
-});
-
 router.get('/logout', function(req, res) {
   req.session.user=null
   req.session.loggedIn=null
@@ -170,13 +177,32 @@ router.get('/logout', function(req, res) {
   console.log("logout")
 });
 
-router.get('/product-details', function(req, res) {
+/* GET home page. */
+router.get('/view-products',async function(req, res, next) {
 
-  if(req.session.loggedIn){
-    productHelper.getProductDetails()
-  }
+  let user=req.session.user;
+// console.log(user);
+// console.log("here user")
+// res.render('index', {user});
+let cartCount =null
+let wishCount = null
+if(req.session.user){
+
+  cartCount=await userHelpers.getCartCount(req.session.user._id)
+  wishCount=await userHelpers.getWishCount(req.session.user._id)
+}
+productHelper.getAllProducts().then((product)=>{
+  // console.log(product);
+  res.render('user/view-products',{user,product,cartCount,wishCount})
 })
+});
 
+
+
+
+router.get('/view-products',function(req,res){
+
+})
 
 router.get('/productDetails',function(req,res){
 
@@ -261,7 +287,7 @@ router.get('/add-to-wishlist/:id',(req,res)=>{
   if(req.session.loggedIn){
 
     userHelpers.addToWishlist(req.params.id,req.session.user._id).then(()=>{
-      res.redirect('/')
+      res.redirect('/view-products')
       console.log('in add to wishlist');
     })
   }else{
@@ -322,11 +348,12 @@ router.post('/delete-wish-product',(req,res,next)=>{
 
 
 
-router.get('/checkout',async(req,res)=>{
+router.get('/checkout/',async(req,res)=>{
   if(req.session.loggedIn){
-
+    let userId=req.query.id
     let total= await userHelpers.getTotalAmount(req.session.user._id)
-    res.render('user/checkout',{total,user:req.session.user})
+    let userDetails= await userHelpers.getUserDetails(userId)
+    res.render('user/checkout',{total,user:req.session.user,userDetails})
   }
     else{
     res.redirect('/login')
@@ -337,8 +364,9 @@ router.post('/checkout',async(req,res)=>{
 
   let products = await userHelpers.getCartProductList(req.body.userId)
   let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
+  // let user= await userHelpers.updateUser(req.body.userId,req.body,req.session)
   userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    res.json(response)
+    // res.json(response)
     res.json({status:true})
     console.log('in checkout');
   })
@@ -347,10 +375,15 @@ router.post('/checkout',async(req,res)=>{
 
 })
 
-router.get('/orderSucessfull',(req,res)=>{
-
-    console.log('ordered sucessfull')
-    res.render('user/orderSucessfull',{user:req.session.user})
+router.get('/orderSucessfull',async(req,res)=>{
+  if(req.session.loggedIn){
+    let userId=req.query.id
+    let userDetails= await userHelpers.getUserDetails(userId)
+      // console.log('ordered sucessfull')
+      res.render('user/orderSucessfull',{user:req.session.user,userDetails})
+  }else{
+    res.redirect('/login')
+  }
 
 })
 
@@ -362,6 +395,14 @@ router.get('/order-history',async(req,res)=>{
 }
   else{
     res.redirect('/login')
+  }
+})
+
+router.get('/cancel-order/:data',async(req,res)=>{
+  if(req.session.loggedIn){
+    await userHelpers.cancelOrder(req.body,req.params.data).then((response)=>{
+      res.redirect('/order-history')
+    })
   }
 })
 

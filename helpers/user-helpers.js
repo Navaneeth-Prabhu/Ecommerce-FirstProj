@@ -116,11 +116,15 @@ module.exports={
                 db.get().collection(collection.USER_COLLECTION)
                     .updateOne({Email:userDetails.Email}, {
                         $set: {
-                            // Name: userDetails.Name,
-                            // number:userDetails.number,
-                            // // Email:userDetails.Email,
+                            Name: userDetails.Name,
+                            number:userDetails.number,
+                            // Email:userDetails.Email,
                             // Password: userDetails.Password,
-                            blocked: userDetails.blocked
+                            blocked: userDetails.blocked,
+                            address: userDetails.address,
+                            city:userDetails.city,
+                            state:userDetails.state,
+                            pin:userDetails.pin
                         }
                     }).then((response) => {
                         resolve()
@@ -462,7 +466,7 @@ module.exports={
             
 
             console.log(order,products,total);
-            let status =order['payment-method']==='COD'?'placed':pending
+            let status =order['payment-method']==='COD'?'placed':'pending'
             let orderObj={
                 delivery_details:{
                     date:order.Date,
@@ -471,6 +475,7 @@ module.exports={
                     address:order.Address,
                     city:order.city,
                     state:order.state,
+                    pin:order.pin,
                     
                 },
                 userId:objectId(order.userId),
@@ -557,7 +562,54 @@ module.exports={
             console.log(orderItems);
             resolve(orderItems)
         })
-    }
+    },
+
+    updateStatus:(body,details)=>{
+
+
+        return new Promise((resolve,reject)=>{
+
+            
+            // console.log('in updateStatus');
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
+            {
+                $set:{
+                    status:body
+                }
+                
+                
+                
+            }).then((response)=>{
+                resolve()
+                console.log(details);
+             console.log('in updateStatus');
+        })
+        })
+    },
+    
+    cancelOrder:(body,details)=>{
+
+
+        return new Promise((resolve,reject)=>{
+
+            
+            // console.log('in updateStatus');
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
+            {
+                $set:{
+                    status:'cancelled'
+                }
+                
+                
+                
+            }).then((response)=>{
+                resolve()
+                console.log(details);
+             console.log('in updateStatus');
+        })
+        })
+    },
+    
 
 
 }

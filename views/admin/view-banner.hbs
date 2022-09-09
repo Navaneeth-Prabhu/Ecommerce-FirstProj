@@ -7,29 +7,29 @@
                     Email Id exits! 
                 </div>
             {{/if}} --}}
-            <a href="/admin/add-category" class="btn btn-primary ml-auto m-3">Add Category</a>
+            <a href="/admin/add-banner" class="btn btn-primary ml-auto m-3">Add Banner</a>
         </div>
         <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
             <thead>
                 <tr >
                     <th scope="col">Date</th>
-                    <th scope="col">Category</th>
+                    <th scope="col">banner</th>
+                    <th scope="col">image</th>
                     <th scope="col">Edit</th>
                    
                     <th scope="col">delete</th>
                 </tr>
             </thead>
             <tbody>
-                {{#each category}}
+                {{#each banner}}
                 <tr>
                     <td>{{this.Date}}</td>
-                    <td>{{this.Category_name}}</td>
+                    <td>{{this.Banner_name}}</td>
    
-                    {{!-- <td>{{this.Password}}</td> --}}
-                    <td><a href="/admin/edit-category?id={{this._id}}" class="btn btn-primary">Edit</a></td>
+                    <td><img style="height:50px" src="/banner-images/{{this._id}}.jpg" alt=""></td>
 
-
-                    <td><a href="/admin/delete-category?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Category_name}}  ?')">Delete</a></td>
+                      <td><a href="/admin/edit-banner?id={{this._id}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="/admin/delete-banner?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Banner_name}}  ?')">Delete</a></td>
                 </tr>
                 {{/each}}
             </tbody>

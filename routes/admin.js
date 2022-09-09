@@ -7,8 +7,10 @@ require('dotenv').config()
 var userHelper = require('../helpers/user-helpers')
 var productHelper = require('../helpers/product-helpers')
 var categoryHelper = require('../helpers/category-helpers')
+var bannerHelpers = require('../helpers/banner-helpers')
 var addUserError=require('../routes/user');
 const { query, response } = require('express');
+
 console.log("here 2")
 
 /* GET users listing. */
@@ -233,7 +235,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
   router.post('/edit-product/',auth.adminCookieJWTAuth ,(req,res)=>{
     let id= req.query.id
     productHelper.updateProduct(req.query.id,req.body).then(()=>{
-      res.redirect('/admin')      
+      res.redirect('/admin/view-product')      
       console.log(req.body);
       if(req.files?.Image){
         let image=req.files.Image
@@ -273,6 +275,26 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
     })
 
+    router.get('/edit-category/',auth.adminCookieJWTAuth, async(req,res)=>{
+    
+      let category=await categoryHelper.getCategory(req.query.id)
+             
+        res.render('admin/edit-category',{admin:true,adminLoggedIn:req.session.adminLoggedIn,category})
+       
+      })
+
+
+
+  router.post('/edit-category/',auth.adminCookieJWTAuth ,(req,res)=>{
+    // let id= req.query.id
+    categoryHelper.updateCategory(req.query.id,req.body).then(()=>{
+      res.redirect('/view-category')      
+      console.log(req.body);
+     
+    })
+  })
+
+
     router.get('/delete-category/',auth.adminCookieJWTAuth, function(req, res) {
 
       let catId=req.query.id
@@ -283,11 +305,132 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
     });
 
+
+
+/////////////////////ORDER///////////////////////
+
+
     router.get('/view-orders',auth.adminCookieJWTAuth,(req,res)=>{
       userHelper.getAllUserOrders().then((order) => {
         console.log(order);
         res.render('admin/view-orders',{admin:true,order})
       })
+    });
+
+
+  //   router.get('/edit-status/',auth.adminCookieJWTAuth, async(req,res)=>{
+    
+  //     // let category = categoryHelper.getAllCategory(req.query.id)
+  //     console.log("get status il ethi")
+  //     let product=await userHelper.getAllUserOrders(req.query.id)
+      
+  //     categoryHelper.getAllCategory().then((category)=>{
+        
+  //       res.render('admin/edit-product',{product,admin:true,adminLoggedIn:req.session.adminLoggedIn,category})
+  //       // res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
+  //     })
+
+  // })
+
+
+  // router.get('/edit-status',auth.adminCookieJWTAuth ,async(req,res)=>{
+    
+  //  await userHelper.updateStatus(req.body).then((response)=>{
+  //     // res.redirect('/admin/view-orders')      
+  //     res.json({status:true})
+  //     res.json(response)
+     
+     
+
+  //   })
+  // })
+
+  router.post('/edit-status/:data',auth.adminCookieJWTAuth,async(req,res,next)=>{
+    
+    console.log('in edit-status');
+    console.log(req.params.data);
+    await userHelper.updateStatus(req.body.status,req.params.data).then((response)=>{
+      res.redirect('/admin/view-orders')
+
+    })
+  })
+
+  ////////////////////BANNER//////////////
+
+  router.post('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
+
+      
+    bannerHelpers.addBanner(req.body,(id) => {
+    let image=req.files.Image
+    console.log(id)
+    image.mv('./public/banner-images/'+id+'.jpg',(err,done)=>{
+    if(!err){
+      res.render("admin/add-banner")
+      }else{
+      console.log(err)
+      }
+      })
+   
+    })
+    res.redirect('/admin/add-banner')
+
+  });
+  
+
+  router.get('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
+
+      bannerHelpers.getAllBanner().then((banner)=>{
+
+        res.render('admin/add-banner', {admin:true,banner, adminLoggedIn:req.session.adminLoggedIn})
+      })
+    req.session.fromAdmin = true;
+
+  });
+
+
+  router.get('/view-banner',auth.adminCookieJWTAuth,function(req,res,next){
+
+
+      bannerHelpers.getAllBanner().then((banner) => {
+        console.log(banner);
+        res.render('admin/view-banner', {admin: true,banner, adminLoggedIn:req.session.adminLoggedIn});
+        req.session.edit=null
+      })
+      // console.log("here admin")
+
+    })
+
+    router.get('/edit-banner/',auth.adminCookieJWTAuth, async(req,res)=>{
+    
+      let banner=await bannerHelpers.getBanner(req.query.id)
+             
+        res.render('admin/edit-banner',{admin:true,adminLoggedIn:req.session.adminLoggedIn,banner})
+       
+      })
+
+
+
+      router.post('/edit-banner/',auth.adminCookieJWTAuth ,(req,res)=>{
+        let id= req.query.id
+        bannerHelpers.updateBanner(req.query.id,req.body).then(()=>{
+          res.redirect('/admin/view-banner')      
+          console.log(req.body);
+          if(req.files?.Image){
+            let image=req.files.Image
+            image.mv('./public/banner-images/'+id+'.jpg')
+          }
+        })
+      })
+
+
+    router.get('/delete-banner/',auth.adminCookieJWTAuth, function(req, res) {
+
+      let bannerId=req.query.id
+      // console.log(userId);
+      bannerHelpers.deleteBanner(bannerId).then((response) => {
+        res.redirect('/admin/view-banner')
+      })
+
     });
 
 

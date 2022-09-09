@@ -38,7 +38,24 @@ module.exports ={
             callback(data)
         })
     },
+    addProduct:(product, callback) => {
+        // var curruntDate = new Date();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        
+        today = mm + '-' + dd + '-' + yyyy;
+        product.Date=today
+        // product.lastEdit=null
+    // console.log(product);
 
+    db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
+        console.log(data);
+
+        callback(data.insertedId)
+    })
+},
 
         getAllCategory:() => {
             return new Promise (async (resolve, reject) => {
@@ -53,6 +70,25 @@ module.exports ={
                 db.get().collection(collection.CATEGORY_COLLECTION).findOne({_id:objectId(catId)}).then((category) => {
                     resolve (category)
                 })
+            })
+        },
+        updateCategory:(catId,Details)=>{
+
+           
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},
+                    {
+                $set:{
+                   
+                    Category_name:Details.Category_name
+                    // lastEdit:productDetails.today
+                }
+            
+    
+    
+            }).then((response)=>{
+                resolve()
+            })
             })
         },
         deleteCategory:(catId) => {

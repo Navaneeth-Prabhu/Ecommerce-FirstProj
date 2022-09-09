@@ -52,27 +52,6 @@ module.exports={
     },
 
     
-    // updateProduct:(productId, productDetails,session) => {
-
-
-    //     return new Promise(async(resolve, reject) => {
-          
-    //             db.get().collection(collection.PRODUCT_COLLECTION)
-    //                 .updateOne({_id:productDetails.id}, {
-    //                     $set: {
-    //                         product_title: productDetails.product_title,
-    //                         product_description:productDetails.product_description,
-                           
-    //                         stock: productDetails.stock,
-    //                         price: productDetails.price
-    //                     }
-    //                 }).then((response) => {
-    //                     resolve()
-    //                 })
-                
-    
-    //     })
-    // },
 
     updateProduct:(productId,productDetails)=>{
 
@@ -105,6 +84,7 @@ module.exports={
     },
 
     
+
 //     addCategory:(category, callback) => {
        
 //         // var today = new Date();

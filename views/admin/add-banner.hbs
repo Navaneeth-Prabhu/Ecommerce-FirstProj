@@ -1,0 +1,65 @@
+
+
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">ADD BANNER</h2>
+                <form action="/admin/add-banner/" method="post" enctype="multipart/form-data" >
+                   <div class="form-group">
+                    <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
+                    <div class="col-md-4">
+                    <input id="Banner_name" name="Banner_name" placeholder="TITLE" class="form-control input-md" required="" type="text">
+                        
+                    </div>
+                    </div>
+
+
+
+                    <!-- Category -->
+                    <div>
+                    <label class="col-md-4 control-label" for="stock_alert">Location</label>  
+                    <select name="place" class="form-group form-select" aria-label="Default select example">
+                    <div class="col-md-4">
+                    <label for="banner">place</label><br />
+                   
+
+      
+                    <option id="home" value="home1" >Home1</option>
+                    <option id="home" value="home2" >Home2</option>
+                    </div>
+                  
+                    </select>
+                    </div>
+
+
+                        
+                    
+                    <div class="form-group">
+                 <img src="{{banner._id}}" alt="" style="height: 100px;" id="imgView">
+                    <label class="col-md-4 control-label" for="filebutton" >images</label>
+                    <div class="col-md-4">
+                        <input id="Image" name="Image" class="input-file" type="file" onchange="viewImage(event)">
+                    </div>
+                    </div>
+
+                    {{!-- <!-- Button -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
+                    <div class="col-md-4">
+                        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+                    </div>
+                    </div>
+                    <center> --}}
+                            <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
+                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin">Cancel</a></button>
+                    </center>
+                    
+                </form>
+        </div>
+    </div>
+</div>
+<script>
+    function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>

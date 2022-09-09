@@ -1,52 +1,115 @@
-<h1>order placed sucessfully
-</h1>
 
-<div class="container">
 
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
-  </head>
+    <div class="container mt-5 d-flex justify-content-center">
+       <div class="card p-4 mt-3">
+          <div class="first d-flex justify-content-between align-items-center mb-3">
+            <div class="info">
+                <span class="d-block name">Thank you, {{user.Name}}</span>
+                <span class="order">Order - 4554645</span>
+                 
+            </div>
+           
+             <img src="https://i.imgur.com/NiAVkEw.png" width="40"/>
+              
 
-    <body>
-      <div class="card">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
-        <i class="checkmark">✓</i>
-      </div>
-        <h1>Success</h1> 
-        <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
-      </div>
+          </div>
+              <div class="detail">
+          <span class="d-block summery">Your order has been dispatched. we are delivering you order.</span>
+              </div>
+          <hr>
+          <div class="text">
+        <span class="d-block new mb-1" >{{user.Name}}</span>
+         </div>
+        <span class="d-block address mb-3">672 Conaway Street Bryantiville Massachusetts 02327</span>
+          <div class="  money d-flex flex-row mt-2 align-items-center">
+            <img src="https://i.imgur.com/ppwgjMU.png" width="20" />
+        
+            <span class="ml-2">Cash on Delivery</span> 
 
-</div>
+               </div>
+               <div class="last d-flex align-items-center mt-3">
+                <span class="address-line">CHANGE MY DELIVERY ADDRESS</span>
+
+               </div>
+        </div>
+    </div>
+
     <style>
-      body {
-        text-align: center;
-        padding: 40px 0;
-        background: #EBF0F5;
-      }
-        h1 {
-          color: #88B04B;
-          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-          font-weight: 900;
-          font-size: 40px;
-          margin-bottom: 10px;
-        }
-        p {
-          color: #404F5E;
-          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
-          font-size:20px;
-          margin: 0;
-        }
-      i {
-        color: #9ABC66;
-        font-size: 100px;
-        line-height: 200px;
-        margin-left:-15px;
-      }
-      .card {
-        background: white;
-        padding: 60px;
-        border-radius: 4px;
-        box-shadow: 0 2px 3px #C8D0D8;
-        display: inline-block;
-        margin: 0 auto;
-      }
+      body{
+	background-color: #eee;
+}
+.card{
+	    background-color: #fff;
+    width: 300px;
+    border: none;
+    border-radius: 16px;
+
+}
+
+.info{
+      line-height: 19px;
+}
+
+.name{
+	color: #4c40e0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.order{
+	font-size: 14px;
+	font-weight: 400;
+	color: #b7b5b5;
+}
+.detail{
+
+	line-height:19px;
+}
+
+.summery{
+
+
+	    color: #d2cfcf;
+    font-weight: 400;
+    font-size: 13px;
+}
+   
+
+
+.text{
+
+	line-height:15px;
+}
+.new{
+
+	color: #000;
+	font-size: 14px;
+	font-weight: 600;
+}
+.money{
+
+
+	font-size: 14px;
+	font-weight:500;
+}
+.address{
+
+color: #d2cfcf;
+	font-weight:500;
+	font-size:14px;
+}
+
+.last{
+
+	font-size: 10px;
+	font-weight: 500;
+
+}
+
+
+.address-line{
+	color: #4C40E0;
+    font-size: 11px;
+    font-weight: 700;
+}
     </style>

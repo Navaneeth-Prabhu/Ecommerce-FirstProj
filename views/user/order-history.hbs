@@ -67,9 +67,11 @@
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Address</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">PaymetnMethod</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Status</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Cancel</strong></th>
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th> --}}
                     </tr>
                   </thead>
@@ -105,11 +107,13 @@
                           {{!-- </div>
                         </div>
                       </td>  --}}
-                      <td class="p-3 align-middle border-light">
+                      {{!-- <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">$ {{this.totalAmount}}</p>
-                      </td>
-                     <td>{{this.paymentMethod}}</td>
+                      </td> --}}
+                      <td><p class="mb-0 small">$ {{this.totalAmount}}</p></td>
+                     {{!-- <td>{{this.paymentMethod}}</td> --}}
                      <td>{{this.status}}</td>
+                     <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Cancel</a></td>
                     </tr>
                    {{/each}}
                   </tbody>

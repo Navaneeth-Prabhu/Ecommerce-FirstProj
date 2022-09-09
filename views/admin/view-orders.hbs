@@ -28,6 +28,7 @@
                     <th scope="col">Status</th>
                     {{!-- <th scope="col">Password</th> --}}
                     <th scope="col">Edit</th>
+                    <th scope="col">Save</th>
                     {{!-- <th scope="col">Delete</th> --}}
                 </tr>
             </thead>
@@ -49,12 +50,13 @@
                     {{!-- <td><img src="/public/product-images/[object Object].jpg" alt="" style="width:10px;height: 10px; "></td> --}}
                     
                     {{!-- <td>{{this.Password}}</td> --}}
-                    {{!-- <td><div class="dropdown show">
-                    <form action="Post"></form>
+                    <td><div class="dropdown show">
+                    <form action="/admin/edit-status/{{this._id}}" method="post">
+                    {{!-- <form action="" method="post"> --}}
                     <!-- Category -->
                     <div>
-                    <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
-                    <select name="Status" class="form-group form-select" aria-label="Default select example">
+                    <label class="col-md-4 control-label" for="stock_alert">Status</label>  
+                    <select name="status" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
                     <label for="status">STATUS</label><br />
                    
@@ -63,19 +65,30 @@
                     <option id="Shipped" value="Shipped" >Shipped</option>
                     <option id="Canceled" value="Canceled" >Canceled</option>
                     </div>
-                 
+
                     </select>
+
                     </div>
+
+                    <td><button class="btn btn-success" type="submit">Save</button></td>
+                    {{!-- <p>Status</p>
+                    <select name="status" id=""></select>
+                    <option value="{{this.status}}">{{this.status}}</option>
+                    <option value="Placed">Placed</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Canceled">Canceled</option>
                     </td> --}}
-                    {{#if this.blocked}}
+                  {{!-- /  <td><a href="/admin/edit-status?id={{this._id}}"><button type="btn btn-success">Save</button></a></td> --}}
+                    {{!-- <td><button class="btn btn-success" onclick="changeStatus('{{this._id}}')">Save</button></td></td> --}}
+                    {{!-- {{#if this.blocked}}
                     <td><a href="/admin/unblock-user?id={{this._id}}"><button type="button" class="btn btn-success">Cancel</button></a></td>
                     {{else }}
                     <td><a href="/admin/block-user?id={{this._id}}"><button type="button" class="btn btn-danger">Placed</button></a></td>
-                    {{/if}}
+                    {{/if}} --}}
 
                     {{!-- <td><a href="/admin/edit-order?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td> --}}
                     {{!-- <td><a href="/admin/edit-order?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td> --}}
-                    
+                    </form>
                 </tr>
                 {{/each}}
             </tbody>
@@ -99,4 +112,46 @@ document.addEventListener("DOMContentLoaded", function(){
         });
     });
 });
+
+
+
+
+
 </script>
+{{!-- 
+  function changeStatus(orderId){
+
+    swal({
+        title: "Are you sure?",
+        text: "you want to change the status"+prodName+" from cart",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'admin/edit-status',
+                data:{
+                  order:orderId
+                  
+               },
+               method:'post',
+               success:(response)=>{
+                location.reload()
+                   $('#tr'+productId).remove()
+                   let msg=prodName+' removed'
+                   $('#delete-msg').html(msg)
+                   
+           
+               }
+           })
+          swal(prodName+" has removed from cart", {
+            icon: "success",
+          });
+        } else {
+          swal("deletion aborted");
+        }
+      });
+
+}   --}}
