@@ -1,0 +1,11 @@
+<div class="container">
+    <h1>address</h1>
+    {{#each address}}
+    <h3>{{this.name}}</h3>
+    <p>{{this.address}}</p>
+
+        <td><a href="/edit-address?id={{this._id}}" class="btn btn-primary">Edit</a></td>
+
+        <td><a href="/delete-address?id={{this._id}}" class="btn btn-danger">Delete</a></td>
+    {{/each}}
+</div>

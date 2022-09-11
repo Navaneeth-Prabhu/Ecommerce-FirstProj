@@ -92,11 +92,13 @@
                         <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                           <div class="quantity">
                             
-                            {{!-- {{#if quantity < 1}} --}}
-                            {{!-- <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)" disabled><i class="fas fa-caret-left"></i></button> --}}
-                        
+                            
+
+                            {{!-- {{#if}} --}}
+                            {{!-- <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)" disabled> <i class="fas fa-caret-left"></i></button> --}}
+                            {{!-- {{else}} --}}
+                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)" > <i class="fas fa-caret-left"></i></button>
                             {{!-- {{/if}} --}}
-                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)"><i class="fas fa-caret-left"></i></button>
                             {{!-- <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/> --}}
                             <span id="{{this.product._id}}">{{this.quantity}}</span>
                             <button class="inc-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)"><i class="fas fa-caret-right"></i></button>
@@ -144,6 +146,24 @@
                   </ul>
                 </div>
               </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+              <label class="form-check-label" for="flexRadioDefault1">
+              Default radio
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+              <label class="form-check-label" for="flexRadioDefault2">
+              Default checked radio
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+              <label class="form-check-label" for="flexRadioDefault2">
+              Default checked radio
+              </label>
+            </div>
             </div>
           </div>
         </section>

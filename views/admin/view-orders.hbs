@@ -20,14 +20,15 @@
                     <th scope="col">Date</th>
                     <th scope="col">UserName</th>
                     <th scope="col">Address</th>
-                    <th scope="col">City</th>
-                    <th scope="col">state</th>
+                    {{!-- <th scope="col">City</th> --}}
+                    {{!-- <th scope="col">state</th> --}}
+                    <th scope="col">Pin</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Price</th>
                     <th scope="col">Payment</th>
                     <th scope="col">Status</th>
                     {{!-- <th scope="col">Password</th> --}}
-                    <th scope="col">Edit</th>
+                    <th scope="col">Edit Status</th>
                     <th scope="col">Save</th>
                     {{!-- <th scope="col">Delete</th> --}}
                 </tr>
@@ -41,10 +42,11 @@
                     <td>{{this.delivery_details.name}}</td>
                     <td>{{this.delivery_details.address}}</td>
                    
-                    <td>{{this.delivery_details.city}}</td>
-                    <td>{{this.delivery_details.state}}</td>
+                    {{!-- <td>{{this.delivery_details.city}}</td> --}}
+                    {{!-- <td>{{this.delivery_details.state}}</td> --}}
+                    <td>{{this.delivery_details.pin}}</td>
                     <td>{{this.delivery_details.mobile}}</td>
-                    <td>{{this.totalAmount}}</td>
+                    <td>₹ {{this.totalAmount}}</td>
                     <td>{{this.paymentMethod}}</td>
                     <td>{{this.status}}</td>
                     {{!-- <td><img src="/public/product-images/[object Object].jpg" alt="" style="width:10px;height: 10px; "></td> --}}
@@ -55,7 +57,7 @@
                     {{!-- <form action="" method="post"> --}}
                     <!-- Category -->
                     <div>
-                    <label class="col-md-4 control-label" for="stock_alert">Status</label>  
+                    <label class="col-md-4 control-label" for="stock_alert"></label>  
                     <select name="status" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
                     <label for="status">STATUS</label><br />

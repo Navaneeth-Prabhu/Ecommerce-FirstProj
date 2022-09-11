@@ -110,7 +110,7 @@ router.get('/delete-user/',auth.adminCookieJWTAuth, function(req, res) {
 //   if(req.session.admin){
 //     console.log(req.body);
 //   let userId=req.params.id
-//   userHelpers.updateUser(userId, req.body,req.session).then(() => {
+  // userHelpers.updateUser(userId, req.body,req.session).then(() => {
 //     res.redirect('/admin/view-users')
 //     req.session.edit=null
 //   })
@@ -318,32 +318,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     });
 
 
-  //   router.get('/edit-status/',auth.adminCookieJWTAuth, async(req,res)=>{
-    
-  //     // let category = categoryHelper.getAllCategory(req.query.id)
-  //     console.log("get status il ethi")
-  //     let product=await userHelper.getAllUserOrders(req.query.id)
-      
-  //     categoryHelper.getAllCategory().then((category)=>{
-        
-  //       res.render('admin/edit-product',{product,admin:true,adminLoggedIn:req.session.adminLoggedIn,category})
-  //       // res.render('admin/add-product', {admin:true,category, adminLoggedIn:req.session.adminLoggedIn})
-  //     })
 
-  // })
-
-
-  // router.get('/edit-status',auth.adminCookieJWTAuth ,async(req,res)=>{
-    
-  //  await userHelper.updateStatus(req.body).then((response)=>{
-  //     // res.redirect('/admin/view-orders')      
-  //     res.json({status:true})
-  //     res.json(response)
-     
-     
-
-  //   })
-  // })
 
   router.post('/edit-status/:data',auth.adminCookieJWTAuth,async(req,res,next)=>{
     

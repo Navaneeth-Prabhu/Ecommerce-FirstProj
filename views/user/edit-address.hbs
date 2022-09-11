@@ -1,0 +1,51 @@
+
+<div class="container">
+
+<div id="content">
+  
+
+                <form action="/edit-address?id={{address._id}}" method="post">
+                <div class="row gy-3">
+                    {{!-- <input type="text" name="userId" id="userId" value="{{user._id}}" > --}}
+                  <div class="col-lg-6">
+                    <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
+                    <input class="form-control form-control-lg" type="text" name="name" id="firstName" value="{{address.name}}">
+                  </div>
+
+
+                  <div class="col-lg-6">
+                    <label class="form-label text-sm text-uppercase" for="phone">Phone number </label>
+                    <input class="form-control form-control-lg" type="tel" name="phone" id="phone" value="{{address.phone}}">
+                  </div>
+                  <div class="col-lg-6">
+                    <label class="form-label text-sm text-uppercase" for="company">Pincode</label>
+                    <input class="form-control form-control-lg" type="number" name="pin" id="pin" value="{{address.pin}}">
+                  </div>
+                  <div class="col-lg-6 form-group">
+                    <label class="form-label text-sm text-uppercase" for="country">Country</label>
+                    <select class="country" name="country" id="country" data-customclass="form-control form-control-lg rounded-0">
+                      <option value="{{address.country}}"></option>
+                    </select>
+                  </div>
+                  <div class="col-lg-12">
+                    <label class="form-label text-sm text-uppercase" for="address">Address line 1 </label>
+                    <input class="form-control form-control-lg" type="text" name="address" id="address" value="{{address.address}}">
+                  </div>
+
+                  <div class="col-lg-6">
+                    <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
+                    <input class="form-control form-control-lg" type="text" name="city" id="city" value="{{address.city}}">
+                  </div>
+                  <div class="col-lg-6">
+                    <label class="form-label text-sm text-uppercase" for="state">State</label>
+                    <input class="form-control form-control-lg" type="text" name="state" id="state" value="{{address.state}}">
+                  </div>
+                  {{!-- <input type="text" name="add_type" value="Primary" hidden> --}}
+                 
+                  <div class="col-lg-12 form-group">
+                    <button class="btn btn-dark" type="submit">Save</button>
+                  </div>
+                </div>
+              </form>
+    </div>
+</div>

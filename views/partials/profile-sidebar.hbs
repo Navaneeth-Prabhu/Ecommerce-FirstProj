@@ -1,82 +1,6 @@
-{{!-- <style>
-    /* The side navigation menu */
-.sidebar {
-  margin: 0;
-  padding: 0;
-  width: 200px;
-  background-color: #f1f1f1;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-/* Sidebar links */
-.sidebar a {
-  display: block;
-  color: black;
-  padding: 16px;
-  text-decoration: none;
-}
-
-/* Active/current link */
-.sidebar a.active {
-  background-color: #00af98;
-  color: white;
-}
-
-/* Links on mouse-over */
-.sidebar a:hover:not(.active) {
-  background-color: #555;
-  color: white;
-}
-
-/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
-  margin-left: 200px;
-  padding: 1px 16px;
-  height: 1000px;
-}
-
-/* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 700px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
-}
-
-/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-@media screen and (max-width: 400px) {
-  .sidebar a {
-    text-align: center;
-    float: none;
-  }
-}
-</style>
-
-{{#if admin}}
-<!-- The sidebar -->
-<div class="sidebar">
-  <a class="active" href="/admin/dashboard">Home</a>
-  <a href="/admin/view-users">Customers</a>
-  <a href="/admin/view-product">Product</a>
-  <a href="/admin/view-category">Category</a>
-  <a href="/admin/view-orders">Orders</a>
-  <a href="/admin/view-banner">Banner</a>
-  <a href="/admin/logout">Logout</a>
-</div>
-{{/if}} --}}
-
-{{!-- <!-- Page content -->
-<div class="content">
-  ..
-</div> --}}
-
 
 <style>
+    <style>
   /*
     DEMO STYLE
 */
@@ -108,7 +32,7 @@ a:focus {
     background: #fff;
     border: none;
     border-radius: 0;
-    margin-bottom: 40px;
+    margin-bottom: 0px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -226,7 +150,7 @@ a.article:hover {
 
 #content {
     width: 100%;
-    padding: 20px;
+    padding: 0px;
     min-height: 100vh;
     transition: all 0.3s;
 }
@@ -247,12 +171,16 @@ a.article:hover {
     }
 }
 </style>
+</style>
+
+
+<div class="container">
 
 <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+               <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Admin Panel</h3>
+                <h3>Profile</h3>
             </div>
 
             <ul class="list-unstyled components">
@@ -272,44 +200,42 @@ a.article:hover {
                     </ul>
                 </li> --}}
                 <li>
-                   <a class="active" href="/admin/dashboard">Home</a>
+                   <a class="active" href="/dashboard">Home</a>
                 </li>
                 <li>
-                   <a href="/admin/view-product">Products</a>
+                   <a href="/user-profile">Profile</a>
                 </li>
                 <li>
-                  <a href="/admin/view-users">Customers</a>
+                  <a href="/address-management">Manage-Address</a>
                 </li>
                 <li>
-                <a href="/admin/view-category">Category</a>
+                <a href="/order-history">Orders</a>
                 </li>
-                {{!-- <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage-Address</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
-                            <a href="#">Page 1</a>
+                           <a href="/add-address?userId={{user._id}}">Add-Address</a>
                         </li>
                         <li>
-                            <a href="#">Page 2</a>
+                            <a href="/view-address?userId={{user._id}}">view-address</a>
+                        </li>
+                        <li>
+                            {{!-- <a href="/edit-address/{{user._id}}">Edit-address</a> --}}
                         </li>
                         <li>
                             <a href="#">Page 3</a>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
 
-                <li>
-                      <a href="/admin/view-orders">Orders</a>
-                </li>
-                <li>
-                     <a href="/admin/view-banner">Banner</a>
-                </li>
+
             </ul>
 
         </nav>
 
         <!-- Page Content  -->
-        <div id="content">
+     
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -318,28 +244,16 @@ a.article:hover {
                         <i class="fas fa-align-left"></i>
                         <span> </span>
                     </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-                            {{!-- <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li> --}}
-                            <li class="nav-item">
-                                 <a class="nav-link" href="/admin/logout">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
+                   
                 </div>
             </nav>
+
+
+
+
+
+
+
 
 
 <script>
@@ -349,3 +263,4 @@ a.article:hover {
             });
         });
 </script>
+       

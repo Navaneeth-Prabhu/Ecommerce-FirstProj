@@ -50,8 +50,15 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  // res.status(err.status || 500);
-  // res.render('error');
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+Handlebars.registerHelper('for', function(from, to, incr, block) {
+  var accum = '';
+  for(var i = from; i < to; i += incr)
+      accum += block.fn(i);
+  return accum;
 });
 
 module.exports = app;
