@@ -41,13 +41,17 @@
 
                     {{#each orders}}
                     <tr>
-                     
-                      {{!-- <th class="ps-0 py-3 border-light" scope="row">
 
+                      {{#each pro}}
+                     <p>helo</p>
+                     {{/each}}
+                      {{!-- <th class="ps-0 py-3 border-light" scope="row">
+                      
                         <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}.jpg" alt="..." width="70"/></a>
                           <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product.product_title}}</a></strong></div>
                         </div>
                       </th> --}}
+                        <td> <a href="/view-order-products/{{this._id}}" class="btn btn-primary">view products</a></td>
                       
                       <td>{{this.delivery_details.address}}</td>
                       <td>{{this.paymentMethod}}</td>
@@ -76,7 +80,7 @@
                       <td><p class="mb-0 small">$ {{this.totalAmount}}</p></td>
                      {{!-- <td>{{this.paymentMethod}}</td> --}}
                      <td>{{this.status}}</td>
-                      <td> <a href="/view-order-products/{{this._id}}" class="btn btn-primary">view products</a></td>
+                    
                      <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Cancel</a></td>
                     </tr>
                    {{/each}}

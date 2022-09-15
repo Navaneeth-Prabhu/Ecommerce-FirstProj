@@ -18,6 +18,8 @@ module.exports={
             product.Date=today
             // product.lastEdit=null
         // console.log(product);
+        Totalclick=0;
+        product.Totalclick=Totalclick
     
         db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
             console.log(data);
@@ -45,6 +47,7 @@ module.exports={
         return new Promise((resolve, reject) => {
             
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(productId)}).then((product) => {
+                db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(productId)},{$inc:{Totalclick:1}})
                 // console.log('this promse');
                 resolve (product)
             })
@@ -85,24 +88,27 @@ module.exports={
 
     
 
-//     addCategory:(category, callback) => {
-       
-//         // var today = new Date();
-//         // var dd = String(today.getDate()).padStart(2, '0');
-//         // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-//         // var yyyy = today.getFullYear();
-        
-//         // today = mm + '-' + dd + '-' + yyyy;
-//         // product.Date=today
-      
-//     console.log(category);
-
-//     db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data) => {
-//         console.log(data);
-
-//         callback(data)
-//     })
-// },
+    trendingPro:()=>{
+        return new Promise (async (resolve, reject) => {
+            let product=await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({Totalclick:-1}).limit(3).toArray()
+            resolve(product)
+            console.log("pro:",product);
+        })
+    },
 
 
-}
+    // getMensWatch:()=>{
+    //      db.get().collection(collection.PRODUCT_COLLECTION).find(Category=='men').then(()=>{
+
+    //     })
+    // },
+
+    getMenWatch:() => {
+        return new Promise (async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).find({Category:'Men'}).toArray()
+            // console.log(product)
+            resolve(product)
+        })
+    },
+
+    }

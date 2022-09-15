@@ -3,12 +3,18 @@ const userHelpers = require('../helpers/user-helpers');
 var router = express.Router();
 const productHelper = require('../helpers/product-helpers');
 const { response } = require('express');
-
 const jwt = require('jsonwebtoken')
+// const cline=require('twilio')
 var auth = require('../helpers/userAwth');
 const { updateUser } = require('../helpers/user-helpers');
 const bannerHelpers = require('../helpers/banner-helpers');
 const dotenv=require('dotenv').config()
+
+const userJWTTokenAuth = require('../helpers/userAwth');
+const { Collection } = require('mongodb');
+const collections = require('../config/collections');
+const bcrypt=require('bcrypt');
+
 
 const client = require('twilio')(process.env.ACCOUNT_SID,process.env.AWTH_TOKEN)
 var creationFailed;
@@ -27,11 +33,17 @@ router.get('/',async function(req, res, next) {
 
     cartCount=await userHelpers.getCartCount(req.session.user._id)
     wishCount=await userHelpers.getWishCount(req.session.user._id)
-   
   }
-  bannerHelpers.getAllBanner().then((banner)=>{
-    // console.log(product);
-    res.render('user/index',{user,banner,cartCount,wishCount})
+
+  productHelper.trendingPro().then((response)=>{
+    trendingPro=response;
+    console.log("tre:",trendingPro);
+    bannerHelpers.getAllBanner().then((banner)=>{
+     banner=banner[0]
+      // console.log(banner)
+  
+      res.render('user/index',{user,banner,cartCount,wishCount,trendingPro})
+    })
   })
 });
 
@@ -82,8 +94,10 @@ router.post('/login', function(req, res) {
       req.session.loginErr="Invalid Username or Password"
       res.redirect('/login')
     }else{
-      if(response.status){
-        req.session.loggedIn=true
+      if(response=="loginError"){
+        req.session.loginErr=true;
+    } else {
+      req.session.loggedIn=true
         req.session.user=response.user
         res.redirect('/')
     }
@@ -104,8 +118,9 @@ router.get('/OTP-login', function(req, res) {
 
 router.post('/OTP-login', function(req, res) {
 
-      console.log("getting here");
-        // number = req.body.number;
+  try {
+    console.log("getting here");
+        number = req.body.number;
         client.verify
         .services(process.env.SERVICE_ID)
         .verifications.create({
@@ -113,23 +128,27 @@ router.post('/OTP-login', function(req, res) {
           channel:'sms'
         })
         res.render('user/OTP-login')
+   
+  } catch (error) {
+    console.log(error);
+  }
+      
   })
+  // router.post('/otp',(req,res)=>{
+  
+  //   console.log('get jfsa;d')
+  //   phone_number = req.body.phone_number;
+  //   client.verify
+  //   .services(process.env.TWILIO_SERVICE_ID)
+  //   .verifications.create({
+  //     to:`+91${req.body.phone__number}`,
+  //     channel:'sms'
+  //   })
+   
+  //   res.render('users/otp',{no__partials:true})
+  // })
 
 
-
-// router.post('/enter-otp',(req,res)=>{
-//   const otp=req.body.otp
-//   console.log('otp',otp);
-//   client.verify
-//   .services(process.env.SERVICE_ID)
-//   .verificationChecks.create({
-//     to:`+91${req.body.number}`,
-//     code:otp
-//   }).then((response)=>{
-//     console.log(response);
-//   })
-//   res.redirect('/')
-// })
 
 router.post('/enter-otp',(req,res)=>{
   const otp=req.body.otp
@@ -140,24 +159,11 @@ router.post('/enter-otp',(req,res)=>{
     to:`+91${req.body.number}`,
     code:otp
   }).then((response)=>{
-    userHelpers.doLogin(req.body).then((response) => {
-      if(response == "blocked"){
-        req.session.userBlocked = true;
-        res.redirect('/login')
-      }else if(! response){
-        req.session.loginErr="Invalid Username or Password"
-        res.redirect('/login')
-      }else{
-        if(response.status){
-          req.session.loggedIn=true
-          req.session.user=response.user
-          res.redirect('/')
-      }
-    }
-    })
-    // console.log(response);
+    console.log(response);
+  })
+  res.redirect('/')
 })
-})
+
 
 
 
@@ -190,7 +196,7 @@ if(req.session.user){
   wishCount=await userHelpers.getWishCount(req.session.user._id)
 }
 productHelper.getAllProducts().then((product)=>{
-  // console.log(product);
+  console.log("pro:",product);
   res.render('user/view-products',{user,product,cartCount,wishCount})
 })
 });
@@ -212,15 +218,16 @@ router.get('/productDetails',function(req,res){
 router.get('/cart',async function(req,res){
   if(req.session.loggedIn){
     let products=await userHelpers.getCartProduct(req.session.user._id)
-   
+  //  let address=await userHelpers.getUserAddress(req.)
     let totalAmount =0
     if(products.length > 0){
       
       totalAmount = await userHelpers.getTotalAmount(req.session.user._id)
       
     }
-    // console.log(products);
+    // console.log(address);
     res.render('user/cart',{products,user:req.session.user,totalAmount})
+
   }
   else{
     res.redirect('/login')
@@ -330,7 +337,9 @@ router.get('/checkout/',async(req,res)=>{
     let userId=req.query.id
     let total= await userHelpers.getTotalAmount(req.session.user._id)
     let userDetails= await userHelpers.getUserDetails(userId)
-    res.render('user/checkout',{total,user:req.session.user,userDetails})
+    let address =await userHelpers.viewAddress(req.session.user._id)
+    res.render('user/checkout',{total,user:req.session.user,userDetails,address})
+    console.log(req.session.user._id);
   }
     else{
     res.redirect('/login')
@@ -341,16 +350,32 @@ router.post('/checkout',async(req,res)=>{
   
   let products = await userHelpers.getCartProductList(req.body.userId)
   let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
- 
-  userHelpers.placeOrder(req.body,products,totalPrice).then((response)=>{
-    // res.json(response)
-    
-    res.json({status:true})
-    console.log('in checkout');
-  })
-// 
-    // console.log(req.body);
 
+  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
+  console.log("in checkout:",orderId);
+    if(req.body['paymentMethod']==='COD'){
+      res.json({cod_success:true})
+    }
+    else{
+      userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
+        console.log('resop:',response);
+        res.json(response)
+      })
+    }
+  })
+})
+
+
+router.post('/verify-payment',(req,res)=>{
+  console.log(req.body);
+  userHelpers.verifyPayment(req.body).then(()=>{
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+      console.log('payment sucessfull');
+      res.json({status:true})
+    })
+  }).catch((err)=>{
+    res.json({status:false,errMsg:'payment failed'})
+  })
 })
 
 router.get('/orderSucessfull',async(req,res)=>{
@@ -366,27 +391,27 @@ router.get('/orderSucessfull',async(req,res)=>{
 })
 
 router.get('/order-history',async(req,res)=>{
- if(req.session.loggedIn){
-  let pro=userHelpers.getOrderPro(req.session.user._id)
+//  if(req.session.loggedIn){
+  let pro=userHelpers.getOrderProducts(req.session.user._id)
       let orders= await userHelpers.getUserOrders(req.session.user._id)
       res.render('user/order-history',{user:req.session.user,orders,pro})
-      console.log('in order histroy');
-}
-  else{
-    res.redirect('/login')
-  }
+      console.log('in order histroy:',pro);
+// }
+  // else{
+  //   res.redirect('/login')
+  // }
 })
 
 router.get('/cancel-order/:data',async(req,res)=>{
-  if(req.session.loggedIn){
+  // if(req.session.loggedIn){
     await userHelpers.cancelOrder(req.body,req.params.data).then((response)=>{
       res.redirect('/order-history')
     })
-  }
+  // }
 })
 
 router.get('/view-order-products/:id',async(req,res)=>{
-  if(req.session.loggedIn){
+  // if(req.session.loggedIn){
     
     let products= await userHelpers.getOrderProducts(req.params.id)
     console.log(products);
@@ -394,9 +419,9 @@ router.get('/view-order-products/:id',async(req,res)=>{
     res.render('user/order-pro',{user:req.session.user,products})
   
     console.log('in view order products');
-  }else{
-    res.redirect('/login')
-  }
+  // }else{
+  //   res.redirect('/login')
+  // }
 })
 
 
@@ -405,7 +430,12 @@ router.get('/view-order-products/:id',async(req,res)=>{
 
 
 router.get('/user-profile',async(req,res)=>{
-  res.render('user/user-profile',{user:req.session.user,profile:true})
+  if(req.session.loggedIn){
+
+    res.render('user/user-profile',{user:req.session.user,profile:true})
+  }else{
+    res.redirect('/login')
+  }
   
 })
 
@@ -420,12 +450,36 @@ router.get('/add-address',async(req, res) => {
   }
 })
 
+router.post('/add-address',async(req, res) => {
+  if(req.session.loggedIn){
+    await userHelpers.addAddress(req.session.user._id,req.body).then(()=>{
+      res.redirect('/user-profile')
+    })
+  }else{
+    res.redirect('/login')
+  }
+})
+
+router.post('/edit-address', async function(req,res){
+  if(req.session.loggedIn){
+
+    let id= req.query.id
+    await userHelpers.updateAddress(req.query.id,req.body).then(()=>{
+      res.redirect('/view-address')      
+      console.log(req.query.id);
+      
+    })
+  }else{
+    res.redirect('/login')
+  }
+  })
+
 
 
 router.get('/view-address',async(req,res)=>{
 userHelpers.viewAddress(req.query.userId).then((response)=>{
   console.log(response);
-  res.render('user/view-address',{address:response,user:req.session.user})
+  res.render('user/view-address',{address:response,user:req.session.user,profile:true})
 })
 })
 
@@ -435,15 +489,15 @@ userHelpers.viewAddress(req.query.userId).then((response)=>{
 
 router.get('/edit-address',async function(req, res) {
 
-  if(req.session.loggedIn){
+  // if(req.session.loggedIn){
   let userId=req.query.id;
   let address=await userHelpers.getUserAddress(req.query.id)
   // console.log(user);
   res.render('user/edit-address', {address,user:req.session.user})
  
-  }else{
-    res.redirect('/login')
-  }
+  // }else{
+  //   res.redirect('/login')
+  // }
 });
 
 
@@ -456,7 +510,7 @@ await userHelpers.updateAddress(req.query.id,req.body).then(()=>{
   res.redirect('/view-address')      
   console.log(req.query.id);
   
-})
+  })
 })
 
 router.get('/delete-address',function(req,res){
@@ -467,6 +521,90 @@ router.get('/delete-address',function(req,res){
 
 })
 
+
+
+// router.get('/user-profile',function(req,res){
+//   let userId=req.query.id
+//   userHelpers.getUserDetails(userId).then((response)=>{
+    
+//   })
+// })
+
+/////////////////CAHANGE PASSWORD////////////////
+
+
+router.post('/changePass',async function(req,res){
+  if(req.session.loggedIn){
+
+   
+    
+      let userId = req.session.user._id;
+    
+      let enteredPassword = req.body.password;
+      let newPassword = req.body.newPassword;
+      let confirmPassword = req.body.confirmPassword
+          
+      console.log("new:",newPassword);
+      console.log("conform",confirmPassword);
+      console.log(enteredPassword);
+      
+      
+        if(newPassword==confirmPassword){
+          
+        let userdetails=await userHelpers.getUserDetails(userId)
+
+          console.log(userdetails);
+
+        bcrypt.compare(enteredPassword,userdetails.Password).then((status)=>{
+          if(status){
+            userHelpers.changePassword(userId,newPassword).then((response)=>{
+              res.redirect('/user-profile')
+            })
+
+          }
+        })
+        
+        }
+       
+     
+      }
+    })
+    
+
+//         if (enteredPassword == newPassword) {
+//           // req.session.message = {
+//           //   type: "danger",
+//           //   message: "cannot type old password",
+//           // };
+//           res.redirect("/profile");
+//         } else {
+//           userHelpers.changePassword(userId).then(()=>{
+
+//             res.redirect("/user-profile");
+//           })
+    
+//           // req.session.message = {
+//           //   type: "success",
+//           //   message: "password changed",
+//           // };
+    
+//         }
+      
+//   //     } else {
+//   //       req.session.message = {
+//   //         type: "danger",
+//   //         message: "password is not correct",
+//   //       };
+//   //       res.redirect("/profile");
+//   //     }
+//   // }
+
+ 
+//   }}else{
+//     res.redirect('/login')
+//   }
+
+// })
 
 
 

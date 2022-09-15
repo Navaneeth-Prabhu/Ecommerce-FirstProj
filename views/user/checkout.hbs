@@ -90,34 +90,46 @@
                       <option value>India</option>
                     </select>
                   </div>
-                  <div class="col-lg-12">
+                  {{!-- <div class="col-lg-12">
                     <label class="form-label text-sm text-uppercase" for="address">Address line 1 </label>
-                    <input class="form-control form-control-lg" type="text" id="address" name="Address" placeholder="House number and street name">
-                  </div>
+                    <input class="form-control form-control-lg" type="text" id="address" name="Address" value="{{address.address}}">
+                  </div> --}}
                   {{!-- <div class="col-lg-12">
                     <label class="form-label text-sm text-uppercase" for="addressalt">Address line 2 </label>
                     <input class="form-control form-control-lg" type="text" id="addressalt" placeholder="Apartment, Suite, Unit, etc (optional)">
                   </div> --}}
-                  <div class="col-lg-6">
+                  {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
-                    <input class="form-control form-control-lg" type="text" name="city" id="city">
-                  </div>
-                  <div class="col-lg-6">
+                    <input class="form-control form-control-lg" type="text" name="city" id="city" value="{{address.city}}">
+                  </div> --}}
+                  {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="state">State/County </label>
                     <input class="form-control form-control-lg" type="text" name="state" id="state">
-                  </div>
-                  <div class="col-lg-6">
+                  </div> --}}
+                  {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="pin">Pin</label>
                     <input class="form-control form-control-lg" type="number" name="pin" id="pin">
-                  </div>
-                  <div class="col-lg-6">
+                  </div> --}}
+                  {{!-- <div class="col-lg-6">
                     <button class="btn btn-link text-dark p-0 shadow-0" type="button" data-bs-toggle="collapse" data-bs-target="#alternateAddress">
                       <div class="form-check">
                         <input class="form-check-input" id="alternateAddressCheckbox" type="checkbox">
                         <label class="form-check-label" for="alternateAddressCheckbox">Alternate billing address</label>
                       </div>
                     </button>
-                  </div>
+                  </div> --}}
+
+                    <p>ADDRESS</p>
+                  {{#each address}}
+                    <label for="address" id="addressLabel" class=" radio-inline">
+                    <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id" checked>{{this.address}}
+                    <input type="text" name="address_id" id="address_id" value="{{this._id}}" hidden>
+                  </label>
+                  {{/each}}
+                
+
+
+                  <p>payment mode</p>
                   <label for="" class=" radio-inline">
                     <input type="radio" name="payment-method" value="COD" checked>COD
                   </label>
@@ -282,6 +294,9 @@
       <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     </div>
+
+
+
 <script>
   $("#checkout").submit((e)=>{
     e.preventDefault()
@@ -290,13 +305,70 @@
       method:'post',
       data:$('#checkout').serialize(),
       success:(response)=>{
-        alert(response)
-        if(response.status)
+
+       
+          
+        if(response.cod_success)
         {
           location.href='/orderSucessfull'
           
-        }      
+        }else{
+            razorPayment(response)
+            console.log('helo:',response)
+        }    
         }
     })
   })
+
+  function razorPayment(order) {
+    
+    var options = {
+        "key": "rzp_test_t1yn2Ez97FhcF6", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "WATCH",
+        "description": "Test Transaction",
+        "image": "/images/resize-1661314920805561225Group1.jpg",
+        "order_id":order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+             
+            
+            verifyPayment(response,order)
+        },
+        "prefill": {
+            "name": "xxxxxx",
+            "email": "xxxxx@gmail.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#F37254"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+
+}
+function verifyPayment(payment,order){
+   console.log("in verifyPayment");
+    $.ajax({
+        url:'/verify-payment',
+        data:{
+        payment,
+        order
+    },
+    method:'post',
+    success:(response=>{
+     
+        if(response.status){
+            location.href='/orderSucessfull'
+        }else{
+          alert('payment failed')
+        }
+      })
+    })
+}
 </script>

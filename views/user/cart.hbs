@@ -105,9 +105,9 @@
                           </div>
                         </div>
                       </td>
-                      <td class="p-3 align-middle border-light">
-                        {{!-- <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p> --}}
-                      </td>
+                      {{!-- <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p>
+                      </td> --}}
                         {{!-- <td><a href="/user/delete-cart-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.product._id}}  ?')">Delete</a></td> --}}
                       <td class="p-3 align-middle border-light"><button onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
                        {{!-- <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr> --}}
@@ -146,24 +146,30 @@
                   </ul>
                 </div>
               </div>
+            {{#each address}}
             <div class="form-check">
               <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
               <label class="form-check-label" for="flexRadioDefault1">
-              Default radio
+              {{address.address}}
               </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-              <label class="form-check-label" for="flexRadioDefault2">
-              Default checked radio
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-              <label class="form-check-label" for="flexRadioDefault2">
-              Default checked radio
-              </label>
-            </div>
+            {{/each}}
+                            {{!-- <div class="address" style="
+    position: absolute;
+    top: 8rem;
+    left: 50rem;
+">
+<label for="address" style="
+    font-weight: bold;
+">Select from saved addresses</label><br>
+                      {{#each addresses}}
+                        <input type="radio" id="html" name="address" value="{{this.address}},{{ this.city}},{{ this.pin}}"  required>
+                         {{this.address}}
+                         {{this.city}}
+                         {{this.pin}}
+                         <br>
+                         {{/each}}
+                </div> --}}
             </div>
           </div>
         </section>

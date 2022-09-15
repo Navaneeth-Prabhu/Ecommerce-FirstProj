@@ -38,8 +38,8 @@
       </div> --}}
       <!-- HERO SECTION-->
       {{!-- {{#each banner}} --}}
-      <div class="container-fluid">
-        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center"></section> <img  src="/banner-images/{{banner._id}}.jpg" alt="..." style="height:20rem;widht:20rem">
+      <div class="container-fluid p-0">
+        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center"><img class="img-fluid" src="/banner-images/{{banner._id}}.jpg" alt="..." style=""></section> 
         {{!-- <section class="hero pb-3 bg-cover bg-center d-flex align-items-center"> <img class="image-fluid"  src="/banner-images/wallpaperflare.com_wallpaper.jpg" alt="..." style="height:100%;width:100%"> --}}
           <div class="container py-5">
             <div class="row px-4 px-lg-5">
@@ -54,6 +54,8 @@
        
 
         <!-- TRENDING PRODUCTS-->
+        <div class="container">
+
         <section class="py-5">
           <header>
             <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
@@ -61,11 +63,11 @@
           </header>
                 <div class="row">
                   <!-- PRODUCT-->
-                  {{#each product}}
-                  <div class="col-lg-4 col-sm-6">
+                  {{#each trendingPro}}
+                  <div class="col-lg-4 col-sm-6 p-0">
                     <div class="product text-center">
                       <div class="mb-3 position-relative">
-                        <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img  src="/product-images/{{this._id}}.jpg" alt="..." style="height:20rem;widht:20rem"></a>
+                        <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img  src="/product-images/{{this._id}}.jpg" alt="..." style="height:25rem;widht:25rem"></a>
                         <div class="product-overlay">
                           <ul class="mb-0 list-inline">
                                <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li>
@@ -80,9 +82,9 @@
                       <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
                     </div>
                   </div>
-                  {{#for 0 10 2}}
+                  {{!-- {{#for 0 10 2}}
     <span>helo</span>
-{{/for}}
+{{/for}} --}}
                     {{/each}}
                     
             
@@ -92,6 +94,7 @@
 
           </div>
         </section>
+        </div>
         <!-- SERVICES-->
         <section class="py-5 bg-light">
           <div class="container">

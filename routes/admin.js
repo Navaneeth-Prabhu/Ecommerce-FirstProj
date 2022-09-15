@@ -139,7 +139,11 @@ router.get('/unblock-user',auth.adminCookieJWTAuth, (req,res) => {
 
 //////admin dashboard//
 router.get('/dashboard',auth.adminCookieJWTAuth, function(req,res){
-    res.render('admin/dashboard',{admin: true, adminLoggedIn:req.session.adminLoggedIn})
+  userHelper.getAllUserOrders().then((order)=>{
+    console.log('order: ',order);
+
+    res.render('admin/dashboard',{admin: true, adminLoggedIn:req.session.adminLoggedIn,order})
+  })
 })
 
 //////admin view user//
@@ -408,5 +412,20 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
     });
 
+
+
+    router.get('/men-watches',function(req,res){
+      productHelper.getMenWatch()
+    })
+
+
+    ////////////////////dashBoard//////////////////
+
+
+    // router.get('/dashboard',function(req,res){
+    //   productHelper.getAllProducts().then((response)=>{
+    //     res.rend
+    //   })
+    // })
 
 module.exports = router;

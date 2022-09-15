@@ -1,0 +1,222 @@
+<div class="container">
+    <div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">Profile</h2>
+                <form action="/user-profile" method="post" id="signup" name="signup">
+                    <div class="form-group">
+                        <label for="Password"  style="font-size:small">Name</label>
+                        <input type="text" name="Name" id="" class="form-control" value="{{user.Name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="" style="font-size:small">Email Address</label>
+                        <input type="email" name="Email" id="" class="form-control" value="{{user.Email}}">
+                    </div>
+                    <div class="form-group">
+                        <label for=""  style="font-size:small">Phone</label>
+                        <input type="number" name="number" id="" class="form-control" value="{{user.number}}">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password"  style="font-size:small">Password</label>
+                        <div class="col-9">
+
+                        <input type="password" name="Password" id="" class="form-control" value="{{user.Password}}" readonly>
+                        </div>
+                        <div class="col-3">
+
+                    <button type="button" class="btn btn-success rounded" data-toggle="modal" data-target="#exampleModalCenter">change</button>
+                        </div>
+                        {{!-- <button class="btn btn-success" data-target="#changePass" data-toggle="modal">change password</button> --}}
+                    </div>
+                    {{!-- <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already have account ?</a> --}}
+                    <button type="submit" class="btn btn-primary float-right rounded">SAVE</button>
+                </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{!-- <form class="form" role="form" autocomplete="off"> --}}
+            <form action="/changePass" method="post" id="changePass" name="changePass">
+                <div class="form-group">
+                        <label for="inputPasswordOld">Current Password</label>
+                            <input type="password" name="password" class="form-control" id="inputPasswordOld" required="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordNew">New Password</label>
+                                    <input type="password" name="newPassword" class="form-control" id="inputPasswordNew" required="">
+                                    <span class="form-text small text-muted">
+                                            The password must be 8-20 characters, and must <em>not</em> contain spaces.
+                                        </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordNewVerify">Verify</label>
+                                    <input type="password" name="confirmPassword" class="form-control" id="inputPasswordNewVerify" required="">
+                                    <span class="form-text small text-muted">
+                                            To confirm, type the new password again.
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-lg float-right rounded">Save</button>
+                                </div>
+                            </form>
+      </div>
+      {{!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> --}}
+    </div>
+  </div>
+</div>
+
+{{!-- <div class="modal" id="changePass">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <div class="col-md-9 offset-md-3">
+                    <span class="anchor" id="formChangePassword"></span>
+                    <hr class="mb-5">
+
+                    <!-- form card change password -->
+                    <div class="card card-outline-secondary">
+                        <div class="card-header modal-header">
+                            <h3 class="mb-0">Change Password</h3>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="card-body">
+                            <form class="form" role="form" autocomplete="off">
+                                <div class="form-group">
+                                    <label for="inputPasswordOld">Current Password</label>
+                                    <input type="password" class="form-control" id="inputPasswordOld" required="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordNew">New Password</label>
+                                    <input type="password" class="form-control" id="inputPasswordNew" required="">
+                                    <span class="form-text small text-muted">
+                                            The password must be 8-20 characters, and must <em>not</em> contain spaces.
+                                        </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPasswordNewVerify">Verify</label>
+                                    <input type="password" class="form-control" id="inputPasswordNewVerify" required="">
+                                    <span class="form-text small text-muted">
+                                            To confirm, type the new password again.
+                                        </span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-lg float-right">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /form card change password -->
+
+        </div>
+    </div>
+</div>
+</div> --}}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <!-- <script src="/validation.js"></script> -->
+
+
+    <script>
+        $(document).ready(function () {
+    console.log("started");
+    jQuery.validator.addMethod(
+      "testUsername",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+      },
+      "Use only alphabets and undersore"
+    );
+    jQuery.validator.addMethod(
+      "testName",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+      },
+      "Use only alphabets"
+    );
+    
+    jQuery.validator.addMethod(
+      "minlength",
+      function (value, element, params) {
+        return this.optional(element) || value.trim().length >= params;
+      },
+      jQuery.validator.format("Please enter at least {0} characters.")
+    );
+    $("#signup").validate({
+      rules: {
+        Name: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        number: {
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+          number : true,
+        },
+        Email: {
+          required: true,
+          email: true,
+        },
+        Password: {
+          required: true,
+          minlength: 8,
+        },
+      },
+      submitHandler: function (form) {
+        // form.preventDefault();
+        console.log("recieved");
+        $.ajax({
+          url: "/route/signup",
+          data: $("#signup").serialize(),
+          method: "POST",
+          success: function (response) {  
+            window.location.reload();
+          },
+          error: function (err) {
+            err = jQuery.parseJSON(err.responseText);
+            console.log(err.message);
+            $("#error").text(err.message);
+          },
+        });
+      },
+    });
+  });
+    </script>
+</div>
+<script>
+    // validation example for Login form
+$("#btnLogin").click(function(event) {
+    
+    var form = $("#loginForm");
+    
+    if (form[0].checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    // if validation passed form
+    // would post to the server here
+    
+    form.addClass('was-validated');
+});
+</script>
