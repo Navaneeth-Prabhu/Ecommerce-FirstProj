@@ -1,58 +1,335 @@
-<div class="content">
+<section class="p-3 pb-5 dash">
 
-<p><i class="fa fa-dashboard" aria-hidden="true"></i>DASHBOARD</p>
-
-
-<div class="container">
-
-<div>
-  <canvas id="myChart"></canvas>
-
-<script>
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-  ];
-
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: 'My First dataset',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [0, 10, 5, 2, 20, 30, 45],
-    }]
-  };
-
-
-
-  const config = {
-  type: 'bar',
-  data: data,
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  },
-};
-</script>
-
-<script>
-  const myChart = new Chart(
-    document.getElementById('myChart'),
-    config
-  );
-</script>
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4 dashCards">
+    <div class="col-sm-3">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-chart-line fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total Sales</p>
+          <h6 class="mb-0">₹{{total}}</h6>
+        </div>
+      </div>
+    </div>
+     <div class="col-sm-3 ">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-dollar fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total no. of sales</p>
+          <h6 class="mb-0">{{no}}</h6>
+        </div>
+      </div>
+    </div>
+     <div class="col-sm-3 ">
+      <div
+        class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+      >
+        <i class="fa fa-users fa-3x text-primary"></i>
+        <div class="ms-3">
+          <p class="mb-2">Total users</p>
+          <h6 class="mb-0">{{u_no}}</h6>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </div>
+<!-- Sale & Revenue End -->
+
+<!-- Sales Chart Start -->
+<div class="row" style="  width: 77rem;">
+    <div class="col-sm-6">
+      <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h6 class="mb-0">Sales</h6>
+
+        </div>
+        <canvas id="line-chart"></canvas>
+      </div>
+    </div>
+ 
+
+<!-- Sales Chart End -->
+
+ <div class="bg-light rounded h-100 p-4 col-sm-6 " style="
+   
+">
+                            <h6 class="mb-4">Monthly sales</h6>
+                            <canvas id="monthly"></canvas>
+                        </div>
+                    {{!-- <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Multiple Line Chart</h6>
+                            <canvas id="salse-revenue"></canvas>
+                        </div>
+                    </div> --}}
+                </div>           
+      </div>
+  </div>
+      </div>
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+  <div
+    class="bg-light rounded p-4"
+    style="
+    width: 29rem;
+    display: inline-block;
+    left: 18rem;
+    position: absolute;
+"
+  >
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h6 class="mb-0">New users</h6>
+
+    </div>
+    <div class="table-responsive">
+      <table class="table  pl-3">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+              <th scope="row">{{this.name}}</th>
+              <td>{{this.email}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive"  style="
+    position: absolute;
+    width: 46rem;
+    top: -0.4rem;
+    left: 30rem;
+    overflow-x: hidden;
+    overflow-y:hidden;
+    height: 36rem;
+    border-radius: 6px;
+    background-color: #f7f7f7;
+    padding: 1rem;
+">   <div class="d-flex align-items-center justify-content-between mb-4" style="background: white;">
+      <h6 class="mb-0 pt-3">Latest transactions</h6>
+
+    </div>
+       <table class="table table-bordered" id="salesTable">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    
+                    <th>amount</th>
+                    <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+               
+                    {{#each orders}}
+
+                    <tr>
+                        <td>{{this.date}}</td>
+                        
+                        <td>
+                         {{this.totalAmount}}
+ 
+                        </td>
+                        <td>
+                            <p>
+  <button class="betaButton" data-toggle="collapse" data-target="#1{{this._id}}" type="button" onclick="userDetails('{{this.userId}}','{{this._id}}')" aria-expanded="false" aria-controls="multiCollapseExample1" style="
+    width: 8rem;
+"> User details</button>
+ 
 
 
+  
+</p>
+<div class="row">
+  <div class="col">
+    <div class="collapse multi-collapse" id="1{{this._id}}">
+      <div class="card card-body">
+        <h6>Name:</h6><span id="name{{this._id}}"></span><br>
+        <h6>Email:</h6><span id="email{{this._id}}"></span>
+        
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="collapse multi-collapse" id="2{{this._id}}">
+      <div class="card card-body">
+        
+
+      </div>
+    </div>
+  </div>
 </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                
+                </tbody>
+            </table>
+    </div>
+  </div>
+</div>
+<h4 style="
+    position: absolute;
+    left: 20rem;
+    top: 70rem;
+">Records</h4>
+<table class="table" style="
+    position: absolute;
+    left: 20rem;
+    top: 74rem;
+        width: 44rem;
+">
+ 
+  <tr>
+    <th>Most Sold</th>
+  </tr>
+  <tr><th>Name</th>
+  <th>count</th>
+  <th>price</th></tr>
+  <tr>
+    <td id="ms"></td>
+    <td id="count"></td>
+    <td id="price"></td>
+  </tr>
+</table>
+</section>
+<!-- Recent Sales End -->
+
+<!-- Widgets Start -->
+
+<script src="/javascripts/chart/chart.min.js"></script>
+<script>
+    $(window).on('load',function() {
+   let money = []
+    let date = []
+    let month = []
+    let monthMoney =[]
+   $.ajax({
+        url:'/admin/getMostStats',
+        method:'get',
+        success:(response)=>{
+           console.log(response)
+            $('#ms').html(response.productname)
+            $('#count').html(response.count)
+            $('#price').html(response.price)
+        
+          
+         
+        }
+    
+  });
+  $.ajax({
+        url:'/admin/get-order-details',
+        method:'get',
+        success:(response)=>{
+            
+        
+          response.forEach(data => {
+            if(data.status =="Delivered"){
+        date.push((data.deliveryDetails.Date).split('T')[0])
+        money.push(data.totalAmount)}
+        });
+       date.reverse()
+       money.reverse()
+         
+        }
+    
+  });
+  $.ajax({
+        url:'/admin/stats',
+        method:'get',
+        success:(response)=>{
+         response.forEach(data=>{
+           
+           switch(data._id)
+           {
+            case 1 : month.push("Jan")
+                     break;
+                    case 2 : month.push("Feb")
+                     break;
+                     case 3 : month.push("Mar")
+                     break;
+                     case 4 : month.push("Apr")
+                     break;
+                     case 5 : month.push("May")
+                     break;
+                     case 6 : month.push("Jun")
+                     break;
+                     case 7 : month.push("July")
+                     break;
+                     case 8 : month.push("Aug")
+                     break;
+                     case 9 : month.push("Sep")
+                     break;
+                     case 10 : month.push("Oct")
+                     break;
+                     case 11: month.push("Nov")
+                     break;
+                     case 12: month.push("Dec")
+                     break;
+           }
+          
+            monthMoney.push(data.total)
+         })
+         month.reverse()
+         monthMoney.reverse()
+        }
+    
+  });
+  setTimeout(()=>{
+console.log(month)
+ var ctx3 = $("#line-chart").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: date,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(255, 51, 204, 2)",
+                 data: money
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },600)
+      setTimeout(()=>{
+ var ctx3 = $("#monthly").get(0).getContext("2d");
+     var myChart3 = new Chart(ctx3, {
+         type: "line",
+         data: {
+             labels: month,
+             datasets: [{
+                 label: "Sales",
+                 fill: false,
+                 backgroundColor: "rgba(0, 156, 255, .3)",
+                 data: monthMoney
+             }]
+         },
+         options: {
+             responsive: true
+         }
+     });
+  },600)
+   
+    })
+   
+   
+       
+  
+</script>
 
 
 

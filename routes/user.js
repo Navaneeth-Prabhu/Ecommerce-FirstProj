@@ -9,11 +9,13 @@ var auth = require('../helpers/userAwth');
 const { updateUser } = require('../helpers/user-helpers');
 const bannerHelpers = require('../helpers/banner-helpers');
 const dotenv=require('dotenv').config()
+const paypal = require('../helpers/paypal')
 
 const userJWTTokenAuth = require('../helpers/userAwth');
 const { Collection } = require('mongodb');
 const collections = require('../config/collections');
 const bcrypt=require('bcrypt');
+// import * as paypal from "../helpers/paypal";
 
 
 const client = require('twilio')(process.env.ACCOUNT_SID,process.env.AWTH_TOKEN)
@@ -334,6 +336,8 @@ router.post('/delete-wish-product',(req,res,next)=>{
 
 router.get('/checkout/',async(req,res)=>{
   if(req.session.loggedIn){
+    // let product = await userHelpers.getCartProduct(req.body.userId)
+
     let userId=req.query.id
     let total= await userHelpers.getTotalAmount(req.session.user._id)
     let userDetails= await userHelpers.getUserDetails(userId)
@@ -348,22 +352,36 @@ router.get('/checkout/',async(req,res)=>{
 
 router.post('/checkout',async(req,res)=>{
   
+  console.log("uyg",req.body['payment-method']);
   let products = await userHelpers.getCartProductList(req.body.userId)
-  let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
 
-  userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
-  console.log("in checkout:",orderId);
-    if(req.body['paymentMethod']==='COD'){
-      res.json({cod_success:true})
-    }
-    else{
-      userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
-        console.log('resop:',response);
-        res.json(response)
-      })
-    }
-  })
+  // if(products.length>0){
+
+    let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
+  
+    userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
+    console.log("in checkout:",orderId);
+    console.log("body:",req.body);
+      if(req.body['payment-method']==='COD'){
+        res.json({cod_success:true})
+      // }
+      // else if(req.body['payment-method'==='paypal']){
+        
+      //   res.json({ cod_success: true });
+      }else{
+        userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
+          console.log('resop:',response);
+          res.json(response)
+        })
+      }
+    })
+  // }else{
+
+  //   res.redirect('/login')
+  // }
 })
+
+
 
 
 router.post('/verify-payment',(req,res)=>{
@@ -391,23 +409,25 @@ router.get('/orderSucessfull',async(req,res)=>{
 })
 
 router.get('/order-history',async(req,res)=>{
-//  if(req.session.loggedIn){
+ if(req.session.loggedIn){
   let pro=userHelpers.getOrderProducts(req.session.user._id)
       let orders= await userHelpers.getUserOrders(req.session.user._id)
       res.render('user/order-history',{user:req.session.user,orders,pro})
       console.log('in order histroy:',pro);
-// }
-  // else{
-  //   res.redirect('/login')
-  // }
+}
+  else{
+    res.redirect('/login')
+  }
 })
 
 router.get('/cancel-order/:data',async(req,res)=>{
-  // if(req.session.loggedIn){
+  if(req.session.loggedIn){
     await userHelpers.cancelOrder(req.body,req.params.data).then((response)=>{
       res.redirect('/order-history')
     })
-  // }
+  }else{
+    res.redirect('/login')
+  }
 })
 
 router.get('/view-order-products/:id',async(req,res)=>{
@@ -432,11 +452,22 @@ router.get('/view-order-products/:id',async(req,res)=>{
 router.get('/user-profile',async(req,res)=>{
   if(req.session.loggedIn){
 
-    res.render('user/user-profile',{user:req.session.user,profile:true})
+    res.render('user/user-profile',{user:req.session.user,profile:true,passErr:req.session.changePasswordError, success: req.session.success})
+    req.session.changePasswordError=null;
+    req.session.success = null
   }else{
     res.redirect('/login')
   }
   
+})
+
+router.post('/user-profile',async(req,res)=>{
+  await userHelpers.updateUser(req.session.user,req.body).then(()=>{
+    req.session.user.Name = req.body.Name
+    req.session.user.number=req.body.number
+    // console.log(req.session.user);
+    res.redirect('/user-profile')
+  })
 })
 
 
@@ -558,12 +589,16 @@ router.post('/changePass',async function(req,res){
         bcrypt.compare(enteredPassword,userdetails.Password).then((status)=>{
           if(status){
             userHelpers.changePassword(userId,newPassword).then((response)=>{
+              req.session.success = true
               res.redirect('/user-profile')
             })
 
           }
         })
         
+        }else{
+          req.session.changePasswordError="entered wrong password";
+          res.redirect('/user-profile')
         }
        
      
@@ -571,41 +606,19 @@ router.post('/changePass',async function(req,res){
     })
     
 
-//         if (enteredPassword == newPassword) {
-//           // req.session.message = {
-//           //   type: "danger",
-//           //   message: "cannot type old password",
-//           // };
-//           res.redirect("/profile");
-//         } else {
-//           userHelpers.changePassword(userId).then(()=>{
+//////paypal/////
 
-//             res.redirect("/user-profile");
-//           })
-    
-//           // req.session.message = {
-//           //   type: "success",
-//           //   message: "password changed",
-//           // };
-    
-//         }
-      
-//   //     } else {
-//   //       req.session.message = {
-//   //         type: "danger",
-//   //         message: "password is not correct",
-//   //       };
-//   //       res.redirect("/profile");
-//   //     }
-//   // }
+router.post("/api/orders", async (req, res) => {
+  const order = await paypal.createOrder();
+  const total = await userHelpers.getTotalAmount();
+  res.json(order,total);
+});
 
- 
-//   }}else{
-//     res.redirect('/login')
-//   }
-
-// })
-
+router.post("/api/orders/:orderId/capture", async (req, res) => {
+  const { orderId } = req.params;
+  const captureData = await paypal.capturePayment(orderId);
+  res.json(captureData);
+});
 
 
 

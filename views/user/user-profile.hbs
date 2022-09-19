@@ -3,19 +3,30 @@
     <div class="col-md-6 m-auto">
         <div class="container mt-5 pl-5">
             <h2 class="text-center">Profile</h2>
-                <form action="/user-profile" method="post" id="signup" name="signup">
+                <form action="/user-profile" method="post" id="userpro" name="userpro">
+                {{#if success}}
+                 <div class="alert alert-success" role="alert">
+                   Password changed successfully
+                </div>
+                {{/if}}
+                {{#if passErr}}
+                <div class="alert alert-danger" role="alert">
+                   {{passErr}}
+                </div>
+                {{/if}}
                     <div class="form-group">
                         <label for="Password"  style="font-size:small">Name</label>
                         <input type="text" name="Name" id="" class="form-control" value="{{user.Name}}">
                     </div>
                     <div class="form-group">
                         <label for="" style="font-size:small">Email Address</label>
-                        <input type="email" name="Email" id="" class="form-control" value="{{user.Email}}">
+                        <input type="email" name="Email" id="" class="form-control" value="{{user.Email}}" readonly>
                     </div>
                     <div class="form-group">
                         <label for=""  style="font-size:small">Phone</label>
                         <input type="number" name="number" id="" class="form-control" value="{{user.number}}">
                     </div>
+
                     <div class="form-group row">
                         <label for="Password"  style="font-size:small">Password</label>
                         <div class="col-9">
@@ -159,7 +170,7 @@
       },
       jQuery.validator.format("Please enter at least {0} characters.")
     );
-    $("#signup").validate({
+    $("#userpro").validate({
       rules: {
         Name: {
           required: true,
@@ -186,8 +197,8 @@
         // form.preventDefault();
         console.log("recieved");
         $.ajax({
-          url: "/route/signup",
-          data: $("#signup").serialize(),
+          url: "/user-profile",
+          data: $("#changePass").serialize(),
           method: "POST",
           success: function (response) {  
             window.location.reload();

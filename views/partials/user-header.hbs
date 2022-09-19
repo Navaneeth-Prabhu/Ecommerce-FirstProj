@@ -18,35 +18,41 @@
                 <li class="nav-item">
                   <!-- Link--><a class="nav-link" href="/order-history">Orders</a>
                 </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                {{!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                   <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown"><a class="dropdown-item border-0 transition-link" href="index.html">Homepage</a><a class="dropdown-item border-0 transition-link" href="shop.html">Category</a><a class="dropdown-item border-0 transition-link" href="detail.html">Product detail</a><a class="dropdown-item border-0 transition-link" href="cart.html">Shopping cart</a><a class="dropdown-item border-0 transition-link" href="checkout.html">Checkout</a></div>
-                </li>
+                </li> --}}
               </ul>
               <ul class="navbar-nav ms-auto">               
                 <li class="nav-item">
-                  <a class="nav-link" href="/user-profile"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>profile</a>
+                  <a class="nav-link" href="/user-profile"> <i class="fa fa-user" aria-hidden="true" style="color: gray;"></i></a>
                   </li>
+                   <li class="dropdown">
+
+              {{!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a> --}}
+                {{!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/user-profile"> <i class="fas fa-user me-1 text-gray fw-normal" aria-hidden="true" ></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul> --}}
+            </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/cart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<span class="badge badge-success" id="cart-count">{{cartCount}}</span></a>
+                  <a class="nav-link" href="/cart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i><span class="badge badge-success" id="cart-count">{{cartCount}}</span></a>
                   </li>
                <li class="nav-item">
                 <a class="nav-link" href="/wishlist"> <i class="far fa-heart me-1"></i><span class="badge badge-dark">{{wishCount}}</span></a>
                 </li>
-               <li class="nav-item">
+               {{!-- <li class="nav-item">
                 <a class="nav-link" href="/add-address"> address
-                </li>
-                {{!-- <li class="nav-item"><a class="nav-link" href="#!"> <i class="fas fa-user me-1 text-gray fw-normal"></i>Login</a></li> --}}
-                {{!-- {{#if user}}
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout"><i class="fas fa-user me-1 text-gray fw-normal"></i>Logout</a>
-                </li>
-                {{else}}
-                <li class="nav-item">
-                    <a class="nav-link" href="/login"><i class="fas fa-user me-1 text-gray fw-normal"></i>Login</a>
-                </li>
-                {{/if}} --}}
+                </li> --}}
+                          {{!-- <ul class="nav navbar-nav navbar-right">` --}}
+            
+           
+          {{!-- </ul> --}}
                 {{#if user}}
-                  <li>{{user.Name}}</p></li>
+                  <li class="nav-item">{{user.Name}}</li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
@@ -59,4 +65,12 @@
             </div>
           </nav>
         </div>
+      
       </header>
+      <script>
+        $('ul.nav li.dropdown').hover(function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+}, function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+});
+      </script>

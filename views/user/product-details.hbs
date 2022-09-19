@@ -44,16 +44,7 @@
               <p class="text-muted lead">₹{{product.price}}</p>
               <p class="text-sm mb-4">{{product.product_description}}</p>
               <div class="row align-items-stretch mb-4">
-                {{!-- <div class="col-sm-5 pr-sm-0">
-                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-                    <div class="quantity">
-                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
-                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
-                    </div>
-                  </div>
-                </div> --}}
-                {{!-- <div class="col-sm-3 pl-sm-0"><button class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"  onclick="addToCart('{{this._id}}')">Add to cart</button></div> --}}
+               
              <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
              
               </div><a class="text-dark p-0 mb-4 d-inline-block" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a><br>
@@ -183,7 +174,7 @@
               </div>
             </div>
           </div> --}}
-        </div>
+        {{!-- </div>
       </section>
       <footer class="bg-dark text-white">
         <div class="container py-4">
@@ -228,7 +219,7 @@
             </div>
           </div>
         </div>
-      </footer>
+      </footer> --}}
       <!-- JavaScript files-->
       {{!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <script src="vendor/glightbox/js/glightbox.min.js"></script>

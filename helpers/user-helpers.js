@@ -9,10 +9,17 @@ const Razorpay = require('razorpay');
 const { resolve } = require('path')
 const { resolveObjectURL } = require('buffer')
 
+// import fetch from "node-fetch";
+// import "dotenv/config"; // loads env variables from .env file
+
 var instance = new Razorpay({
   key_id: 'rzp_test_t1yn2Ez97FhcF6',
   key_secret: '66pHj3iP59aS2XaME3FLPOG6',
 });
+
+
+
+
 
 
 module.exports={
@@ -110,14 +117,7 @@ module.exports={
     },
     updateUser:(userId, userDetails,session) => {
          console.log(session);
-         blocked = false;
-        if(userDetails.blocked == 'true'){
-        
-            session.user=null
-            session.loggedIn=null
-            session.loginErr=null
-            blocked = true;
-        }
+
         // console.log(userDetails)
         return new Promise(async(resolve, reject) => {
 
@@ -129,11 +129,11 @@ module.exports={
                             number:userDetails.number,
                             // Email:userDetails.Email,
                             // Password: userDetails.Password,
-                            blocked: userDetails.blocked,
-                            address: userDetails.address,
-                            city:userDetails.city,
-                            state:userDetails.state,
-                            pin:userDetails.pin
+                            // blocked: userDetails.blocked,
+                            // address: userDetails.address,
+                            // city:userDetails.city,
+                            // state:userDetails.state,
+                            // pin:userDetails.pin
                         }
                     }).then((response) => {
                         resolve()
@@ -508,9 +508,8 @@ module.exports={
             today = mm + '-' + dd + '-' + yyyy;
             order.Date=today
             
-
-    
-            let status =order['payment-method']==='COD'?'placed':'pending'
+            let status = order["payment-method"] === "COD" || order["payment-method"] === "paypal" ? "placed" : "pending";
+            
             let orderObj={
                 delivery_details:{
                     date:order.Date,
@@ -531,6 +530,7 @@ module.exports={
                 // date:date,
                 
             }
+            // db.get().collection(collection.PRODUCT_COLLECTION).updateOne({$inc:{"stock":-1}})
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
                 // db.get().collection(collection.PRODUCT_COLLECTION)
                 db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
@@ -542,60 +542,6 @@ module.exports={
     },
 
 
-
-/////////////////////////////PAYMENT///////////////////
-
-
-    generateRazorPay:(orderId,total)=>{
-        return new Promise((resolve,reject)=>{
-            var options={
-                amount:total*100,
-                currency:"INR",
-                receipt:""+orderId
-            };
-            instance.orders.create(options, function (err, order) {
-                if (err) {
-                  console.log(err);
-        
-                  reject(err);
-                } else {
-                    console.log("new orde:",order);
-                  resolve(order);
-                
-                }
-            })
-        })
-    },
-
-    verifyPayment:(details)=>{
-        return new Promise((resolve,reject)=>{
-            crypto = require('crypto');
-            hmac=crypto.createHmac('sha256','66pHj3iP59aS2XaME3FLPOG6')
-            hmac.update(details['payment[razorpay_order_id]']+'|'+details['payment[razorpay_payment_id]'])
-            hmac=hmac.digest('hex')
-            if(hmac==details['payment[razorpay_signature]']){
-                resolve()
-            }else{
-                reject()
-            }
-        })
-    },    
-    changePaymentStatus:async (orderId)=>{
-        await new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: objectId(orderId) },
-            {
-                $set:{
-                    status: 'placed'
-                }
-            }
-            ).then(()=>{
-                resolve()
-            })
-        })
-        
-    },
-
-    
 
 
     getCartProductList:(userId)=>{
@@ -829,6 +775,149 @@ changePassword:(userId,newPassword)=>{
 //     })
 // },
 
+/////////////////////////////PAYMENT///////////////////
+
+
+generateRazorPay:(orderId,total)=>{
+    return new Promise((resolve,reject)=>{
+        var options={
+            amount:total*100,
+            currency:"INR",
+            receipt:""+orderId
+        };
+        instance.orders.create(options, function (err, order) {
+            if (err) {
+              console.log(err);
+    
+              reject(err);
+            } else {
+                console.log("new orde:",order);
+              resolve(order);
+            
+            }
+        })
+    })
+},
+
+verifyPayment:(details)=>{
+    return new Promise((resolve,reject)=>{
+        crypto = require('crypto');
+        hmac=crypto.createHmac('sha256','66pHj3iP59aS2XaME3FLPOG6')
+        hmac.update(details['payment[razorpay_order_id]']+'|'+details['payment[razorpay_payment_id]'])
+        hmac=hmac.digest('hex')
+        if(hmac==details['payment[razorpay_signature]']){
+            resolve()
+        }else{
+            reject()
+        }
+    })
+},    
+changePaymentStatus:async (orderId)=>{
+    await new Promise((resolve, reject) => {
+        db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: objectId(orderId) },
+        {
+            $set:{
+                status: 'placed'
+            }
+        }
+        ).then(()=>{
+            resolve()
+        })
+    })
+    
+},
+
+////////////////////PayPal/////////////
+
+//  generatePayPal:async()=> {
+//     const accessToken = await generateAccessToken();
+//     const url = `${base}/v2/checkout/orders`;
+//     const response = await fetch(url, {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//       body: JSON.stringify({
+//         intent: "CAPTURE",
+//         purchase_units: [
+//           {
+//             amount: {
+//               currency_code: "INR",
+//               value: "100.00",
+//             },
+//           },
+//         ],
+//       }),
+//     });
+//     const data = await response.json();
+//     console.log(data);
+//     return data;
+//   },
+
+
+   capturePayment:async(orderId)=> {
+    const accessToken = await generateAccessToken();
+    const url = `${base}/v2/checkout/orders/${orderId}/capture`;
+    const response = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  },
+  
+  generateAccessToken: async()=> {
+    const response = await fetch(base + "/v1/oauth2/token", {
+      method: "post",
+      body: "grant_type=client_credentials",
+      headers: {
+        Authorization:
+          "Basic " + Buffer.from(CLIENT_ID + ":" + APP_SECRET).toString("base64"),
+      },
+    });
+    const data = await response.json();
+    return data.access_token;
+  },
+
+
+
+  /////////////////end of Paypal/////////////////////
+
+  editUser:(userId, userDetails,session) => {
+    console.log(userDetails);
+
+   // console.log(userDetails)
+   return new Promise(async(resolve, reject) => {
+
+        
+           db.get().collection(collection.USER_COLLECTION)
+               .updateOne({Email:userDetails.Email}, {
+                   $set: {
+                       Name: userDetails.Name,
+                       number:userDetails.number,
+                       // Email:userDetails.Email,
+                       // Password: userDetails.Password,
+
+                       address: userDetails.address,
+                       city:userDetails.city,
+                       state:userDetails.state,
+                       pin:userDetails.pin
+                   }
+               }).then((response) => {
+                   resolve()
+               })
+           
+       // } else {
+       //     console.log("Cant update user")
+       //     resolve(false);
+       // }
+   })
+},
 
 
 }
