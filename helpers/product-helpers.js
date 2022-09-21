@@ -27,6 +27,7 @@ module.exports={
             callback(data.insertedId)
         })
     },
+    
 
     getAllProducts:() => {
         return new Promise (async (resolve, reject) => {
@@ -49,6 +50,8 @@ module.exports={
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(productId)}).then((product) => {
                 db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(productId)},{$inc:{Totalclick:1}})
                 // console.log('this promse');
+                product._id = productId
+                console.log(product._id)
                 resolve (product)
             })
         })

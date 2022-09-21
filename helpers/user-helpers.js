@@ -442,33 +442,7 @@ module.exports={
             resolve(wishItems)
         })
     },
-    // getWishPro:(userId)=>{
-    //     return new Promise(async(resolve,reject)=>{
-    //         let wishItems=await db.get().collection(collection.WISHLIST_COLLECTION).aggregate([
-    //             {
-    //                 $match:{user:objectId(userId)}
-    //             },
-    //             {
-    //                 $lookup:{
-    //                     from:collection.PRODUCT_COLLECTION,
-    //                     let:{
-    //                         proList:'$products'
-    //                     },
-    //                     pipeline:[{
-    //                         $match:{
-    //                             $expr:{
-    //                                 $in:['$_id','$$proList']
-    //                             }
-    //                         }
-    //                     }],
-    //                     as:'product'
-    //                 }
-    //             }
-    //         ]).toArray()
-    //         console.log(wishItems);
-    //         resolve(wishItems)
-    //     })
-    // },
+
 
     getWishCount:(userId)=>{
         return new Promise(async(resolve,reject)=>{

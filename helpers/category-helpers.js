@@ -7,37 +7,24 @@ const { response } = require('express');
 
 
 module.exports ={
-        // addCategory:function(category) {
-        //     return new Promise(async function (resolve, reject) {
-        //         var isThere = await db.get().collection(collection.CATEGORY_COLLECTION).findOne({ Category_name: category.Category_name })
-        //         if (isThere) {
-        //             resolve(false)
-        //         } else {
-                  
-        //             db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data) => {
-        //                 // console.log(data);
-        //                 resolve(data)
-        //             })
-        //         }
-        //     })    
-        // },
+    
         addCategory:(category, callback) => {
             // var curruntDate = new Date();
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             var yyyy = today.getFullYear();
-            
+              
             today = mm + '-' + dd + '-' + yyyy;
             category.Date=today
 
-    
-        db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data) => {
+        
+        db.get().collection(collection.CATEGORY_COLLECTION,offer).insertOne(category).then((data) => {
             console.log(data);
 
             callback(data)
         })
-    },
+    },                        
     addProduct:(product, callback) => {
         // var curruntDate = new Date();
         var today = new Date();

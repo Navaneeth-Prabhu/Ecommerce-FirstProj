@@ -208,9 +208,10 @@ productHelper.getAllProducts().then((product)=>{
 router.get('/productDetails',function(req,res){
 
   let productId = req.query.id;
+  console.log(productId)
     productHelper.getProductDetails(productId).then((product) => {
       console.log(product);
-      res.render('user/product-details', {user:req.session.user,product})
+      res.render('user/product-details', {user:req.session.user, product })
     })
 });
 

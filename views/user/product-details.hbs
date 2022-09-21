@@ -1,38 +1,37 @@
-<section>
-    <div class="page-holder bg-light">
+
+
+
 
       <section class="py-5">
         <div class="container">
           <div class="row mb-5">
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <!-- PRODUCT SLIDER-->
               <div class="row m-sm-0">
                 <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
                   <div class="swiper product-slider-thumbs">
                     <div class="swiper-wrapper">
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="/product-images/{{product._id}}.jpg" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="/product-images/{{product._id}}.jpg" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="/product-images/{{product._id}}.jpg" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="/product-images/{{product._id}}.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="img-fluid" src="/product-images/{{product._id}}1.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="img-fluid" src="/product-images/{{product._id}}2.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="img-fluid" src="/product-images/{{product._id}}3.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="img-fluid" src="/product-images/{{product._id}}4.jpg" alt="..."></div>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-10 order-1 order-sm-2">
-                  <div class="swiper product-slider d-flex justify-content-center" >
-                    <div class="swiper-wrapper">
-                      <div class="swiper-slide justify-content-center"  id="image-container"  style="z-index:122"><a class="glightbox product-view " href="/product-images/{{product._id}}.jpg" data-gallery="gallery2" data-glightbox="Product item 1"  style="z-index:122"><img class="img-fluid " src="/product-images/{{product._id}}.jpg"  style="z-index:122"  alt="..."></a></div>
-                   
-
-                      {{!-- <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-2.jpg" data-gallery="gallery2" data-glightbox="Product item 2"><img class="img-fluid" src="img/product-detail-2.jpg" alt="..."></a></div>
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-3.jpg" data-gallery="gallery2" data-glightbox="Product item 3"><img class="img-fluid" src="img/product-detail-3.jpg" alt="..."></a></div>
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid" src="img/product-detail-4.jpg" alt="..."></a></div> --}}
+                <div class="col-sm-10 order-1 order-sm-2 " id="image-container">
+                  <div class="swiper product-slider" >
+                    <div class="swiper-wrapper" >
+                      <div class="swiper-slide h-auto d-flex justify-content-center" ><a class="glightbox product-view" href="/product-images/{{product._id}}1.jpg" data-gallery="gallery2" data-glightbox="Product item 1"><img class="img-fluid" src="/product-images/{{product._id}}1.jpg" alt="..." style="height: 500px;"></a></div>
+                      <div class="swiper-slide h-auto d-flex justify-content-center"><a class="glightbox product-view" href="/product-images/{{product._id}}2.jpg" data-gallery="gallery2" data-glightbox="Product item 2"><img class="img-fluid" src="/product-images/{{product._id}}2.jpg" alt="..." style="height: 500px;"></a></div>
+                      <div class="swiper-slide h-auto d-flex justify-content-center"><a class="glightbox product-view" href="/product-images/{{product._id}}3.jpg" data-gallery="gallery2" data-glightbox="Product item 3"><img class="img-fluid" src="/product-images/{{product._id}}3.jpg" alt="..." style="height: 500px;"></a></div>
+                      <div class="swiper-slide h-auto d-flex justify-content-center"><a class="glightbox product-view" href="/product-images/{{product._id}}4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid" src="/product-images/{{product._id}}4.jpg" alt="..." style="height: 500px;"></a></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <!-- PRODUCT DETAILS-->
-            <div class="col-lg-6"  style="z-index:1">
+            <div class="col-lg-5" style="z-index: ;">
               <ul class="list-inline mb-2 text-sm">
                 <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
                 <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
@@ -40,13 +39,20 @@
                 <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
                 <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
               </ul>
-              <h1>{{product.product_title}}</h1>
-              <p class="text-muted lead">₹{{product.price}}</p>
-              <p class="text-sm mb-4">{{product.product_description}}</p>
+              <h1>Red digital smartwatch</h1>
+              <p class="text-muted lead">$250</p>
+              <p class="text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.</p>
               <div class="row align-items-stretch mb-4">
-               
-             <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
-             
+                <div class="col-sm-5 pr-sm-0">
+                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+                    <div class="quantity">
+                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
+                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
+                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 pl-sm-0"><button class="btn tbn-sm btn-dark"b type="button"  onclick="addToCart('{{product._id}}')">Add to Cart</button></div>
               </div><a class="text-dark p-0 mb-4 d-inline-block" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a><br>
               <ul class="list-unstyled small d-inline-block">
                 <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span class="ms-2 text-muted">039</span></li>
@@ -107,7 +113,7 @@
             </div>
           </div>
           <!-- RELATED PRODUCTS-->
-          {{!-- <h2 class="h5 text-uppercase mb-4">Related products</h2>
+          <h2 class="h5 text-uppercase mb-4">Related products</h2>
           <div class="row">
             <!-- PRODUCT-->
             <div class="col-lg-3 col-sm-6">
@@ -116,7 +122,7 @@
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
                       <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="#!">Add to cart</a></li>
+                      <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" type="button"  onclick="addToCart('{{product._id}}')">Add to Cart</button></li>
                       <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
                     </ul>
                   </div>
@@ -173,100 +179,22 @@
                 <p class="small text-muted">$351</p>
               </div>
             </div>
-          </div> --}}
-        {{!-- </div>
-      </section>
-      <footer class="bg-dark text-white">
-        <div class="container py-4">
-          <div class="row py-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#!">Online Stores</a></li>
-                <li><a class="footer-link" href="#!">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">What We Do</a></li>
-                <li><a class="footer-link" href="#!">Available Services</a></li>
-                <li><a class="footer-link" href="#!">Latest Posts</a></li>
-                <li><a class="footer-link" href="#!">FAQs</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <h6 class="text-uppercase mb-3">Social media</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Twitter</a></li>
-                <li><a class="footer-link" href="#!">Instagram</a></li>
-                <li><a class="footer-link" href="#!">Tumblr</a></li>
-                <li><a class="footer-link" href="#!">Pinterest</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-top pt-4" style="border-color: #1d1d1d !important">
-            <div class="row">
-              <div class="col-md-6 text-center text-md-start">
-                <p class="small text-muted mb-0">&copy; 2021 All rights reserved.</p>
-              </div>
-              <div class="col-md-6 text-center text-md-end">
-                <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" >navaNeeth</a></p>
-                <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-              </div>
-            </div>
           </div>
         </div>
-      </footer> --}}
-      <!-- JavaScript files-->
-      {{!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="vendor/nouislider/nouislider.min.js"></script>
-      <script src="vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
-      <script src="/front.js"></script> --}}
-      <script>
-        // ------------------------------------------------------- //
-        //   Inject SVG Sprite - 
-        //   see more here 
-        //   https://css-tricks.com/ajaxing-svg-sprite/
-        // ------------------------------------------------------ //
-        function injectSvgSprite(path) {
-        
-            var ajax = new XMLHttpRequest();
-            ajax.open("GET", path, true);
-            ajax.send();
-            ajax.onload = function(e) {
-            var div = document.createElement("div");
-            div.className = 'd-none';
-            div.innerHTML = ajax.responseText;
-            document.body.insertBefore(div, document.body.childNodes[0]);
-            }
-        }
-        // this is set to BootstrapTemple website as you cannot 
-        // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
-        // while using file:// protocol
-        // pls don't forget to change to your domain :)
-        injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
-        
-      </script>
-      <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    </div>
-    
-    <script>
-        var options = {
-            width:300,
-            height:450,
+      </section>
+
+
+
+<script>
+
+   var options = {
+            height:500,
             zoomWidth:700,
             offset:{vertical:0 , horizontal:0},
-            scale:1.2,
+            scale:1,
             
         }
         //creating new object for image zoom
         new ImageZoom(document.getElementById("image-container") , options)
-    </script>
-</section>
 
+</script>

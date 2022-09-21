@@ -180,20 +180,84 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
       
     productHelper.addProduct(req.body,(id) => {
-    let image=req.files.Image
-    console.log(id)
-    image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
-    if(!err){
-      res.render("admin/add-product")
-      }else{
-      console.log(err)
-      }
+    let image1=req.files?.image1
+    let image2=req.files?.image2
+    let image3=req.files?.image3
+    let image4=req.files?.image4
+    // console.log(id)
+    image1.mv(`./public/product-images/${id}1.jpg`,(err,done)=>{
       })
+    image2.mv(`./public/product-images/${id}2.jpg`,(err,done)=>{
+      })
+    image3.mv(`./public/product-images/${id}3.jpg`,(err,done)=>{
+      })
+    image4.mv(`./public/product-images/${id}4.jpg`,(err,done)=>{
+      })
+
    
     })
     res.redirect('/admin/add-product')
 
   });
+  
+// router.post('/add-product',auth.adminCookieJWTAuth,function (req,res){
+
+//   try{
+ 
+//       productHelper.addProduct(req.body, async(id) => {
+//       try {
+//         let image = req.files.image1;
+
+//         let subImages = []
+//         if(req.files?.image2){subImages.push(req.files?.image2)}
+//         if(req.files?.image3){subImages.push(req.files?.image3)}
+//         if(req.files?.image4){subImages.push(req.files?.image4)}
+//         try {
+          
+       
+//         for (let index = 0; index < subImages.length; index++) {
+//          await subImages[index].mv("./public/product-images/" + id + index +".jpg", (err, data) => {
+//             if (!err) {
+            
+//             console.log("sub images added",index);
+            
+//             } else {
+//               console.log(err);
+//             }
+//           })
+          
+//         }
+//       } catch (error) {
+        
+//           res.redirect('/error')
+//       }
+//         if (image) {
+//           await image.mv("./public/product-images/" + id + ".jpg", (err, data) => {
+//             if (!err) {
+//               // res.redirect("/admin/products");
+//              console.log("image added");
+//             } else {
+//               console.log(err);
+//             }
+//           });
+//         }
+
+        
+//       } catch (error) {
+//         console.log(error);
+//         res.redirect('/admin/products')
+//       }
+//         finally{
+//           res.redirect("/admin/products")
+//         }
+//         }).then(()=>{console.log("added succesfully")}).catch((err)=>{console.log(err);});
+//   }catch(err){
+//     console.log(err+"error in add product")
+//     res.redirect('/error')
+//   }
+// })
+  
+
   
 
   router.get('/add-product',auth.adminCookieJWTAuth, function(req,res) {
@@ -242,13 +306,25 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     productHelper.updateProduct(req.query.id,req.body).then(()=>{
       res.redirect('/admin/view-product')      
       console.log(req.body);
-      if(req.files?.Image){
-        let image=req.files.Image
-        image.mv('./public/product-images/'+id+'.jpg')
+      if(req.files?.image1){
+        let image1=req.files.image1
+        image1.mv(`./public/product-images/${id}1.jpg`)
       }
+      if(req.files?.image2){
+        let image2=req.files.image2
+        image2.mv(`./public/product-images/${id}2.jpg`)
+      }
+      if(req.files?.image3){
+        let image3=req.files.image3
+        image3.mv(`./public/product-images/${id}3.jpg`)
+      }
+      if(req.files?.image4){
+        let image4=req.files.image4
+        image4.mv(`./public/product-images/${id}4.jpg`)
+      }
+
     })
   })
-
 
   ///////////////////////category///////////////
 
@@ -605,4 +681,49 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
         //     res.redirect('/error')
         //   }
         // };
+
+
+        ///////////////OFFER?//////////////
+
+        router.get('/offer',auth.adminCookieJWTAuth,function(req,res){
+
+        })
+
+        router.post('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
+
+      
+          bannerHelpers.addBanner(req.body,(id) => {
+          let image=req.files.Image
+          console.log(id)
+          image.mv('./public/banner-images/'+id+'.jpg',(err,done)=>{
+          if(!err){
+            res.render("admin/add-banner")
+            }else{
+            console.log(err)
+            }
+            })
+         
+          })
+          res.redirect('/admin/add-banner')
+      
+        });
+        
+      
+        router.get('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
+      
+            bannerHelpers.getAllBanner().then((banner)=>{
+      
+              res.render('admin/add-banner', {admin:true,banner, adminLoggedIn:req.session.adminLoggedIn})
+            })
+          req.session.fromAdmin = true;
+      
+        });
+
+
+
+        router.get('/add-offer',auth.adminCookieJWTAuth,function(req,res){
+          categoryHelper.getAllCategory().then((category)=>{
+            res.render('admin/add-offer',{category})
+          })
+        })
 module.exports = router;
