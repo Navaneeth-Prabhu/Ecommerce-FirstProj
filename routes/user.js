@@ -15,6 +15,7 @@ const userJWTTokenAuth = require('../helpers/userAwth');
 const { Collection } = require('mongodb');
 const collections = require('../config/collections');
 const bcrypt=require('bcrypt');
+const categoryHelpers = require('../helpers/category-helpers');
 // import * as paypal from "../helpers/paypal";
 
 
@@ -218,24 +219,73 @@ router.get('/productDetails',function(req,res){
 
 
 
-router.get('/cart',async function(req,res){
-  if(req.session.loggedIn){
-    let products=await userHelpers.getCartProduct(req.session.user._id)
-  //  let address=await userHelpers.getUserAddress(req.)
-    let totalAmount =0
-    if(products.length > 0){
-      
-      totalAmount = await userHelpers.getTotalAmount(req.session.user._id)
-      
-    }
-    // console.log(address);
-    res.render('user/cart',{products,user:req.session.user,totalAmount})
+// router.get('/cart',async function(req,res){
 
-  }
-  else{
-    res.redirect('/login')
+  
+//   if(req.session.loggedIn){
+//     let products=await userHelpers.getCartProduct(req.session.user._id)
+//   //  let address=await userHelpers.getUserAddress(req.)
+//   let totalOfferAmount =0
+//     let totalAmount =0
+//     if(products.length > 0){
+      
+//       totalAmount = await userHelpers.getTotalAmount(req.session.user._id)
+//       totalOfferAmount = await userHelpers.getOfferTotalAmount(req.session.user._id)
+      
+//     }
+//     // console.log(address);
+//     res.render('user/cart',{products,user:req.session.user,totalAmount,totalOfferAmount})
+
+//   }
+//   else{
+//     res.redirect('/login')
+//   }
+// })
+
+router.get('/cart',async function(req,res){
+  try {
+    let total = 0
+    await userHelpers.getCartProduct(req.session.user._id).then(async(products)=>{
+      products.forEach((data) => {
+
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+            console.log(Number(data.product.offerPrice));
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+        
+       
+      });
+
+    
+
+    // let total = await userHelper.getTotalAmount(req.session.user._id);
+    
+  
+    let categories = await categoryHelpers.getAllCategory().catch((err)=>{console.log(err,"hello"); res.redirect('/error')})
+    
+    
+   console.log("tot: ",total);
+    res.render("user/cart", { products, total, user: req.session.user,categories});
+  }).catch((error)=>{
+    console.log(error,"hi");
+    res.redirect('/error')});
+  } catch (err) {
+    console.log(err,"hey");
+    res.redirect('/error')
   }
 })
+
 
 router.get('/add-to-cart/:id',(req,res)=>{
   if(req.session.loggedIn){
@@ -249,16 +299,66 @@ router.get('/add-to-cart/:id',(req,res)=>{
   }
 })
 
-router.post('/change-product-quantity',(req,res,next)=>{
-  console.log(req.body);
-  console.log("body heere");
+// router.post('/change-product-quantity',(req,res,next)=>{
+//   console.log(req.body);
+//   console.log("body heere");
   
-  userHelpers.changeProductQuantity(req.body).then(async(response)=>{
-    response.total = await userHelpers.getTotalAmount(req.body.user)
-    // response.totalPro = await userHelpers.getTotalProAmo(req.body.user)
-    res.json(response)
-  })
+//   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+//     response.total = await userHelpers.getTotalAmount(req.body.user)
+//     // response.totalPro = await userHelpers.getTotalProAmo(req.body.user)
+//     res.json(response)
+//   })
+// })
+
+
+router.post('/change-product-quantity',(req,res,next)=>{
+  try {
+    let price = 0;
+    let offerPrice = 0;
+    let total  = 0
+    productHelper.getProductDetails(req.body.product).then((response) => {
+      price = response.price;
+      offerPrice = response?.offerPrice
+    }).catch(()=>{res.redirect('/error')});
+
+    // console.log(price);
+    userHelpers.changeProductQuantity(req.body).then(async (response) => {
+      let products = await userHelpers.getCartProduct(req.session.user._id);
+      products.forEach((data) => {
+
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         
+       
+        
+       
+      });
+      
+      response.total = total
+      response.price = price;
+      response.offerPrice = offerPrice
+      res.json(response);
+    });
+  } catch (err) {
+    console.log(err);
+    console.log(req.body);
+    res.redirect('/error')
+  }
 })
+
 
 router.post('/delete-cart-product',(req,res,next)=>{
   if(req.session.loggedIn){
@@ -353,7 +453,7 @@ router.get('/checkout/',async(req,res)=>{
 
 router.post('/checkout',async(req,res)=>{
   
-  console.log("uyg",req.body['payment-method']);
+  console.log("in post checkout",req.body['payment-method']);
   let products = await userHelpers.getCartProductList(req.body.userId)
 
   // if(products.length>0){
@@ -612,6 +712,7 @@ router.post('/changePass',async function(req,res){
 router.post("/api/orders", async (req, res) => {
   const order = await paypal.createOrder();
   const total = await userHelpers.getTotalAmount();
+  // res.status(status).json(obj)
   res.json(order,total);
 });
 
@@ -623,8 +724,59 @@ router.post("/api/orders/:orderId/capture", async (req, res) => {
 
 
 
+///////////////Verify coupon///////
+router.post('/verifyCoupon',async function(req,res){
+  // try {
+    let total = 0
+    let products = await userHelpers.getCartProduct(req.session.user._id).catch(()=>{res.redirect('/error')});;
+      products.forEach((data) => {
+
+  
+        // try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        // } catch (error) {
+          
+        //   data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+        //   total+=data.subTotal
+        // }
+         
+       
+        
+       
+      });
+    
+    // let user = await userHelpers.getUserDetails(req.session.user._id);
+    // let address = false;
+    // if (user.address) {
+    //   address = user.address;
+    // }
+    let address =await userHelpers.viewAddress(req.session.user._id)
+
+    userHelpers.verifyCoupon(req.body).then((coupon)=>{
+      console.log(req.body);
+      console.log('cou: ',coupon);
+      if(coupon){
+        total = total - (total* (Number(coupon.off)/100))
+      }
+      res.render("user/checkout", { total, user: req.session.user, address,coupon });
+    });
+   
+  // } catch (err) {
+  //   console.log(err);
+  //   res.redirect('/error')
+  // }
+})
 
 
+    
 
 
 

@@ -4,6 +4,7 @@ var collection = require('../config/collections');
 var objectId = require('mongodb').ObjectId
 var bcrypt = require('bcrypt');
 const { response } = require('express');
+const collections = require('../config/collections');
 
 
 module.exports ={
@@ -86,4 +87,48 @@ module.exports ={
                 })
             })
         },
+        addCategoryOff:(catId,offer,validTill, validFrom)=>{
+ 
+            return new Promise(async(resolve,reject)=>{
+                try {
+                    let offerPrice = []
+                let off=Number(offer)
+                let offTill = validTill
+                console.log(catId);
+                let offFrom = validFrom
+                let ppa = {category:catId} 
+                await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
+                    res.forEach(data=>{
+                        let price = Number(data.price)
+                        offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
+                    })
+                   offerPrice.forEach(data=>{
+                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
+                   })
+                   console.log("cat"+ catId);
+                   db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name:catId},{$set:{offer:off,validTill:offTill, validFrom: offFrom}},{upsert: true}).then((res)=>{
+                    
+                   })
+                })
+              resolve()
+                } catch (error) {
+                    reject()
+                } 
+            })    
+       },
+       deleteCategoryOffer:(catId) => {
+        return new Promise((resolve, reject) => {
+            console.log(catId);
+            // await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
+               db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name: catId}, {$unset:{offer:"", validFrom:"", validTill:""}}).then((response) => {
+                console.log((response));
+                db.get().collection(collection.PRODUCT_COLLECTION).updateMany({SubCategory: catId}, {$unset:{offerPrice:""}}).then((res) => {
+                    resolve(res)
+                })
+               })
+                
+        // })
+        })
+    }
+       
 }

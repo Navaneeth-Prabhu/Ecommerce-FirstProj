@@ -73,7 +73,7 @@ module.exports={
     getAllUsers:() => {
         return new Promise (async (resolve, reject) => {
             let users = await db.get().collection(collection.USER_COLLECTION).find().toArray()
-            console.log(users +'\n helo')
+            // console.log(users +'\n helo')
             resolve(users)
         })
     },
@@ -338,7 +338,58 @@ module.exports={
 
             ]).toArray()
             // console.log(total[0].total);
-            resolve(total[0].total)
+            if (total == "") {
+                resolve();
+              } else {
+                resolve(total[0].total);
+              }
+        })
+    },
+    getOfferTotalAmount:(userId)=>{
+        console.log(userId);
+        return new Promise(async(resolve,reject)=>{
+            let total=await db.get().collection(collection.CART_COLLECTION).aggregate([
+                 {
+                    $match:{user:objectId(userId)}
+                 },
+                 {
+                    $unwind:'$products'
+                 },
+                 {
+                    $project:{
+                        item:'$products.item',
+                        quantity:'$products.quantity'
+                    }
+                 },
+                 {
+                    $lookup:{
+                        from:collection.PRODUCT_COLLECTION,
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
+                    }
+                 },
+                 {
+                    $project:{
+                        item:1,
+                        quantity:1,
+                        product:{$arrayElemAt:['$product',0]}
+                    }
+                 },
+                 {
+                    $group:{
+                        _id:null,
+                        total:{$sum:{$multiply:[{$toInt:'$quantity'},{$toInt:'$product.offerPrice'}]}}
+                    }
+                 }
+
+            ]).toArray()
+            // console.log(total[0].total);
+            if (total == "") {
+                resolve();
+              } else {
+                resolve(total[0].total);
+              }
         })
     },
     
@@ -475,13 +526,13 @@ module.exports={
     placeOrder:(order,products,total)=>{
         return new Promise((resolve,reject)=>{
             var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            var yyyy = today.getFullYear();
+            // var dd = String(today.getDate()).padStart(2, '0');
+            // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            // var yyyy = today.getFullYear();
             
-            today = mm + '-' + dd + '-' + yyyy;
+            // today = mm + '-' + dd + '-' + yyyy;
             order.Date=today
-            
+            let date = new Date()
             let status = order["payment-method"] === "COD" || order["payment-method"] === "paypal" ? "placed" : "pending";
             
             let orderObj={
@@ -501,6 +552,7 @@ module.exports={
                 products:products,
                 totalAmount:total,
                 status:status,
+                date:today
                 // date:date,
                 
             }
@@ -892,6 +944,27 @@ changePaymentStatus:async (orderId)=>{
        // }
    })
 },
+
+
+verifyCoupon: (coupon) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+    
+      db.get().collection(collection.COUPON_COLLECTION).findOne({
+        coupon: coupon.coupon
+      }).then((res) => {
+        console.log(res);
+        resolve(res)
+      })
+          
+    } catch (error) {
+        console.log(error);
+        reject()
+    }
+      
+    });
+    
+  }
 
 
 }

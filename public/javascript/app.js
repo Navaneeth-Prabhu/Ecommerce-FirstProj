@@ -32,7 +32,7 @@ paypal
           //     ": " +
           //     transaction.id 
           // );
-          $( "#checkout" ).trigger( "click" );
+          $( "#co" ).trigger( "click" );
           // When ready to go live, remove the alert and show a success message within this page. For example:
           // var element = document.getElementById('paypal-button-container');
           // element.innerHTML = '';

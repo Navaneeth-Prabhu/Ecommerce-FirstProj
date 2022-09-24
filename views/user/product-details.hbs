@@ -39,24 +39,22 @@
                 <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
                 <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
               </ul>
-              <h1>Red digital smartwatch</h1>
-              <p class="text-muted lead">$250</p>
+              <h1>{{product.product_title}}</h1>
+                      {{#if product.offerPrice}}
+                      <p class="small text-muted"><span class="font-weight-bold">₹</span><del>{{product.price}}</del> </p>
+                      <p class="lead"><span class="font-weight-bold">₹</span> {{product.offerPrice}}</p>
+                      {{else}}
+                      <p class="text-muted lead"><span class="font-weight-bold">₹</span> {{product.price}}</p>
+                      {{/if}}
+
               <p class="text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.</p>
               <div class="row align-items-stretch mb-4">
-                <div class="col-sm-5 pr-sm-0">
-                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-                    <div class="quantity">
-                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
-                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="col-sm-3 pl-sm-0"><button class="btn tbn-sm btn-dark"b type="button"  onclick="addToCart('{{product._id}}')">Add to Cart</button></div>
               </div><a class="text-dark p-0 mb-4 d-inline-block" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a><br>
               <ul class="list-unstyled small d-inline-block">
-                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span class="ms-2 text-muted">039</span></li>
-                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ms-2" href="#!">Demo Products</a></li>
+               
+                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong>{{product.Category}}</li>
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ms-2" href="#!">Innovation</a></li>
               </ul>
             </div>
@@ -188,6 +186,7 @@
 <script>
 
    var options = {
+   
             height:500,
             zoomWidth:700,
             offset:{vertical:0 , horizontal:0},

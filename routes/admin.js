@@ -11,21 +11,83 @@ var bannerHelpers = require('../helpers/banner-helpers')
 var addUserError=require('../routes/user');
 const { query, response } = require('express');
 const { ORDER_COLLECTION } = require('../config/collections');
+const categoryHelpers = require('../helpers/category-helpers');
+const couponHelper = require('../helpers/coupon-helpers')
 
 console.log("here 2")
 
 /* GET users listing. */
-router.get('/',auth.adminCookieJWTAuth, function(req, res, next) {
-  // console.log(req.session.adminLoggedIn);
-  
-    userHelpers.getAllUsers().then((users) => {
-      console.log(users);
-      res.render('admin/dashboard', {admin: true,users, adminLoggedIn:req.session.adminLoggedIn});
+router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next) {
+  console.log("in dashboard");
+  try {
+    let total = 0
+    let newDate = []
+    no= 0
+    let u_no =0
+    await userHelper.getAllUserOrders().then((orders)=>{
       
-    })
-    console.log("here admin")
+      // console.log("in try: ",orders);
+       orders.forEach(data => {
+     
+   
+        if (data.status == "Delivered") {
+          no++
+          total=total+data.totalAmount
+          console.log(total);
+        }
+       });
+      
+     }).catch((err)=>{res.redirect('/error')})
+   await  userHelper.getAllUsers().then((users)=>{
+    users.reverse()
+    let newUsers = []
+    let newTrans = []
+    for (let index = 0; index < 5; index++) {
+      newUsers.push(users[index])
+      
+    }
+    users = newUsers
+      userHelper.getAllUserOrders().then(async(orders) => {
+        for (let index = 0; index < 3; index++) {
+          newTrans.push(orders[index])
+          
+        }
+        orders = newTrans
+        try {
+          console.log("order: ",orders);
+          orders.forEach(data => {
+            
+            data.date=((data.delivery_details.date))
+           console.log("hey");
+       
+            });
+        } catch (err) {
+          console.log("err: 2nd try ",err)
+          res.redirect('/error')
+        }
+        await userHelper.getAllUsers().then((users)=>{users.forEach(data => {
+     
+          u_no++
+         
+     
+          });})
+          
+      res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no});
+    });
+ 
+      
+    }).catch(()=>{res.redirect('/error')})
+   
+ 
+    
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error')
+  }
+})
 
-});
+
+
 
 router.get('/login',auth.adminLoggedIn, function(req,res) {
   if(req.session.adminLoggedIn){
@@ -138,14 +200,7 @@ router.get('/unblock-user',auth.adminCookieJWTAuth, (req,res) => {
   })
 })
 
-//////admin dashboard//
-router.get('/dashboard',auth.adminCookieJWTAuth, function(req,res){
-  userHelper.getAllUserOrders().then((order)=>{
-    console.log('order: ',order);
 
-    res.render('admin/dashboard',{admin: true, adminLoggedIn:req.session.adminLoggedIn,order})
-  })
-})
 
 //////admin view user//
 router.get('/view-users',auth.adminCookieJWTAuth, function(req,res){
@@ -496,234 +551,336 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     })
 
 
-    ////////////////////dashBoard//////////////////
+//////admin dashboard///////////
 
 
-    // router.get('/dashboard',function(req,res){
-    //   productHelper.getAllProducts().then((response)=>{
-    //     res.rend
-    //   })
-    // })
 
 
-    // router.get("/stats", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
+// router.get('/dashboard',auth.adminCookieJWTAuth, async function(req,res){
+  
+
+
+//   exports.dashboard= async (req, res) => {
+//     try {
+//       let total = 0
+//       let newDate = []
+//       no= 0
+//       let u_no =0
+//       await userHelper.getAllUserOrders().then((orders)=>{
+        
+ 
+//          orders.forEach(data => {
+       
+     
+//           if (data.status == "Delivered") {
+//             no++
+//             total=total+data.totalAmount
+//           }
+//          });
+        
+//        }).catch((err)=>{res.redirect('/error')})
+//      await  userHelper.getAllUsers().then((users)=>{
+//       users.reverse()
+//       let newUsers = []
+//       let newTrans = []
+//       for (let index = 0; index < 5; index++) {
+//         newUsers.push(users[index])
+        
+//       }
+//       users = newUsers
+//         userHelper.getAllUserOrders().then(async(orders) => {
+//           for (let index = 0; index < 3; index++) {
+//             newTrans.push(orders[index])
+            
+//           }
+//           orders = newTrans
+//           try {
+//             console.log(orders,"oooooordders");
+//             orders.forEach(data => {
+              
+//               data.date=((data.deliveryDetails.Date).toLocaleDateString("en-US"))
+             
+         
+//               });
+//           } catch (err) {
+//             console.log("errrrrrrrrrrrrrrrrrrrrr",err)
+//             res.redirect('/error')
+//           }
+//           await userHelper.getAllUsers().then((users)=>{users.forEach(data => {
+       
+//             u_no++
+           
+       
+//             });})
+            
+//         res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no});
+//       });
+   
+        
+//       }).catch(()=>{res.redirect('/error')})
+     
+   
+
+     
+      
+//     } catch (err) {
+//       console.log(err);
+//       res.redirect('/error')
+//     }
+//   };
+
+// })
+   
+
+    router.get("/stats", auth.adminCookieJWTAuth, async (req, res) => {
+      const today = new Date();
+      const latYear = today.setFullYear(today.setFullYear() - 1);
     
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-    //         $project: {
-    //           month: { $month: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$month",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
+      try {
+        const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
+          {
+            $match:{
+                status:"Delivered"
+            },
+          },
+          {
+            $project: {
+              month: { $month: "$delivery_details.date" },
+              total:"$totalAmount"
+            },
+          },
+          {
+            $group: {
+              _id: "$month",
+              total: { $sum: "$total" },
+            },
+          },
+        ]).sort({ _id: -1 }).toArray();
+        res.status(200).json(data)
+        console.log(data);
+      } catch (err) {
+        res.status(500).json(err).redirect('/error');
+        console.log(err);
+      }
+    });
     
-    // router.get("/stats2", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
+    router.get("/stats2", auth.adminCookieJWTAuth, async (req, res) => {
+      const today = new Date();
+      const latYear = today.setFullYear(today.setFullYear() - 1);
     
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
+      try {
+        const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
+          {
+            $match:{
+                status:"Delivered"
+            },
+          },
+          {
           
-    //         $project: {
-    //           week: { $week: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$week",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
-    // router.get("/stats3", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
+            $project: {
+              week: { $week: "$delivery_details.date" },
+              total:"$totalAmount"
+            },
+          },
+          {
+            $group: {
+              _id: "$week",
+              total: { $sum: "$total" },
+            },
+          },
+        ]).sort({ _id: -1 }).toArray();
+        res.status(200).json(data)
+        console.log(data);
+      } catch (err) {
+        res.status(500).json(err).redirect('/error');
+        console.log(err);
+      }
+    });
+    router.get("/stats3", auth.adminCookieJWTAuth, async (req, res) => {
+      const today = new Date();
+      const latYear = today.setFullYear(today.setFullYear() - 1);
     
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
+      try {
+        const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
+          {
+            $match:{
+                status:"Delivered"
+            },
+          },
+          {
           
-    //         $project: {
-    //           dayOfMonth: { $dayOfMonth: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$dayOfMonth",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
+            $project: {
+              dayOfMonth: { $dayOfMonth: "$delivery_details.date" },
+              total:"$totalAmount"
+            },
+          },
+          {
+            $group: {
+              _id: "$dayOfMonth",
+              total: { $sum: "$total" },
+            },
+          },
+        ]).sort({ _id: -1 }).toArray();
+        res.status(200).json(data)
+        console.log(data);
+      } catch (err) {
+        res.status(500).json(err).redirect('/error');
+        console.log(err);
+      }
+    });
     
-    // router.get("/stats4", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
+    router.get("/stats4", auth.adminCookieJWTAuth, async (req, res) => {
+      const today = new Date();
+      const latYear = today.setFullYear(today.setFullYear() - 1);
     
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-    //         $project: {
-    //           year: { $year: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$year",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
+      try {
+        const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
+          {
+            $match:{
+                status:"Delivered"
+            },
+          },
+          {
+            $project: {
+              year: { $year: "$delivery_details.date" },
+              total:"$totalAmount"
+            },
+          },
+          {
+            $group: {
+              _id: "$year",
+              total: { $sum: "$total" },
+            },
+          },
+        ]).sort({ _id: -1 }).toArray();
+        res.status(200).json(data)
+        console.log(data);
+      } catch (err) {
+        res.status(500).json(err).redirect('/error');
+        console.log(err);
+      }
+    });
     
-    // router.get('/getMostStats', auth.adminCookieJWTAuth,async (req,res)=>{
+    router.get('/getMostStats', auth.adminCookieJWTAuth,async (req,res)=>{
      
     
-    //  await adminHelpers.getMostStats().then(async(response)=>{
-    //     let top = 0
-    //     for (let i= 0; i < response.length-1; i++) {
-    //       if (response[i].count<response[i+1].count) {
-    //         top  = response[i+1]
-    //       }
-          
-    //     }
-    //   })
-    // })
-    //     router.get('/get-order-details', verifyAdmin,controller.orderDetails)
+      await productHelper.getMostStats().then(async(response)=>{
+      let top = 0
+      for (let i= 0; i < response.length-1; i++) {
+        if (response[i].count<response[i+1].count) {
+          top  = response[i+1]
+        }
+      }
+    productHelper.getProductDetails(top._id).then(async(product)=>{
+       try {
+         product.count = top.count
+        
+      } catch (error) {
+        console.log("wait for top");
+      }
+     
+      res.json(product)
+    })
+    })
+    })
 
 
-        // exports.viewSalesReport = async (req, res) => {
-        //   try {
-        //     let total = 0
-        //     let no = 0
-        //    await userHelper.getAllUserOrders().then((orders)=>{
-             
-      
-        //       orders.forEach(data => {
-        //         if (data.status == "Delivered") {
-        //           no++
-        //           total=total+data.totalAmount
-        //         }
-              
-        //       });
-        //       let options = {year: 'numeric', month: 'short', day: 'numeric' };
-        //       orders.forEach(data => {
-        //         // console.log(data.deliveryDetails.Date);
-        //         data.date=(data.deliveryDetails.Date.toLocaleDateString("en-US", options))
-                
-        //         });
-        //       res.render('admin/salesReport',{admin:req.session.admin,total,no,orders})
-        //     }).catch(()=>{res.redirect('/error')})
-          
-            
-            
-        //   } catch (err) {
-        //     console.log(err);
-        //     res.redirect('/error')
-        //   }
-        // };
+
+
 
 
         ///////////////OFFER?//////////////
 
-        router.get('/offer',auth.adminCookieJWTAuth,function(req,res){
 
+
+    router.get('/view-offer',auth.adminCookieJWTAuth,function(req,res){
+          categoryHelper.getAllCategory().then((categories) => {
+            console.log(categories);
+            res.render('admin/view-offer',{admin:true, categories})
+          })
+           
         })
 
-        router.post('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
-
+    router.post('/add-offer',auth.adminCookieJWTAuth, function(req,res) {
       
-          bannerHelpers.addBanner(req.body,(id) => {
-          let image=req.files.Image
-          console.log(id)
-          image.mv('./public/banner-images/'+id+'.jpg',(err,done)=>{
-          if(!err){
-            res.render("admin/add-banner")
-            }else{
-            console.log(err)
-            }
+    try {
+            console.log("in try");
+            console.log(req.body);
+            let catId = req.body.SubCategory
+            let off = req.body.offer
+            let validTill = req.body.date_end
+            let validFrom = req.body.date_start
+            categoryHelper.addCategoryOff(catId,off,validTill, validFrom).then(()=>{
+              res.redirect("/admin/view-offer")
             })
-         
-          })
-          res.redirect('/admin/add-banner')
-      
+         }
+         catch(err){
+          res.redirect('/error')
+          console.log(err);
+         }
+
         });
         
-      
-        router.get('/add-banner',auth.adminCookieJWTAuth, function(req,res) {
-      
-            bannerHelpers.getAllBanner().then((banner)=>{
-      
-              res.render('admin/add-banner', {admin:true,banner, adminLoggedIn:req.session.adminLoggedIn})
-            })
-          req.session.fromAdmin = true;
-      
-        });
 
-
-
+        
         router.get('/add-offer',auth.adminCookieJWTAuth,function(req,res){
-          categoryHelper.getAllCategory().then((category)=>{
-            res.render('admin/add-offer',{category})
+        categoryHelper.getAllCategory().then((category)=>{
+            res.render('admin/add-offer',{admin:true,category})
           })
         })
+
+        router.get('/delete-offer', function(req, res) {
+          categoryHelpers.deleteCategoryOffer(req.query.id).then((response) => {
+            console.log(response);
+            res.redirect('/admin/view-offer')
+          })
+        })
+
+
+
+    ///////coupon//////////////////
+
+
+    router.post('/coupons',auth.adminCookieJWTAuth,function(req,res){
+      try {
+        couponHelper.addCoupon(req.body).catch(()=>{res.redirect('/error')})
+          res.redirect("/admin/coupons");
+  
+        // redirect to /admin/manage-categories
+      } catch (err) {
+        console.log("post:",err);
+        res.redirect('/error')
+      }
+    })
+
+    router.get('/coupons',auth.adminCookieJWTAuth,function(req,res){
+
+      
+      try {
+        console.log("in try");
+        couponHelper.getCoupons().then((response)=>{
+          console.log("in helper");
+          let coupons=  response
+  
+          res.render("admin/coupons",{coupons,admin:true});
+      }).catch(()=>{res.redirect('/error')})
+     } catch (err) {
+        console.log("get:",err);
+        res.redirect('/error')
+      }
+    })
+
+    router.get('/delete-coupon',auth.adminCookieJWTAuth,function(req,res){
+      try {
+        let proid=req.query.id
+      couponHelper.deleteCoupon(proid).catch(()=>{res.redirect('/error')})
+        res.redirect("/admin/coupons")
+      } catch (err) {
+        console.log(err);
+        res.redirect('/error')
+      }
+    })
+  
+
+
 module.exports = router;

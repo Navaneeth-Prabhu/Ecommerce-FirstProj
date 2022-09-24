@@ -11,10 +11,14 @@
                    <div class="form-group">
                     <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
                     <div class="col-md-4">
-                    <input id="Banner_name" name="Banner_name" placeholder="TITLE" class="form-control input-md" required="" type="text">
+                    <input id="offer_name" name="offer_name" placeholder="TITLE" class="form-control input-md" required="" type="text">
+                    
                         
                     </div>
                     </div>
+                    <label class="col-md-4 control-label" for="product_weight">offer</label>  
+                    <div class="col-md-4">
+                    <input id="offer" name="offer" placeholder="" class="form-control input-md" required="" type="number">
 
 
                     <div>
@@ -30,24 +34,14 @@
                     </select>
                     </div>
 
-      
-                    <option id="home" value="home1" >Home1</option>
-                    <option id="home" value="home2" >Home2</option>
                     </div>
                   
-                    </select>
-                    </div>
 
 
                         
                     
-                    <div class="form-group">
-                 <img src="{{banner._id}}" alt="" style="height: 100px;" id="imgView">
-                    <label class="col-md-4 control-label" for="filebutton" >images</label>
-                    <div class="col-md-4">
-                        <input id="Image" name="Image" class="input-file" type="file" onchange="viewImage(event)">
-                    </div>
-                    </div>
+                    <input type="date" name="date_start" id="date_start">
+                    <input type="date" name="date_end" id="date_end">
 
                     {{!-- <!-- Button -->
                     <div class="form-group">
@@ -58,7 +52,7 @@
                     </div>
                     <center> --}}
                             <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
-                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin">Cancel</a></button>
+                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin/view-offer">Cancel</a></button>
                     </center>
                     
                 </form>

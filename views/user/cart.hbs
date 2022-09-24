@@ -79,7 +79,7 @@
                     <tr>
                      
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}.jpg" alt="..." width="70"/></a>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="70"/></a>
                           <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product.product_title}}</a></strong></div>
                         </div>
                       </th>
@@ -122,7 +122,10 @@
               <div class="bg-light px-4 py-3">
                 <div class="row align-items-center text-center">
                   <div class="col-md-6 mb-3 mb-md-0 text-md-start"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a></div>
+                  {{#if products}}
                   <div class="col-md-6 text-md-end"><a class="btn btn-outline-dark btn-sm" href="/checkout">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
+                  {{else}}
+                  {{/if}}
                 </div>
               </div>
             </div>
@@ -134,14 +137,13 @@
                   <ul class="list-unstyled mb-0">
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li>
                     <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{totalAmount}}</span></li>
+                    {{!-- {{#if product.offerPrice}} --}}
+                    {{!-- <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{totalOfferAmount}}</span></li> --}}
+                    {{!-- {{else}} --}}
+                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{total}}</span></li>
+                    {{!-- {{/if}} --}}
                     <li>
-                      <form action="#">
-                        <div class="input-group mb-0">
-                          <input class="form-control" type="text" placeholder="Enter your coupon">
-                          <button class="btn btn-dark btn-sm w-100" type="submit"> <i class="fas fa-gift me-2"></i>Apply coupon</button>
-                        </div>
-                      </form>
+
                     </li>
                   </ul>
                 </div>

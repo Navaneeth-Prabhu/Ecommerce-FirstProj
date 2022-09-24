@@ -133,7 +133,13 @@
                         </div>
                       </div>
                       <h6> <a class="reset-anchor" href="detail.html">{{this.product_title}}</a></h6>
+                      {{#if this.offerPrice}}
+                      <p class="small text-muted"><span class="font-weight-bold">₹</span><del>{{this.price}}</del> </p>
+                      <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.offerPrice}}</p>
+                      {{else}}
                       <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
+                      {{/if}}
+
                     </div>
                   </div>
                     {{/each}}

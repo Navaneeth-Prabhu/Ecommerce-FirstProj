@@ -105,7 +105,7 @@
                   </div>
 
 
-                    <p>ADDRESS</p>
+                    <H5>ADDRESS</H5>
                   {{#each address}}
                     <label for="address" id="addressLabel" class=" radio-inline">
                     <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id" checked>
@@ -117,24 +117,42 @@
                 
 
 
-                  <p>payment mode</p>
+                  <h5>PAYMENT METHOD</h5>
                   <label for="" class=" radio-inline">
-                    <input type="radio" name="payment-method" value="COD" checked>COD
+                    <input type="radio" name="payment-method" value="COD" onclick="toggle()" required>COD
                   </label>
                   <label for="" class="radio-inline">
-                    <input type="radio" name="payment-method" value="razorpay"  >RazorPay
+                    <input type="radio" name="payment-method" value="razorpay" onclick="toggle()" required>RazorPay
                   </label>
-                  {{!-- <label for="" class="radio-inline">
-                    <input type="radio" name="payment-method" value="paypal" >PayPal
-                     <div class="btn" id="paypal-button-container"></div>
-                  </label> --}}
+                  <label for="" class="radio-inline">
+                    <input type="radio" name="payment-method" value="paypal" onclick="toggle1()" required >PayPal
+                  </label>
         
                   <div class="col-lg-12 form-group">
-                    <button class="btn btn-dark" type="submit">Place order</button>
+                     <div class="btn clr" id="paypal-button-container"></div>
+                    <button class="btn btn-dark clr" type="submit" id="co">Place order</button>
                   </div>
                 </div>
               </form>
             </div>
+            {{!-- <div class="payment">
+                            <p>Payment method</p>
+                            <label class="radio-inline" >
+                                <input type="radio" name="Payment-method" value="COD" onclick="toggle()" required>COD
+                            </label><br>
+                            <label class="radio-inline" >
+                                <input type="radio" name="Payment-method" value="paypal" onclick="toggle1()" required>Paypal
+                            </label><br>
+                            <label class="radio-inline mt-2">
+                                <input type="radio" name="Payment-method" value="Online-Payment" onclick="toggle()" required>Razorpay Payment
+                            </label><br><br>
+                            {{#if coupon}}
+                            <input type="text" name="coupon" value={{coupon.off}} style="display: none;">
+                            {{/if}}
+                            <button type="submit" class="float-rleft btn-primary clr" id="co">Checkout</button>
+                      
+                            <div id="paypal-button-container" style="margin-top: 1rem;" class="clr"></div>
+                        </div> --}}
 
 
 
@@ -150,6 +168,17 @@
                     {{!-- <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$351</span></li> --}}
                     {{!-- <li class="border-bottom my-2"></li> --}}
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>${{total}}</span></li>
+                    <li>
+
+                    </li>
+                    <li>
+                      <form action="/verifyCoupon" method="post">
+                        <div class="input-group mb-0">
+                          <input class="form-control" type="text" placeholder="Enter your coupon" name="coupon" id="coupon">
+                          <button class="btn btn-dark btn-sm w-100" type="submit"> <i class="fas fa-gift me-2"></i>Apply coupon</button>
+                        </div>
+                      </form>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -240,6 +269,15 @@
     </div>
 
 
+<style>
+  .clr {
+    display: none !important;
+  }
+  .sft {
+   display: block !important;
+  }
+</style>
+
 
 <script>
   $("#checkout").submit((e)=>{
@@ -306,7 +344,7 @@ function verifyPayment(payment,order){
     },
     method:'post',
     success:((response) =>{
-      console.log("helo",response)
+      console.log("",response)
         if(response.status){
             location.href='/orderSucessfull'
         }else{
@@ -360,3 +398,19 @@ paypal
  
 
     </script>
+
+<script>
+  function toggle() {
+    const list = document.getElementById("co").classList;
+    const list2 = document.getElementById("paypal-button-container").classList;
+    list.add("sft");
+    list2.remove("sft");
+  
+  }
+   function toggle1() {
+      const list = document.getElementById("co").classList;
+    const list2 = document.getElementById("paypal-button-container").classList;
+    list2.add("sft");
+    list.remove("sft");
+  }
+</script>

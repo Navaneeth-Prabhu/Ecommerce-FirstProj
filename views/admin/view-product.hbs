@@ -18,7 +18,7 @@
                     <th scope="col">DATE</th>
                     {{!-- <th scope="col">Last</th> --}}
                     <th scope="col">Name</th>
-                    <th scope="col">Discription</th>
+                    {{!-- <th scope="col">Discription</th>- --}}
                     <th scope="col">Stock</th>
                     <th scope="col">Category</th>
                     <th scope="col">SubCategory</th>
@@ -35,7 +35,7 @@
                     <td>{{this.Date}}</td>
                     {{!-- <td>{{this.lastEdit}}</td> --}}
                     <td>{{this.product_title}}</td>
-                    <td>{{this.product_description}}</td>
+                    {{!-- <td>{{this.product_description}}</td> --}}
                     <td>{{this.stock}}</td>
                     <td>{{this.Category}}</td>
                     <td>{{this.SubCategory}}</td>
@@ -44,7 +44,7 @@
                     
                     {{!-- <td>{{this.Password}}</td> --}}
                     {{!-- <td><img class=" w-25 h-25 p-0" src="/product-image/{{this.image}}.jpg"></td> --}}
-                    <td><img style="height:50px" src="/product-images/{{this._id}}.jpg" alt=""></td>
+                    <td><img style="height:50px" src="/product-images/{{this._id}}1.jpg" alt=""></td>
                     <td><a href="/admin/edit-product?id={{this._id}}" class="btn btn-primary">Edit</a></td>
 
                     <td><a href="/admin/delete-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td>
