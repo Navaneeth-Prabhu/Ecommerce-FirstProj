@@ -448,7 +448,16 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
     router.get('/view-orders',auth.adminCookieJWTAuth,(req,res)=>{
       userHelper.getAllUserOrders().then((order) => {
-        console.log(order);
+        order.forEach(element => {
+          if(element.status == "Delivered") {
+            element.delivered = true;
+          } else if (element.status == "Shipped") {
+            element.shipped = true;
+          } else if(element.status == "cancelled") {
+            element.delivered = true;
+          }
+        });
+        // console.log(order);
         res.render('admin/view-orders',{admin:true,order})
       })
     });
@@ -464,6 +473,20 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
       res.redirect('/admin/view-orders')
 
     })
+  })
+
+  router.get('/order-products/:id',async(req,res)=>{
+    // if(req.session.loggedIn){
+      
+      let products= await userHelpers.getOrderProducts(req.params.id)
+      console.log(products);
+      // res.send("hiiii")
+      res.render('admin/order-pro',{products})
+    
+      console.log('in view order products');
+    // }else{
+    //   res.redirect('/login')
+    // }
   })
 
   ////////////////////BANNER//////////////

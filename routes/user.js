@@ -451,6 +451,85 @@ router.get('/checkout/',async(req,res)=>{
   }
 })
 
+// router.post('/checkout',async(req,res)=>{
+//   try {
+//     // console.log("Checkout form body", req.body);
+    
+//     let products = await userHelpers.getcar(req.session.user._id);
+
+//     // products.products.forEach(data=>{
+      
+//     //   userHelpers
+//     //   .removeWish(req.session.user._id, data.item)
+//     //   .then((response) => {
+//     //     console.log('');
+//     //   }).catch(()=>{res.redirect('/error')});;
+//     // })
+//     let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
+   
+//     let total = 0
+//     await userHelpers.getCartProduct(req.session.user._id).then((productss)=>{
+//       productss.forEach((data) => {
+
+  
+//         try {
+//           if (data.product.offerPrice) {
+//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+//           } else {
+//             data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+//           }
+//          total+=data.subTotal
+//         } catch (error) {
+//           data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+//           total+=data.subTotal
+//         }
+//          if (req.body.coupon) {
+//           let off = Number(req.body.coupon)
+//           total= total-(total*(off/100))
+//          }
+       
+        
+       
+//       });
+
+
+//     }).catch(()=>{res.redirect('/error')});;
+      
+    
+      
+//     req.body.UserId = req.session.user._id;
+//     await userHelpers.orderPlace(req.body, products, total).then((orderId) => {
+   
+//       if (req.body["Payment-method"] === "COD") {
+//         res.json({ codSuccess: true });
+//       } else if (req.body["Payment-method"] === "paypal") {
+//         res.json({ codSuccess: true });
+//       } else {
+//         userHelpers
+//           .generateRazorPay(orderId, total)
+//           .then((order) => {
+//             order.user = user;
+//             res.json(order);
+//           })
+//           .catch((err) => {
+//             console.log("#### err");
+//             console.log(err);
+//             res.status(500).json({ paymentErr: true });
+//           });
+//       }
+//     }).catch(()=>{res.redirect('/error')});;
+//   } catch (err) {
+//     console.log(err);
+//     res.redirect('/error')
+//   }
+// })
+
+
+
+
 router.post('/checkout',async(req,res)=>{
   
   console.log("in post checkout",req.body['payment-method']);
@@ -465,10 +544,10 @@ router.post('/checkout',async(req,res)=>{
     console.log("body:",req.body);
       if(req.body['payment-method']==='COD'){
         res.json({cod_success:true})
-      // }
-      // else if(req.body['payment-method'==='paypal']){
+      }
+      else if(req.body['payment-method']==='paypal'){
         
-      //   res.json({ cod_success: true });
+        res.json({ cod_success: true });
       }else{
         userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
           console.log('resop:',response);
@@ -513,6 +592,15 @@ router.get('/order-history',async(req,res)=>{
  if(req.session.loggedIn){
   let pro=userHelpers.getOrderProducts(req.session.user._id)
       let orders= await userHelpers.getUserOrders(req.session.user._id)
+      orders.forEach(element => {
+        if(element.status == "Delivered") {
+          element.delivered = true;
+        } else if (element.status == "Shipped") {
+          element.shipped = true;
+        } else if(element.status == "cancelled") {
+          element.cancelled = true;
+        }
+      });
       res.render('user/order-history',{user:req.session.user,orders,pro})
       console.log('in order histroy:',pro);
 }
@@ -655,13 +743,6 @@ router.get('/delete-address',function(req,res){
 
 
 
-// router.get('/user-profile',function(req,res){
-//   let userId=req.query.id
-//   userHelpers.getUserDetails(userId).then((response)=>{
-    
-//   })
-// })
-
 /////////////////CAHANGE PASSWORD////////////////
 
 
@@ -712,8 +793,8 @@ router.post('/changePass',async function(req,res){
 router.post("/api/orders", async (req, res) => {
   const order = await paypal.createOrder();
   const total = await userHelpers.getTotalAmount();
-  // res.status(status).json(obj)
-  res.json(order,total);
+  
+  res.json(order);
 });
 
 router.post("/api/orders/:orderId/capture", async (req, res) => {

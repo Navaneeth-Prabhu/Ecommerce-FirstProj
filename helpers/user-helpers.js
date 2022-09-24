@@ -568,6 +568,43 @@ module.exports={
     },
 
 
+    orderPlace: (order, products, totalPrice) => {
+        return new Promise((resolve, reject) => {
+          try {
+        
+          let status = order["Payment-method"] === "COD" || order["Payment-method"] === "paypal" ? "placed" : "pending";
+    
+          let orderObj = {
+            deliveryDetails: {
+              address: order.address,
+              Date: new Date(),
+            },
+            userId: objectId(order.UserId),
+            payment_Method: order["Payment-method"],
+            status: status,
+            totalAmount: totalPrice,
+            products: products,
+          };
+    
+          db.get()
+            .collection(collections.ORDER_COLLECTION)
+            .insertOne(orderObj)
+            .then((response) => {
+              db.get()
+                .collection(collections.CART_COLLECTION)
+                .removeOne({
+                  user: objectId(order.UserId)
+                });
+    
+              resolve(response.ops[0]._id);
+            });
+                
+          } catch (error) {
+            reject()
+          }
+        });
+      },
+
 
 
     getCartProductList:(userId)=>{

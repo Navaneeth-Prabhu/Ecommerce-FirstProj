@@ -17,12 +17,13 @@
                 <tr>
                     {{!-- <th scope="col">DATE</th> --}}
                     {{!-- <th scope="col">Last</th> --}}
+                    <th scope="col">Product</th>
                     <th scope="col">Date</th>
                     <th scope="col">UserName</th>
                     <th scope="col">Address</th>
                     {{!-- <th scope="col">City</th> --}}
                     {{!-- <th scope="col">state</th> --}}
-                    <th scope="col">Pin</th>
+                    {{!-- <th scope="col">Pin</th> --}}
                     <th scope="col">Phone</th>
                     <th scope="col">Price</th>
                     <th scope="col">Payment</th>
@@ -37,6 +38,7 @@
                 {{#each order}}
                 <tr>
                     {{!-- <td><img style="height:50px" src="/product-images/{{this._id}}.jpg" alt=""></td> --}}
+                    <td> <a href="/admin/order-products/{{this._id}}" class="btn btn-primary">view products</a></td>
                     <td>{{this.delivery_details.date}}</td>
                     {{!-- <td>{{this.lastEdit}}</td> --}}
                     <td>{{this.delivery_details.name}}</td>
@@ -44,7 +46,7 @@
                    
                     {{!-- <td>{{this.delivery_details.city}}</td> --}}
                     {{!-- <td>{{this.delivery_details.state}}</td> --}}
-                    <td>{{this.delivery_details.pin}}</td>
+                    {{!-- <td>{{this.delivery_details.pin}}</td> --}}
                     <td>{{this.delivery_details.mobile}}</td>
                     <td>₹ {{this.totalAmount}}</td>
                     <td>{{this.paymentMethod}}</td>
@@ -56,18 +58,20 @@
                     <form action="/admin/edit-status/{{this._id}}" method="post">
                     {{!-- <form action="" method="post"> --}}
                     <!-- Category -->
+                   {{#if this.delivered}}
+                   {{else}}
                     <div>
                     <label class="col-md-4 control-label" for="stock_alert"></label>  
                     <select name="status" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
                     <label for="status">STATUS</label><br />
-                   
 
-                    <option id="Placed" value="Placed" >Placed</option>
-                    <option id="Shipped" value="Shipped" >Shipped</option>
-                    <option id="Canceled" value="Canceled" >Cancelled</option>
-                    <option id="Delivered" value="Delivered" >Delivered</option>
+                    <option id="status" value="Placed" >Placed</option>
+                    <option id="status" value="Shipped" >Shipped</option>
+                    <option id="status" value="Canceled" >Cancelled</option>
+                    <option id="status" value="Delivered" >Delivered</option>
                     </div>
+                    {{/if}}
 
                     </select>
 

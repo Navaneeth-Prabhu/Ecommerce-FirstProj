@@ -82,7 +82,12 @@
                      <td>{{this.status}}</td>
                     
                       {{!-- {{#if this.status=='Delivered'}} --}}
+                      {{#if this.delivered}}
+
+                     <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Return</a></td>
+                     {{else}}
                      <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Cancel</a></td>
+                     {{/if}}
                      {{!-- {{/if}} --}}
                     </tr>
                    {{/each}}
