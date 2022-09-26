@@ -539,7 +539,7 @@ module.exports={
                 delivery_details:{
                     date:order.Date,
                     name:order.name,
-                    mobile:order.number,
+                    // mobile:order.number,
                     address:order.address,
                     // city:order.city,
                     // state:order.state,
@@ -621,7 +621,7 @@ module.exports={
     getUserOrders:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             let orders= await db.get().collection(collection.ORDER_COLLECTION)
-              .find({userId:objectId(userId)}).toArray()
+              .find({userId:objectId(userId)}).sort({"date":-1}).toArray()
            
             resolve(orders)
         })
@@ -700,7 +700,7 @@ module.exports={
         })
     },
     
-    cancelOrder:(body,details)=>{
+    returnOrder:(body,details)=>{
 
 
         return new Promise((resolve,reject)=>{
@@ -710,7 +710,7 @@ module.exports={
             db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
             {
                 $set:{
-                    status:'cancelled'
+                    status:'Return'
                 }
                 
                 

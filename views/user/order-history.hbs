@@ -1,3 +1,4 @@
+
     <div class="page-holder">
 
       <div class="container">
@@ -37,7 +38,7 @@
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th> --}}
                     </tr>
                   </thead>
-                  <tbody class="border-0">
+                  <tbody class="border-0" >
 
                     {{#each orders}}
                     <tr>
@@ -59,21 +60,7 @@
                         <p class="mb-0 small">${{this.name}}</p>
                       </td> --}}
                      
-                      {{!-- <td class="p-3 align-middle border-light">
-                        <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
-                          <div class="quantity">
-                            
-                            {{!-- {{#if quantity < 1}} --}}
-                            {{!-- <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}',-1)" disabled><i class="fas fa-caret-left"></i></button> --}}
-                        
-                            {{!-- {{/if}} --}}
-                            
-                            {{!-- <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/> --}}
-                            {{!-- <span id="{{this.product._id}}">{{this.quantity}}</span> --}}
-                           
-                          {{!-- </div>
-                        </div>
-                      </td>  --}}
+
                       {{!-- <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">$ {{this.totalAmount}}</p>
                       </td> --}}
@@ -84,7 +71,7 @@
                       {{!-- {{#if this.status=='Delivered'}} --}}
                       {{#if this.delivered}}
 
-                     <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Return</a></td>
+                     <td> <a href="/return-order/{{this._id}}" class="btn btn-danger">Return</a></td>
                      {{else}}
                      <td> <a href="/cancel-order/{{this._id}}" class="btn btn-primary">Cancel</a></td>
                      {{/if}}

@@ -144,8 +144,8 @@
                   <div class="col">
                     <div class="collapse multi-collapse" id="1{{this._id}}">
                       <div class="card card-body">
-                        <h6>Name:</h6><span id="name{{this._id}}"></span><br>
-                        <h6>Email:</h6><span id="email{{this._id}}"></span>
+                        <h6>Name:</h6><span id="name{{this.Name}}"></span><br>
+                        <h6>Email:</h6><span id="email{{this.Email}}"></span>
 
                       </div>
                     </div>
@@ -200,6 +200,8 @@
 <!-- Widgets Start -->
 
 <script src="/javascripts/chart/chart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   $(window).on('load', function () {
     let money = []
@@ -218,66 +220,8 @@
       }
 
     });
-    $.ajax({
-      url: '/admin/get-order-details',
-      method: 'get',
-      success: (response) => {
 
-
-        response.forEach(data => {
-          if (data.status == "Delivered") {
-            date.push((data.deliveryDetails.Date).split('T')[0])
-            money.push(data.totalAmount)
-          }
-        });
-        date.reverse()
-        money.reverse()
-
-      }
-
-    });
-    $.ajax({
-      url: '/admin/stats',
-      method: 'get',
-      success: (response) => {
-        response.forEach(data => {
-
-          switch (data._id) {
-            case 1: month.push("Jan")
-              break;
-            case 2: month.push("Feb")
-              break;
-            case 3: month.push("Mar")
-              break;
-            case 4: month.push("Apr")
-              break;
-            case 5: month.push("May")
-              break;
-            case 6: month.push("Jun")
-              break;
-            case 7: month.push("July")
-              break;
-            case 8: month.push("Aug")
-              break;
-            case 9: month.push("Sep")
-              break;
-            case 10: month.push("Oct")
-              break;
-            case 11: month.push("Nov")
-              break;
-            case 12: month.push("Dec")
-              break;
-          }
-
-          monthMoney.push(data.total)
-        })
-        
-        month.reverse()
-        monthMoney.reverse()
-      }
-
-    });
-
+   
     setTimeout(() => {
       console.log(month)
       var ctx3 = $("#line-chart").get(0).getContext("2d");
@@ -325,3 +269,64 @@
 
 </script>
 <!-- Widgets End -->
+
+    {{!-- $.ajax({
+      url: '/admin/get-order-details',
+      method: 'get',
+      success: (response) => {
+
+
+        response.forEach(data => {
+          if (data.status == "Delivered") {
+            date.push((data.deliveryDetails.Date).split('T')[0])
+            money.push(data.totalAmount)
+          }
+        });
+        date.reverse()
+        money.reverse()
+
+      }
+
+    }); --}}
+
+     {{!-- $.ajax({
+      url: '/admin/stats',
+      method: 'get',
+      success: (response) => {
+        response.forEach(data => {
+
+          switch (data._id) {
+            case 1: month.push("Jan")
+              break;
+            case 2: month.push("Feb")
+              break;
+            case 3: month.push("Mar")
+              break;
+            case 4: month.push("Apr")
+              break;
+            case 5: month.push("May")
+              break;
+            case 6: month.push("Jun")
+              break;
+            case 7: month.push("July")
+              break;
+            case 8: month.push("Aug")
+              break;
+            case 9: month.push("Sep")
+              break;
+            case 10: month.push("Oct")
+              break;
+            case 11: month.push("Nov")
+              break;
+            case 12: month.push("Dec")
+              break;
+          }
+          
+          monthMoney.push(data.total)
+        })
+        
+        month.reverse()
+        monthMoney.reverse()
+      }
+
+    }); --}}

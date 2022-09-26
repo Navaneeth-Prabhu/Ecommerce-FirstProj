@@ -435,27 +435,65 @@ router.post('/delete-wish-product',(req,res,next)=>{
 
 
 
-router.get('/checkout/',async(req,res)=>{
-  if(req.session.loggedIn){
-    // let product = await userHelpers.getCartProduct(req.body.userId)
+// router.get('/checkout/',async(req,res)=>{
+//   if(req.session.loggedIn){
+//     // let product = await userHelpers.getCartProduct(req.body.userId)
 
-    let userId=req.query.id
-    let total= await userHelpers.getTotalAmount(req.session.user._id)
-    let userDetails= await userHelpers.getUserDetails(userId)
+//     let userId=req.query.id
+//     let total= await userHelpers.getTotalAmount(req.session.user._id)
+//     let userDetails= await userHelpers.getUserDetails(userId)
+//     let address =await userHelpers.viewAddress(req.session.user._id)
+//     res.render('user/checkout',{total,user:req.session.user,userDetails,address})
+//     console.log(req.session.user._id);
+//   }
+//     else{
+//     res.redirect('/login')
+//   }
+// })
+
+
+router.get('/checkout/',async(req,res)=>{
+  try {
+    let total = 0
+    let products = await userHelpers.getCartProduct(req.session.user._id);
+      products.forEach((data) => {
+
+  
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          total+=data.subTotal
+        }
+         
+       
+        
+       
+      });
+      let userId=req.query.id
+      let userDetails= await userHelpers.getUserDetails(userId)
     let address =await userHelpers.viewAddress(req.session.user._id)
-    res.render('user/checkout',{total,user:req.session.user,userDetails,address})
-    console.log(req.session.user._id);
+    res.render("user/checkout", { total, user: req.session.user,userDetails, address });
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error')
   }
-    else{
-    res.redirect('/login')
-  }
+
 })
 
 // router.post('/checkout',async(req,res)=>{
 //   try {
 //     // console.log("Checkout form body", req.body);
     
-//     let products = await userHelpers.getcar(req.session.user._id);
+//     let products = await userHelpers.getCartProductList(req.body.userId);
 
 //     // products.products.forEach(data=>{
       
@@ -467,9 +505,9 @@ router.get('/checkout/',async(req,res)=>{
 //     // })
 //     let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
    
-//     let total = 0
-//     await userHelpers.getCartProduct(req.session.user._id).then((productss)=>{
-//       productss.forEach((data) => {
+//     let totalPrice = 0
+//     await userHelpers.getCartProductList(req.body.userId).then((products)=>{
+//       products.forEach((data) => {
 
   
 //         try {
@@ -485,14 +523,13 @@ router.get('/checkout/',async(req,res)=>{
 //           data.subTotal = Number(data.quantity) * Number(data.product.price);
         
 //           total+=data.subTotal
+//           console.log(total);
 //         }
 //          if (req.body.coupon) {
 //           let off = Number(req.body.coupon)
 //           total= total-(total*(off/100))
 //          }
-       
-        
-       
+
 //       });
 
 
@@ -501,7 +538,7 @@ router.get('/checkout/',async(req,res)=>{
     
       
 //     req.body.UserId = req.session.user._id;
-//     await userHelpers.orderPlace(req.body, products, total).then((orderId) => {
+//     await userHelpers.orderPlace(req.body, products, totalPrice).then((orderId) => {
    
 //       if (req.body["Payment-method"] === "COD") {
 //         res.json({ codSuccess: true });
@@ -509,13 +546,13 @@ router.get('/checkout/',async(req,res)=>{
 //         res.json({ codSuccess: true });
 //       } else {
 //         userHelpers
-//           .generateRazorPay(orderId, total)
+//           .generateRazorPay(orderId, totalPrice)
 //           .then((order) => {
 //             order.user = user;
 //             res.json(order);
 //           })
 //           .catch((err) => {
-//             console.log("#### err");
+//             console.log("#err");
 //             console.log(err);
 //             res.status(500).json({ paymentErr: true });
 //           });
@@ -599,10 +636,12 @@ router.get('/order-history',async(req,res)=>{
           element.shipped = true;
         } else if(element.status == "cancelled") {
           element.cancelled = true;
+        }else if (element.status == "Return") {
+          element.Return = true
         }
       });
       res.render('user/order-history',{user:req.session.user,orders,pro})
-      console.log('in order histroy:',pro);
+      // console.log('in order histroy:',pro);
 }
   else{
     res.redirect('/login')
@@ -612,6 +651,15 @@ router.get('/order-history',async(req,res)=>{
 router.get('/cancel-order/:data',async(req,res)=>{
   if(req.session.loggedIn){
     await userHelpers.cancelOrder(req.body,req.params.data).then((response)=>{
+      res.redirect('/order-history')
+    })
+  }else{
+    res.redirect('/login')
+  }
+})
+router.get('/return-order/:data',async(req,res)=>{
+  if(req.session.loggedIn){
+    await userHelpers.returnOrder(req.body,req.params.data).then((response)=>{
       res.redirect('/order-history')
     })
   }else{
