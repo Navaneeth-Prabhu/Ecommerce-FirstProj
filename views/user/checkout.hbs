@@ -64,6 +64,7 @@
               <form action="/checkout/?id={{user._id}}" method="post" id="checkout" name="checkout">
                 <div class="row gy-3">
                   <div class="col-lg-6">
+                    <input class="form-control form-control-lg" type="number" id="offerp" name="offerp" value="{{total}}" hidden>
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
                     <input class="form-control form-control-lg" type="text" id="name" name="name" value="{{user.Name}}">
                   </div>
@@ -106,6 +107,7 @@
 
 
                     <H5>ADDRESS</H5>
+                    <a class="btn btn-primary" href="/add-address?userId={{user._id}}">Add-Address</a>
                   {{#each address}}
                     <label for="address" id="addressLabel" class=" radio-inline">
                     <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id" checked>
@@ -168,6 +170,7 @@
                     {{!-- <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$351</span></li> --}}
                     {{!-- <li class="border-bottom my-2"></li> --}}
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>${{total}}</span></li>
+                     
                     <li>
 
                     </li>
@@ -397,7 +400,7 @@ paypal
   .render("#paypal-button-container");
  
 
-    </script>
+  </script>
 
 <script>
   function toggle() {

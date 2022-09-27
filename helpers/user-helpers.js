@@ -70,6 +70,23 @@ module.exports={
         })
     },
 
+    findTheUser:(number)=>{
+        return new Promise(async(resolve,reject)=>{
+            var is_valid= null;
+            var account=await db.get().collection(collection.USER_COLLECTION).findOne({number:number})
+            console.log(account)
+            if(!account){
+                resolve("no account")
+            }else if(account.blocked){
+                is_valid = "user blocked"
+                console.log("user is blocked");
+            }else{
+                is_valid=failed
+                resolve(is_valid)
+            }
+        })
+    },
+
     getAllUsers:() => {
         return new Promise (async (resolve, reject) => {
             let users = await db.get().collection(collection.USER_COLLECTION).find().toArray()
@@ -523,38 +540,67 @@ module.exports={
 
 
 
-    placeOrder:(order,products,total)=>{
+    placeOrder:(order,products,offerPrice,totalPrice)=>{
+        console.log(order,"order");
         return new Promise((resolve,reject)=>{
             var today = new Date();
-            // var dd = String(today.getDate()).padStart(2, '0');
-            // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            // var yyyy = today.getFullYear();
+            var orderDate= new Date()
+            var dd = String(orderDate.getDate()).padStart(2, '0');
+            var mm = String(orderDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = orderDate.getFullYear();
             
-            // today = mm + '-' + dd + '-' + yyyy;
-            order.Date=today
-            let date = new Date()
+            orderDate = mm + '-' + dd + '-' + yyyy;
+            order.Date=orderDate
+            // let date = new Date()
             let status = order["payment-method"] === "COD" || order["payment-method"] === "paypal" ? "placed" : "pending";
-            
-            let orderObj={
-                delivery_details:{
-                    date:order.Date,
-                    name:order.name,
-                    // mobile:order.number,
-                    address:order.address,
-                    // city:order.city,
-                    // state:order.state,
-                    // pin:order.pin,
+            let orderObj
+            if(order.offerp==totalPrice){
+                orderObj={
+                    delivery_details:{
+                        date:order.Date,
+                        name:order.name,
+                        // mobile:order.number,
+                        address:order.address,
+                        // city:order.city,
+                        // state:order.state,
+                        // pin:order.pin,
+                        
+                    },
+                    // address:objectIdorder.address,
+                    userId:objectId(order.userId),
+                    paymentMethod:order['payment-method'],
+                    products:products,
+                    totalAmount:totalPrice,
+                    // offerPrice:order.offerp,
+                    status:status,
+                    date:today
+                    // date:date,
                     
-                },
-                // address:objectIdorder.address,
-                userId:objectId(order.userId),
-                paymentMethod:order['payment-method'],
-                products:products,
-                totalAmount:total,
-                status:status,
-                date:today
-                // date:date,
-                
+                }
+            }else{
+
+                orderObj={
+                    delivery_details:{
+                        date:order.Date,
+                        name:order.name,
+                        // mobile:order.number,
+                        address:order.address,
+                        // city:order.city,
+                        // state:order.state,
+                        // pin:order.pin,
+                        
+                    },
+                    // address:objectIdorder.address,
+                    userId:objectId(order.userId),
+                    paymentMethod:order['payment-method'],
+                    products:products,
+                    totalAmount:totalPrice,
+                    offerPrice:order.offerp,
+                    status:status,
+                    date:today
+                    // date:date,
+                    
+                }
             }
             // db.get().collection(collection.PRODUCT_COLLECTION).updateOne({$inc:{"stock":-1}})
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
@@ -572,7 +618,7 @@ module.exports={
         return new Promise((resolve, reject) => {
           try {
         
-          let status = order["Payment-method"] === "COD" || order["Payment-method"] === "paypal" ? "placed" : "pending";
+          let status = order["payment-method"] === "COD" || order["payment-method"] === "paypal" ? "placed" : "pending";
     
           let orderObj = {
             deliveryDetails: {
@@ -580,7 +626,7 @@ module.exports={
               Date: new Date(),
             },
             userId: objectId(order.UserId),
-            payment_Method: order["Payment-method"],
+            payment_Method: order["payment-method"],
             status: status,
             totalAmount: totalPrice,
             products: products,
@@ -639,7 +685,7 @@ module.exports={
 
     getOrderProducts:(orderId)=>{
         console.log('in get order products');
-        // console.log(orderId)
+        console.log(orderId)
         return new Promise(async(resolve,reject)=>{
             let orderItems=await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                  {
@@ -672,7 +718,7 @@ module.exports={
 
 
             ]).toArray()
-            // console.log(orderItems);
+            console.log(orderItems);
             resolve(orderItems)
         })
     },
@@ -700,6 +746,28 @@ module.exports={
         })
     },
     
+    cancelOrder:(body,details)=>{
+
+
+        return new Promise((resolve,reject)=>{
+
+            
+            // console.log('in updateStatus');
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
+            {
+                $set:{
+                    status:'Cancelled'
+                }
+                
+                
+                
+            }).then((response)=>{
+                resolve()
+                console.log(details);
+             console.log('in updateStatus');
+        })
+        })
+    },
     returnOrder:(body,details)=>{
 
 
@@ -982,26 +1050,7 @@ changePaymentStatus:async (orderId)=>{
    })
 },
 
-
-verifyCoupon: (coupon) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-    
-      db.get().collection(collection.COUPON_COLLECTION).findOne({
-        coupon: coupon.coupon
-      }).then((res) => {
-        console.log(res);
-        resolve(res)
-      })
-          
-    } catch (error) {
-        console.log(error);
-        reject()
-    }
-      
-    });
-    
-  }
+/////////coupon/////////////
 
 
 }

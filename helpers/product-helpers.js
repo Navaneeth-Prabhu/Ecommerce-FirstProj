@@ -205,48 +205,34 @@ module.exports={
           });
    },
 
-    // getOffers(){
-    // return new Promise((resolve, reject) => {
-    //     try {
-       
-    //     let date = new Date()
-    //     let currentDate = moment(date).format('YYYY-MM-DD')
-    //     db.get().collection(collections.CATEGORY_COLLECTION).find().toArray().then(async(categories) => {
+   addCategoryOff:(catId,offer,validTill)=>{
+ 
+    return new Promise(async(resolve,reject)=>{
+        try {
+            let offerPrice = []
+        let off=Number(offer)
+        let offTill = validTill
+        let cID = {category:catId} 
+        await db.get().collection(collection.PRODUCT_COLLECTION).find(cID).toArray().then((res)=>{
+            res.forEach(data=>{
+                let price = Number(data.price)
+                offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
+            })
+           offerPrice.forEach(data=>{
+            db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
+           })
+           db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{offer:off,validTill:offTill}}).then((res)=>{
+            
+           })
+        })
+      resolve()
+        } catch (error) {
+            reject()
+        }
         
-    //         for (let i in categories) {
-    //             let catId = categories[i]._id.toString()
-    //             let products = await db.get().collection(collections.PRODUCT_COLLECTION).find({category:catId}).toArray()
-    //             console.log(products);
-    //             if (categories[i].offer) {
-    //                 if (categories[i].validTill < currentDate) {
-    //                     db.get().collection(collections.CATEGORY_COLLECTION).findOneAndUpdate({ _id: objectId(categories[i]._id) },
-    //                         {
-    //                             $unset: {
-    //                                 "offer": categories[i].offer,
-                                    
-    //                             }
-    //                         })
-    //                         products.forEach(data=>{
-    //                             db.get().collection(collections.PRODUCT_COLLECTION).updateMany({category:catId},
-    //                                 {
-    //                                     $unset: {
-    //                                         "offerPrice" :data.offerPrice,
-    //                                     }
-    //                                 })
-    //                         })
-                           
-    //                 }
-    //             }
-    //         }
-    //     })
-             
-    // } catch (error) {
-    //     reject()    
-    // }
-    //     // db.get().collection(collections.CATEGORY_COLLECTION).find().toArray().then((category) => {
-    //     //     resolve(category)
-    //     // })
-    // })
-    // }
+        
 
-    }
+    })
+}
+
+}

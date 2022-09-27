@@ -26,7 +26,7 @@
             <div class="col-lg-12 mb-4 mb-lg-0">
               <!-- CART TABLE-->
               <div class="table-responsive mb-4">
-                <table class="table text-nowrap">
+                <table class="table text-nowrap" id="myTable">
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
@@ -64,7 +64,11 @@
                       {{!-- <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">$ {{this.totalAmount}}</p>
                       </td> --}}
+                      {{#if this.offerPrice}}
+                      <td><p class="mb-0 small">$ {{this.offerPrice}}</p></td>
+                      {{else}}
                       <td><p class="mb-0 small">$ {{this.totalAmount}}</p></td>
+                      {{/if}}
                      {{!-- <td>{{this.paymentMethod}}</td> --}}
                      <td>{{this.status}}</td>
                     

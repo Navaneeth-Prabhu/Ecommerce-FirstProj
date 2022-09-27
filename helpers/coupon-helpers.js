@@ -44,4 +44,25 @@ module.exports = {
       }
     });
   },
+  
+  verifyCoupon: (coupon) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+    
+      db.get().collection(collection.COUPON_COLLECTION).findOne({
+        coupon: coupon.coupon
+      }).then((res) => {
+        console.log(res);
+        resolve(res)
+      })
+          
+    } catch (error) {
+        console.log(error);
+        reject()
+    }
+      
+    });
+    
+  }
+
 };

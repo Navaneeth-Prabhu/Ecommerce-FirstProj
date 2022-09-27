@@ -48,7 +48,11 @@
                     {{!-- <td>{{this.delivery_details.state}}</td> --}}
                     {{!-- <td>{{this.delivery_details.pin}}</td> --}}
                     {{!-- <td>{{this.delivery_details.mobile}}</td> --}}
+                    {{#if this.offerPrice}}
+                    <td>₹{{this.offerPrice}}</td>
+                    {{else}}
                     <td>₹{{this.totalAmount}}</td>
+                    {{/if}}
                     <td>{{this.paymentMethod}}</td>
                     <td>{{this.status}}</td>
                     {{!-- <td><img src="/public/product-images/[object Object].jpg" alt="" style="width:10px;height: 10px; "></td> --}}

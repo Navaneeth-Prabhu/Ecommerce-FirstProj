@@ -43,7 +43,7 @@
           <h6 class="mb-0">Sales</h6>
 
         </div>
-        <canvas id="line-chart"></canvas>
+        <canvas id="chart"></canvas>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
 
     <div class="bg-light rounded h-100 p-4 col-sm-6 " style="">
       <h6 class="mb-4">Monthly sales</h6>
-      <canvas id="monthly"></canvas>
+      <canvas id="chart2"></canvas>
     </div>
     {{!-- <div class="col-sm-12 col-xl-6">
       <div class="bg-light rounded h-100 p-4">
@@ -65,13 +65,13 @@
   </div>
   </div>
   <!-- Recent Sales Start -->
-  <div class="container-fluid pt-4 px-4">
-    <div class="bg-light rounded p-4" style="
+  {{!-- <div class="container-fluid pt-4 px-4"> --}}
+    {{!-- <div class="bg-light rounded p-4" style="
     width: 29rem;
     display: inline-block;
     left: 18rem;
-    position: absolute;">
-      <div class="d-flex align-items-center justify-content-between mb-4">
+    position: absolute;"> --}}
+      {{!-- <div class="d-flex align-items-center justify-content-between mb-4">
         <h6 class="mb-0">New users</h6>
 
       </div>
@@ -93,8 +93,8 @@
             {{/each}}
           </tbody>
         </table>
-      </div>
-      <div class="table-responsive" style="
+      </div> --}}
+      {{!-- <div class="table-responsive" style="
     position: absolute;
     width: 46rem;
     top: -0.4rem;
@@ -165,10 +165,10 @@
 
           </tbody>
         </table>
-      </div>
-    </div>
-  </div>
-  <h4 style="
+      </div> --}}
+    {{!-- </div> --}}
+  {{!-- </div> --}}
+  {{!-- <h4 style="
     position: absolute;
     left: 20rem;
     top: 70rem;
@@ -193,12 +193,51 @@
       <td id="count"></td>
       <td id="price"></td>
     </tr>
-  </table>
+  </table> --}}
+</section>
+<section>
+
+<div class="container ">
+
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>Position</th>
+       
+            </tr>
+        </thead>
+        <tbody>
+          {{#each orders}}
+            <tr>
+                <td>{{this.date}}</td>
+                <td>{{this.totalAmount}}</td>
+                {{!-- <td>Edinburgh</td>
+                <td>61</td>
+                <td>2011-04-25</td>
+                <td>$320,800</td> --}}
+            </tr>
+            {{/each}}
+          </tbody>
+    </table>
+</div>
 </section>
 <!-- Recent Sales End -->
-
+<script>
+  $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+</script>
 <!-- Widgets Start -->
-
+<script>
+  let myChart = document.getElementById('chart')
+  let myChart2 = document.getElementById('chart2')
+</script>
 <script src="/javascripts/chart/chart.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -221,7 +260,8 @@
 
     });
 
-   
+
+
     setTimeout(() => {
       console.log(month)
       var ctx3 = $("#line-chart").get(0).getContext("2d");
@@ -264,6 +304,103 @@
 
   })
 
+
+  fetch('/admin/dashboard/day', {
+            method: 'get',
+        }).then((val) => val.json())
+            .then((data) => {
+                // console.log(data);
+                let xaxis = []
+                let countss = []
+                for (const val of data) {
+                    let date = `${val.detail.day}/${val.detail.month}/${val.detail.year}`
+                    xaxis.push(date)
+                    countss.push(val.count)
+                }
+
+                const masspopChart = new Chart(myChart, {
+                    type: 'bar',
+                    data: {
+                        labels: [...xaxis],
+                        datasets: [{
+                            label: 'Number of orders',
+                            data: [...countss],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(245, 125, 75, 1.2)',
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                })
+            })
+  fetch('/admin/dashboard/week', {
+            method: 'get',
+        }).then((val) => val.json())
+            .then((data) => {
+                // console.log(data);
+                let xaxis = []
+                let countss = []
+                for (const val of data) {
+                    let date = `${val.detail.day}/${val.detail.month}/${val.detail.year}`
+                    xaxis.push(date)
+                    countss.push(val.count)
+                }
+
+                const masspopChart = new Chart(myChart2, {
+                    type: 'line',
+                    data: {
+                        labels: [...xaxis],
+                        datasets: [{
+                            label: 'Number of orders',
+                            data: [...countss],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(245, 125, 75, 1.2)',
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                })
+            })
 
 
 

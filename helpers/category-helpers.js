@@ -25,7 +25,21 @@ module.exports ={
 
             callback(data)
         })
-    },                        
+    },    
+
+
+    addCategories:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            try {
+        db.get().collection(collections.CATEGORY_COLLECTION).insertOne(data)
+                
+            } catch (error) {
+                reject()
+            }
+    })
+},
+
+
     addProduct:(product, callback) => {
         // var curruntDate = new Date();
         var today = new Date();
@@ -99,25 +113,25 @@ module.exports ={
                 let offFrom = validFrom
                 let date = new Date()
                 let currentDate = moment(date).format('YYYY-MM-DD')
-                // let ppa = {category:catId} 
-                if (catId.validTill < currentDate) {
-                    db.get().collection(collection.CATEGORY_COLLECTION).findOneAndUpdate({ _id: objectId(catId) },
-                        {
-                            $unset: {
-                                "offer": categories[i].offer,
+                let ppa = {category:catId} 
+                // if (catId.validTill < currentDate) {
+                //     db.get().collection(collection.CATEGORY_COLLECTION).findOneAndUpdate({ _id: objectId(catId) },
+                //         {
+                //             $unset: {
+                //                 "offer": categories[i].offer,
                                 
-                            }
-                        })
-                        products.forEach(data=>{
-                            db.get().collection(collection.PRODUCT_COLLECTION).updateMany({category:catId},
-                                {
-                                    $unset: {
-                                        "offerPrice" :data.offerPrice,
-                                    }
-                                })
-                        })
+                //             }
+                //         })
+                //         products.forEach(data=>{
+                //             db.get().collection(collection.PRODUCT_COLLECTION).updateMany({category:catId},
+                //                 {
+                //                     $unset: {
+                //                         "offerPrice" :data.offerPrice,
+                //                     }
+                //                 })
+                //         })
                        
-                }else{
+                // }else{
 
                     await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
                         res.forEach(data=>{
@@ -132,7 +146,7 @@ module.exports ={
                         
                        })
                     })
-                }
+                // }
               resolve()
                 } catch (error) {
                     reject()

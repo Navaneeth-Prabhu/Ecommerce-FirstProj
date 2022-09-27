@@ -9,10 +9,12 @@ var productHelper = require('../helpers/product-helpers')
 var categoryHelper = require('../helpers/category-helpers')
 var bannerHelpers = require('../helpers/banner-helpers')
 var addUserError=require('../routes/user');
+var chartHelper=require('../helpers/chart-helper')
 const { query, response } = require('express');
 const { ORDER_COLLECTION } = require('../config/collections');
 const categoryHelpers = require('../helpers/category-helpers');
-const couponHelper = require('../helpers/coupon-helpers')
+const couponHelper = require('../helpers/coupon-helpers');
+const { Chart } = require('chart.js');
 
 console.log("here 2")
 
@@ -72,6 +74,7 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
      
           });})
           
+          
       res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no});
     });
  
@@ -86,7 +89,16 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
   }
 })
 
-
+router.get('/dashboard/day',auth.adminCookieJWTAuth,async (req,res)=>{
+  await chartHelper.findOrdersByDay().then((data)=>{
+    res.json(data)
+  })
+})
+router.get('/dashboard/week',auth.adminCookieJWTAuth,async (req,res)=>{
+  await chartHelper.findOrderByMonth().then((data)=>{
+    res.json(data)
+  })
+})
 
 
 router.get('/login',auth.adminLoggedIn, function(req,res) {
@@ -97,11 +109,12 @@ router.get('/login',auth.adminLoggedIn, function(req,res) {
     req.session.adminLoginError = null
   }
 });
-
 const adminCredentials = {
   email:"admin@gmail.com",
   password:"admin"
 };
+
+
 router.post('/login', function(req, res) {
   
   console.log(adminCredentials.email);
@@ -113,7 +126,7 @@ router.post('/login', function(req, res) {
         httpOnly:true
       })
       console.log('login success')
-      res.redirect('/admin')
+      res.redirect('/admin/dashboard')
     
 
 
@@ -390,13 +403,24 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
   }); 
   
-  router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
-    // console.log(req.body);
-    // res.redirect('/admin');
+  // router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
+  //   // console.log(req.body);
+  //   // res.redirect('/admin');
     
-    categoryHelper.addCategory(req.body,(result) => {
-      res.render('admin/add-category',{admin:true, adminLoggedIn:req.session.adminLoggedIn})
-    })
+  //   categoryHelper.addCategory(req.body,(result) => {
+  //     res.render('admin/add-category',{admin:true, adminLoggedIn:req.session.adminLoggedIn})
+  //   })
+  // });
+  router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
+    try {
+      categoryHelper.addCategories(req.body).catch(()=>{res.redirect('/error')})
+        res.redirect("/admin/view-cateory");
+
+      // redirect to /admin/manage-categories
+    } catch (err) {
+      console.log(err);
+      res.redirect('/error')
+    }
   });
 
   router.get('/view-category',auth.adminCookieJWTAuth,function(req,res,next){
@@ -478,17 +502,15 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
   })
 
   router.get('/order-products/:id',async(req,res)=>{
-    // if(req.session.loggedIn){
+
       
       let products= await userHelpers.getOrderProducts(req.params.id)
-      console.log(products);
+      // console.log(products);
       // res.send("hiiii")
       res.render('admin/order-pro',{products})
     
-      console.log('in view order products');
-    // }else{
-    //   res.redirect('/login')
-    // }
+      // console.log('in view order products');
+
   })
 
   ////////////////////BANNER//////////////
@@ -766,7 +788,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     router.post('/add-offer',auth.adminCookieJWTAuth, function(req,res) {
       
     try {
-            console.log("in try");
+            // console.log("in try");
             console.log(req.body);
             let catId = req.body.SubCategory
             let off = req.body.offer
@@ -782,6 +804,22 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
          }
 
         });
+    // router.post('/add-offer',auth.adminCookieJWTAuth, function(req,res) {
+      
+    //   try {
+    //     let catId = req.query.id
+    //     let off = req.body.off
+    //     let validTill = req.body.offTill
+    //     productHelper.addCategoryOff(catId,off,validTill).then(()=>{
+    //       res.redirect("/admin/view-offer")
+    //     })
+    //  }
+    //  catch(err){
+    //   res.redirect('/error')
+    //   console.log(err);
+    //  } 
+    
+    //     });
         
 
         

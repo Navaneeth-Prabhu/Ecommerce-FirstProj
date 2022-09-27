@@ -12,7 +12,7 @@ const dotenv=require('dotenv').config()
 const paypal = require('../helpers/paypal')
 
 const userJWTTokenAuth = require('../helpers/userAwth');
-const { Collection } = require('mongodb');
+const { Collection, Db } = require('mongodb');
 const collections = require('../config/collections');
 const bcrypt=require('bcrypt');
 const categoryHelpers = require('../helpers/category-helpers');
@@ -67,7 +67,7 @@ router.post('/signup', function(req,res) {
       creationFailed="Signup failed! Email Id exists";
     }
     if(req.session.fromAdmin){
-      res.redirect('/admin')
+      res.redirect('/')
       req.session.fromAdmin = false
     }else{
     res.redirect('/login')
@@ -80,7 +80,7 @@ router.get('/login', function(req,res) {
     res.redirect('/')
   }else{
   // console.log("here it is");
-  res.render('user/login', {blocked:req.session.userBlocked,loginErr:req.session.loginErr, creationFailed:creationFailed})
+  res.render('user/login', {blocked:req.session.userBlocked,loginErr:req.session.loginErr, creationFailed:creationFailed,noPartial:true})
   // res.send('message')
   req.session.loginErr=""
   req.session.userBlocked=""
@@ -123,7 +123,9 @@ router.post('/OTP-login', function(req, res) {
 
   try {
     console.log("getting here");
+    
         number = req.body.number;
+        console.log(number);
         client.verify
         .services(process.env.SERVICE_ID)
         .verifications.create({
@@ -163,6 +165,20 @@ router.post('/enter-otp',(req,res)=>{
     code:otp
   }).then((response)=>{
     console.log(response);
+    if(response.valid==true){
+      userHelpers.findTheUser(req.body.number).then((response)=>{
+        if(response == 'blocked'){
+          console.log('blocked');
+        }else if(response){
+          console.log("userlogedin");
+          req.session.loggedIn=true
+          req.session.user=response.user
+          res.redirect('/')
+        }else{
+          console.log("incorrect otp");
+        }
+      })
+    }
   })
   res.redirect('/')
 })
@@ -489,96 +505,58 @@ router.get('/checkout/',async(req,res)=>{
 
 })
 
-// router.post('/checkout',async(req,res)=>{
-//   try {
-//     // console.log("Checkout form body", req.body);
-    
-//     let products = await userHelpers.getCartProductList(req.body.userId);
-
-//     // products.products.forEach(data=>{
-      
-//     //   userHelpers
-//     //   .removeWish(req.session.user._id, data.item)
-//     //   .then((response) => {
-//     //     console.log('');
-//     //   }).catch(()=>{res.redirect('/error')});;
-//     // })
-//     let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
-   
-//     let totalPrice = 0
-//     await userHelpers.getCartProductList(req.body.userId).then((products)=>{
-//       products.forEach((data) => {
-
-  
-//         try {
-//           if (data.product.offerPrice) {
-//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
-      
-//           } else {
-//             data.subTotal = Number(data.quantity) * Number(data.product.price);
-           
-//           }
-//          total+=data.subTotal
-//         } catch (error) {
-//           data.subTotal = Number(data.quantity) * Number(data.product.price);
-        
-//           total+=data.subTotal
-//           console.log(total);
-//         }
-//          if (req.body.coupon) {
-//           let off = Number(req.body.coupon)
-//           total= total-(total*(off/100))
-//          }
-
-//       });
-
-
-//     }).catch(()=>{res.redirect('/error')});;
-      
-    
-      
-//     req.body.UserId = req.session.user._id;
-//     await userHelpers.orderPlace(req.body, products, totalPrice).then((orderId) => {
-   
-//       if (req.body["Payment-method"] === "COD") {
-//         res.json({ codSuccess: true });
-//       } else if (req.body["Payment-method"] === "paypal") {
-//         res.json({ codSuccess: true });
-//       } else {
-//         userHelpers
-//           .generateRazorPay(orderId, totalPrice)
-//           .then((order) => {
-//             order.user = user;
-//             res.json(order);
-//           })
-//           .catch((err) => {
-//             console.log("#err");
-//             console.log(err);
-//             res.status(500).json({ paymentErr: true });
-//           });
-//       }
-//     }).catch(()=>{res.redirect('/error')});;
-//   } catch (err) {
-//     console.log(err);
-//     res.redirect('/error')
-//   }
-// })
-
-
-
-
 router.post('/checkout',async(req,res)=>{
+  try {
+    // console.log("Checkout form body", req.body);
+    
+    let products = await userHelpers.getCartProductList(req.session.user._id);
+
+    // products.products.forEach(data=>{
+      
+    //   userHelper
+    //   .removeWish(req.session.user._id, data.item)
+    //   .then((response) => {
+    //     console.log('');
+    //   }).catch(()=>{res.redirect('/error')});;
+    // })
+    let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
+   
+    let offerPrice = 0
+    await userHelpers.getCartProduct(req.session.user._id).then((products)=>{
+      products.forEach((data) => {
+
   
-  console.log("in post checkout",req.body['payment-method']);
-  let products = await userHelpers.getCartProductList(req.body.userId)
+        try {
+          if (data.product.offerPrice) {
+            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+            // offerPrice=
+      
+          } else {
+            data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+          }
+         total+=data.subTotal
+        } catch (error) {
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+          offerPrice+=data.subTotal
+        }
+         if (req.body.coupon) {
+          let off = Number(req.body.coupon)
+          offerPrice= offerPrice-(offerPrice*(off/100))
+         }
+       
+       
+      });
 
-  // if(products.length>0){
 
+    }).catch(()=>{res.redirect('/error')});;
+      
     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
-  
-    userHelpers.placeOrder(req.body,products,totalPrice).then((orderId)=>{
-    console.log("in checkout:",orderId);
-    console.log("body:",req.body);
+    req.body.UserId = req.session.user._id;
+    await userHelpers.placeOrder(req.body, products,offerPrice, totalPrice).then((orderId) => {
+   
+
       if(req.body['payment-method']==='COD'){
         res.json({cod_success:true})
       }
@@ -586,17 +564,69 @@ router.post('/checkout',async(req,res)=>{
         
         res.json({ cod_success: true });
       }else{
-        userHelpers.generateRazorPay(orderId,totalPrice).then((response)=>{
-          console.log('resop:',response);
+        userHelpers.generateRazorPay(orderId,totalPrice,offerPrice).then((response)=>{
+          // console.log('resop:',response);
           res.json(response)
         })
       }
-    })
-  // }else{
+    }).catch(()=>{res.redirect('/error')});;
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error')
+  }
 
-  //   res.redirect('/login')
-  // }
 })
+
+
+
+
+// router.post('/checkout',async(req,res)=>{
+  
+//   console.log("in post checkout",req.body['payment-method']);
+//   let products = await userHelpers.getCartProductList(req.body.userId)
+
+//   // if(products.length>0){
+//     let offerPrice =0;
+//     await userHelpers.getCartProduct(req.body.userId).then((products)=>{
+//       products.forEach((data)=>{
+//         try {
+//           if(data.product.offerPrice){
+//             console.log("offerpro :",data.product.offerPrice);
+//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice)
+//             offerPrice+=data.subTotal
+//           }else{
+//             offerPrice=0
+//           }
+          
+//         }
+//         catch(error){
+
+//         }
+//       })
+//     })
+//     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
+  
+//     userHelpers.placeOrder(req.body,products,offerPrice,totalPrice).then((orderId)=>{
+//     console.log("in checkout:",orderId);
+//     console.log("body:",req.body);
+//       if(req.body['payment-method']==='COD'){
+//         res.json({cod_success:true})
+//       }
+//       else if(req.body['payment-method']==='paypal'){
+        
+//         res.json({ cod_success: true });
+//       }else{
+//         userHelpers.generateRazorPay(orderId,totalPrice,offerPrice).then((response)=>{
+//           console.log('resop:',response);
+//           res.json(response)
+//         })
+//       }
+//     })
+//   // }else{
+
+//   //   res.redirect('/login')
+//   // }
+// })
 
 
 
@@ -668,17 +698,18 @@ router.get('/return-order/:data',async(req,res)=>{
 })
 
 router.get('/view-order-products/:id',async(req,res)=>{
-  // if(req.session.loggedIn){
-    
+  if(req.session.loggedIn){
+    // console.log("param",req.params.id);
     let products= await userHelpers.getOrderProducts(req.params.id)
-    console.log(products);
-    // res.send("hiiii")
-    res.render('user/order-pro',{user:req.session.user,products})
+    let order= await userHelpers.getUserOrders(req.session.user._id)
+    console.log(order);
+
+    res.render('user/order-pro',{user:req.session.user,products,order})
   
-    console.log('in view order products');
-  // }else{
-  //   res.redirect('/login')
-  // }
+    // console.log('in view order products');
+  }else{
+    res.redirect('/login')
+  }
 })
 
 
@@ -732,7 +763,7 @@ router.post('/edit-address', async function(req,res){
   if(req.session.loggedIn){
 
     let id= req.query.id
-    await userHelpers.updateAddress(req.query.id,req.body).then(()=>{
+    await userHelpers.updateAddress(id,req.body).then(()=>{
       res.redirect('/view-address')      
       console.log(req.query.id);
       
@@ -861,7 +892,7 @@ router.post('/verifyCoupon',async function(req,res){
       products.forEach((data) => {
 
   
-        // try {
+        try {
           if (data.product.offerPrice) {
             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
       
@@ -870,12 +901,12 @@ router.post('/verifyCoupon',async function(req,res){
            
           }
          total+=data.subTotal
-        // } catch (error) {
+        } catch (error) {
           
-        //   data.subTotal = Number(data.quantity) * Number(data.product.price);
+          data.subTotal = Number(data.quantity) * Number(data.product.price);
         
-        //   total+=data.subTotal
-        // }
+          total+=data.subTotal
+        }
          
        
         
@@ -893,7 +924,7 @@ router.post('/verifyCoupon',async function(req,res){
       console.log(req.body);
       console.log('cou: ',coupon);
       if(coupon){
-        total = total - (total* (Number(coupon.off)/100))
+        total = total - (total* (Number(coupon.off)/100));
       }
       res.render("user/checkout", { total, user: req.session.user, address,coupon });
     });
@@ -906,7 +937,11 @@ router.post('/verifyCoupon',async function(req,res){
 
 
     
+/////////////////Download Invoice/////////////////
 
+router.get('/invoice',async function(req,res){
+  
+})
 
 
 
