@@ -21,6 +21,11 @@ module.exports={
         // console.log(product);
         Totalclick=0;
         product.Totalclick=Totalclick
+        if(Number(product.proOff) > 0) {
+            product.offerPrice = Number(product.price) - (Number(product.proOff/100) * Number(product.price));
+        } else {
+            product.offerPrice = 0
+        }
     
         db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
             console.log(data);
@@ -62,6 +67,12 @@ module.exports={
 
     updateProduct:(productId,productDetails)=>{
 
+        if(Number(productDetails.proOff) > 0) {
+            productDetails.offerPrice = Number(productDetails.price) - (Number(productDetails.proOff/100) * Number(productDetails.price));
+        } else {
+            productDetails.offerPrice = 0
+        }
+
         // var today = new Date();
         //     var dd = String(today.getDate()).padStart(2, '0');
         //     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -78,7 +89,9 @@ module.exports={
                 stock:productDetails.stock,
                 price:productDetails.price,
                 Category:productDetails.Category,
-                SubCategory:productDetails.SubCategory
+                SubCategory:productDetails.SubCategory,
+                proOff:productDetails.proOff,
+                offerPrice: productDetails.offerPrice
                 // lastEdit:productDetails.today
             }
         
@@ -205,34 +218,12 @@ module.exports={
           });
    },
 
-   addCategoryOff:(catId,offer,validTill)=>{
- 
-    return new Promise(async(resolve,reject)=>{
-        try {
-            let offerPrice = []
-        let off=Number(offer)
-        let offTill = validTill
-        let cID = {category:catId} 
-        await db.get().collection(collection.PRODUCT_COLLECTION).find(cID).toArray().then((res)=>{
-            res.forEach(data=>{
-                let price = Number(data.price)
-                offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
+   proOfferPrice:(proId,productDetails)=>{
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).then((pro)=>{
+                
             })
-           offerPrice.forEach(data=>{
-            db.get().collection(collections.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
-           })
-           db.get().collection(collections.CATEGORY_COLLECTION).updateOne({_id:objectId(catId)},{$set:{offer:off,validTill:offTill}}).then((res)=>{
-            
-           })
         })
-      resolve()
-        } catch (error) {
-            reject()
-        }
-        
-        
-
-    })
-}
+    }
 
 }

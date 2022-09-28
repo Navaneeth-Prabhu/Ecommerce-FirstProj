@@ -52,6 +52,7 @@ module.exports = {
       db.get().collection(collection.COUPON_COLLECTION).findOne({
         coupon: coupon.coupon
       }).then((res) => {
+        
         console.log(res);
         resolve(res)
       })
@@ -63,6 +64,34 @@ module.exports = {
       
     });
     
+  },
+
+  usedCoupon:(userId,couponId)=>{
+    let userObj={
+      user: objectId(userId)
+    }
+    return new Promise(async(resolve)=>{
+
+      let usedCp= await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({coupon:objectId(couponId)})
+      if(usedCp){
+        
+        let userExist = usedCp.user.findIndex(user=>user==userId)
+        if(userExist!=-1){
+
+          // db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)})
+        }else{
+          db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)},{
+            $push:{user:userObj}
+          }).then((response)=>{
+            resolve()
+          })
+        }
+      }else{
+        db.get().collection(collection.USED_COUPON_COLLECTION).insertOne(userObj).then((response)=>{
+          resolve()
+        })
+      }
+    })
   }
 
 };

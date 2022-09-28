@@ -16,6 +16,8 @@ const { Collection, Db } = require('mongodb');
 const collections = require('../config/collections');
 const bcrypt=require('bcrypt');
 const categoryHelpers = require('../helpers/category-helpers');
+const couponHelpers = require('../helpers/coupon-helpers');
+const walletHelpers = require('../helpers/wallet-helpers')
 // import * as paypal from "../helpers/paypal";
 
 
@@ -449,25 +451,6 @@ router.post('/delete-wish-product',(req,res,next)=>{
 
 
 
-
-
-// router.get('/checkout/',async(req,res)=>{
-//   if(req.session.loggedIn){
-//     // let product = await userHelpers.getCartProduct(req.body.userId)
-
-//     let userId=req.query.id
-//     let total= await userHelpers.getTotalAmount(req.session.user._id)
-//     let userDetails= await userHelpers.getUserDetails(userId)
-//     let address =await userHelpers.viewAddress(req.session.user._id)
-//     res.render('user/checkout',{total,user:req.session.user,userDetails,address})
-//     console.log(req.session.user._id);
-//   }
-//     else{
-//     res.redirect('/login')
-//   }
-// })
-
-
 router.get('/checkout/',async(req,res)=>{
   try {
     let total = 0
@@ -497,7 +480,17 @@ router.get('/checkout/',async(req,res)=>{
       let userId=req.query.id
       let userDetails= await userHelpers.getUserDetails(userId)
     let address =await userHelpers.viewAddress(req.session.user._id)
-    res.render("user/checkout", { total, user: req.session.user,userDetails, address });
+    let wallet = await walletHelpers.getWallet(req.session.user._id)
+    // console.log(wallet);
+    let gwallet
+    if(Number(wallet.wall_amount) >= Number(total)) {
+      console.log("in wallet if ");
+      gwallet = true
+    } else {
+      console.log("in else wallet");
+      gwallet = false
+    }
+    res.render("user/checkout", { total, user: req.session.user,userDetails, address, gwallet });
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -525,7 +518,7 @@ router.post('/checkout',async(req,res)=>{
     await userHelpers.getCartProduct(req.session.user._id).then((products)=>{
       products.forEach((data) => {
 
-  
+
         try {
           if (data.product.offerPrice) {
             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
@@ -544,6 +537,7 @@ router.post('/checkout',async(req,res)=>{
          if (req.body.coupon) {
           let off = Number(req.body.coupon)
           offerPrice= offerPrice-(offerPrice*(off/100))
+          
          }
        
        
@@ -555,7 +549,7 @@ router.post('/checkout',async(req,res)=>{
     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
     req.body.UserId = req.session.user._id;
     await userHelpers.placeOrder(req.body, products,offerPrice, totalPrice).then((orderId) => {
-   
+      
 
       if(req.body['payment-method']==='COD'){
         res.json({cod_success:true})
@@ -563,13 +557,24 @@ router.post('/checkout',async(req,res)=>{
       else if(req.body['payment-method']==='paypal'){
         
         res.json({ cod_success: true });
+      }
+      else if(req.body['payment-method']==='Wallet'){
+        
+        userHelpers.buyWallet(orderId).then((response) => {
+          if(response == "true"){
+            res.json({ cod_success: true });
+          } else {
+            res.json(true)
+          }
+        })
+        
       }else{
         userHelpers.generateRazorPay(orderId,totalPrice,offerPrice).then((response)=>{
           // console.log('resop:',response);
           res.json(response)
         })
       }
-    }).catch(()=>{res.redirect('/error')});;
+    }).catch(()=>{res.redirect('/orderSuccessfully')});;
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -682,6 +687,7 @@ router.get('/cancel-order/:data',async(req,res)=>{
   if(req.session.loggedIn){
     await userHelpers.cancelOrder(req.body,req.params.data).then((response)=>{
       res.redirect('/order-history')
+
     })
   }else{
     res.redirect('/login')
@@ -920,7 +926,8 @@ router.post('/verifyCoupon',async function(req,res){
     // }
     let address =await userHelpers.viewAddress(req.session.user._id)
 
-    userHelpers.verifyCoupon(req.body).then((coupon)=>{
+    couponHelpers.verifyCoupon(req.body).then((coupon)=>{
+      couponHelpers.usedCoupon(req.session.user._id)
       console.log(req.body);
       console.log('cou: ',coupon);
       if(coupon){
@@ -945,7 +952,28 @@ router.get('/invoice',async function(req,res){
 
 
 
+/////////////////Wallet////////////
+router.get('/wallet',async(req,res)=>{
+  if(req.session.loggedIn){
 
+    res.render('user/wallet',{user:req.session.user})
+  }else{
+    res.redirect('/login')
+  }
+})
+
+router.post('/wallet',async(req,res)=>{
+  if(req.session.loggedIn){
+
+    let total = 0
+    await walletHelpers.addtoWallet(req.body,req.session.user._id).then(()=>{
+      res.redirect('/wallet')
+    })
+  }else{
+    res.redirect('/login')
+  }
+
+})
 
 
 

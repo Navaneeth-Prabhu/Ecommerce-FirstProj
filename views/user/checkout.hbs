@@ -68,36 +68,33 @@
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
                     <input class="form-control form-control-lg" type="text" id="name" name="name" value="{{user.Name}}">
                   </div>
-                  {{!-- <div class="col-lg-6">
-                    <label class="form-label text-sm text-uppercase" for="lastName">Last name </label>
-                    <input class="form-control form-control-lg" type="text" id="lastName" placeholder="Enter your last name">
-                  </div> --}}
-                  {{!-- <div class="col-lg-6">
-                    <label class="form-label text-sm text-uppercase" for="email">Email address </label>
-                    <input class="form-control form-control-lg" type="email" id="email" placeholder="e.g. Jason@example.com">
-                  </div> --}}
-                  {{!-- <div class="col-lg-6">
+
+
+
+
+       
+                  <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="address">Address</label>
-                    <input class="form-control form-control-lg" type="text" id="address" name="address" value="">
+                    <input class="form-control form-control-lg" type="text" id="addresss" name="address" value="">
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="city">city</label>
-                    <input class="form-control form-control-lg" type="text" id="city" name="city" value="">
+                    <input class="form-control form-control-lg" type="text" id="citys" name="city" value="">
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="state">State</label>
-                    <input class="form-control form-control-lg" type="text" id="state" name="state" value="">
+                    <input class="form-control form-control-lg" type="text" id="states" name="state" value="">
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="pin">pin</label>
-                    <input class="form-control form-control-lg" type="number" id="pin" name="pin" value="">
-                  </div> --}}
-                  <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+                    <input class="form-control form-control-lg" type="number" id="pins" name="pin" value="">
+                  </div>
                   {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="company">Company name (optional) </label>
                     <input class="form-control form-control-lg" type="text" id="company" placeholder="Your company name">
                   </div> --}}
 
+                  <input type="text" name="userId" id="" value="{{user._id}}" hidden>
                   <div class="col-lg-6 form-group">
                     <label class="form-label text-sm text-uppercase" for="country">Country</label>
                     <select class="country" id="country" data-customclass="form-control form-control-lg rounded-0">
@@ -110,16 +107,26 @@
                     <a class="btn btn-primary" href="/add-address?userId={{user._id}}">Add-Address</a>
                   {{#each address}}
                     <label for="address" id="addressLabel" class=" radio-inline">
-                    <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id" checked>
-                    {{this.address}}
+                    <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id"  onclick="addtoplace( `{{this.address}}`,`{{this.city}}`,`{{this.state}}`,`{{this.pin}}`)">
+                    {{this.address}},{{this.city}}
                     <input type="text" name="address_id" id="address_id" value="{{this._id}}" hidden>
-                    {{!-- <input type="text" name="" id="" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" onclick="addtoFields( `{{this.address}}`,`{{this.city}}`,`{{this.state}}`,`{{this.pin}}`,)" /> --}}
+                    {{!-- <input type="text" name="" id="" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}"  /> --}}
                   </label>
                   {{/each}}
                 
 
 
                   <h5>PAYMENT METHOD</h5>
+                  {{#if gwallet}}
+                  <label for="" class=" radio-inline">
+                    <input type="radio" name="payment-method" value="Wallet" onclick="toggle()" required>Wallet
+                  </label>
+                  {{else}}
+                  <label for="" class=" radio-inline">
+                    <input type="radio" name="payment-method" value="Wallet" onclick="toggle()" disabled>Wallet
+                    <span class="small">   oops !! you dont have enough money in wallet</span>
+                  </label>
+                  {{/if}}
                   <label for="" class=" radio-inline">
                     <input type="radio" name="payment-method" value="COD" onclick="toggle()" required>COD
                   </label>
@@ -189,7 +196,7 @@
           </div>
 
         </section>
-      </div>
+      
       {{!-- <footer class="bg-dark text-white">
         <div class="container py-4">
           <div class="row py-5">
@@ -241,7 +248,7 @@
       <script src="vendor/nouislider/nouislider.min.js"></script>
       <script src="vendor/swiper/swiper-bundle.min.js"></script>
       <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script> --}}
-      <script src="javascript/front.js"></script>
+      {{!-- <script src="javascript/front.js"></script> --}}
       <script>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite - 
@@ -269,7 +276,7 @@
       </script>
       <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    </div>
+    
 
 
 <style>
@@ -297,7 +304,10 @@
         {
           location.href='/orderSucessfull'
           
-        }else{
+        } else if(response) {
+          location.href = '/orderSucessfull'
+        }
+        else{
             razorPayment(response)
             console.log('helo:',response)
         }    
@@ -402,7 +412,7 @@ paypal
 
   </script>
 
-<script>
+<script type = "text/javascript">
   function toggle() {
     const list = document.getElementById("co").classList;
     const list2 = document.getElementById("paypal-button-container").classList;
@@ -415,5 +425,14 @@ paypal
     const list2 = document.getElementById("paypal-button-container").classList;
     list2.add("sft");
     list.remove("sft");
+  }
+
+  function addtoplace(address,city,state,pin){
+    console.log('hello im here')
+    let add = document.getElementById('addresss').value = address
+    let cityname = document.getElementById('citys').value = city
+    let statename = document.getElementById('states').value = state
+    let pinname = document.getElementById('pins').value = pin
+
   }
 </script>

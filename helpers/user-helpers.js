@@ -8,6 +8,7 @@ var objectId = require('mongodb').ObjectId
 const Razorpay = require('razorpay');
 const { resolve } = require('path')
 const { resolveObjectURL } = require('buffer')
+const walletHelpers = require('./wallet-helpers')
 
 // import fetch from "node-fetch";
 // import "dotenv/config"; // loads env variables from .env file
@@ -752,7 +753,7 @@ module.exports={
         return new Promise((resolve,reject)=>{
 
             
-            // console.log('in updateStatus');
+            
             db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
             {
                 $set:{
@@ -762,12 +763,25 @@ module.exports={
                 
                 
             }).then((response)=>{
+                console.log();
+                db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(details)}).then((order) => {
+                    console.log("order",order);
+                    if(order.status == "Cancelled" || order.status == "Return"){
+                        console.log("inside if");
+                        let price = {
+                            wall_amount: order.totalAmount
+                        }
+                        console.log(price,"price");
+                        walletHelpers.addtoWallet(price,order.userId)
+                    }
+                })
                 resolve()
                 console.log(details);
              console.log('in updateStatus');
         })
         })
     },
+
     returnOrder:(body,details)=>{
 
 
@@ -784,6 +798,18 @@ module.exports={
                 
                 
             }).then((response)=>{
+                db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(details)}).then((order) => {
+                    console.log("order",order);
+                    if(order.status == "Cancelled" || order.status == "Return"){
+                        console.log("inside if");
+                        let price = {
+                            wall_amount: order.totalAmount
+                        }
+                        console.log(price,"price");
+                        walletHelpers.addtoWallet(price,order.userId)
+                    }
+                })
+
                 resolve()
                 console.log(details);
              console.log('in updateStatus');
@@ -1051,6 +1077,30 @@ changePaymentStatus:async (orderId)=>{
 },
 
 /////////coupon/////////////
+buyWallet: function (orderId) {
+    db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(orderId)}).then((order) => {
+        db.get().collection(collection.WALLET_COLLECTION).findOne({userId: order.userId}).then((wallet) => {
+            if(order.totalAmount <= wallet.wall_amount) {
+                wallet.wall_amount = wallet.wall_amount - order.totalAmount
+                db.get().collection(collection.WALLET_COLLECTION).updateOne({userId: order.userId}, {
+                    $set:{
+                        wall_amount:wallet.wall_amount
+                    }
+                }).then(() => {
+                    db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(orderId)}, {
+                        $set:{
+                            status:"Placed"
+                        }
+                    }).then(() => {
+                        resolve("true")
+                    })
+                })
+            } else {
+                resolve("false")
+            }
+        })
+    })
+}
 
 
 }

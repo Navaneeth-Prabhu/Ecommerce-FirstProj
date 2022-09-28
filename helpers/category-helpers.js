@@ -105,14 +105,15 @@ module.exports ={
         addCategoryOff:(catId,offer,validTill, validFrom)=>{
  
             return new Promise(async(resolve,reject)=>{
-                try {
+                
+                // try {
                     let offerPrice = []
                 let off=Number(offer)
                 let offTill = validTill
                 console.log(catId);
                 let offFrom = validFrom
                 let date = new Date()
-                let currentDate = moment(date).format('YYYY-MM-DD')
+                // let currentDate = moment(date).format('YYYY-MM-DD')
                 let ppa = {category:catId} 
                 // if (catId.validTill < currentDate) {
                 //     db.get().collection(collection.CATEGORY_COLLECTION).findOneAndUpdate({ _id: objectId(catId) },
@@ -132,9 +133,11 @@ module.exports ={
                 //         })
                        
                 // }else{
+                
 
-                    await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
+                    await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId,}).toArray().then((res)=>{
                         res.forEach(data=>{
+                         
                             let price = Number(data.price)
                             offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
                         })
@@ -148,9 +151,9 @@ module.exports ={
                     })
                 // }
               resolve()
-                } catch (error) {
-                    reject()
-                } 
+                // } catch (error) {
+                //     reject()
+                // } 
             })    
        },
        deleteCategoryOffer:(catId) => {

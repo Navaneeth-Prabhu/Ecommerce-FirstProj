@@ -268,65 +268,6 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
   });
   
-// router.post('/add-product',auth.adminCookieJWTAuth,function (req,res){
-
-//   try{
- 
-//       productHelper.addProduct(req.body, async(id) => {
-//       try {
-//         let image = req.files.image1;
-
-//         let subImages = []
-//         if(req.files?.image2){subImages.push(req.files?.image2)}
-//         if(req.files?.image3){subImages.push(req.files?.image3)}
-//         if(req.files?.image4){subImages.push(req.files?.image4)}
-//         try {
-          
-       
-//         for (let index = 0; index < subImages.length; index++) {
-//          await subImages[index].mv("./public/product-images/" + id + index +".jpg", (err, data) => {
-//             if (!err) {
-            
-//             console.log("sub images added",index);
-            
-//             } else {
-//               console.log(err);
-//             }
-//           })
-          
-//         }
-//       } catch (error) {
-        
-//           res.redirect('/error')
-//       }
-//         if (image) {
-//           await image.mv("./public/product-images/" + id + ".jpg", (err, data) => {
-//             if (!err) {
-//               // res.redirect("/admin/products");
-//              console.log("image added");
-//             } else {
-//               console.log(err);
-//             }
-//           });
-//         }
-
-        
-//       } catch (error) {
-//         console.log(error);
-//         res.redirect('/admin/products')
-//       }
-//         finally{
-//           res.redirect("/admin/products")
-//         }
-//         }).then(()=>{console.log("added succesfully")}).catch((err)=>{console.log(err);});
-//   }catch(err){
-//     console.log(err+"error in add product")
-//     res.redirect('/error')
-//   }
-// })
-  
-
-  
 
   router.get('/add-product',auth.adminCookieJWTAuth, function(req,res) {
 
@@ -804,22 +745,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
          }
 
         });
-    // router.post('/add-offer',auth.adminCookieJWTAuth, function(req,res) {
-      
-    //   try {
-    //     let catId = req.query.id
-    //     let off = req.body.off
-    //     let validTill = req.body.offTill
-    //     productHelper.addCategoryOff(catId,off,validTill).then(()=>{
-    //       res.redirect("/admin/view-offer")
-    //     })
-    //  }
-    //  catch(err){
-    //   res.redirect('/error')
-    //   console.log(err);
-    //  } 
-    
-    //     });
+
         
 
         
