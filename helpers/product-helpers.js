@@ -38,6 +38,11 @@ module.exports={
     getAllProducts:() => {
         return new Promise (async (resolve, reject) => {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
+            // .skip((page - 1) * limit)
+            // .limit(limit * 1)
+            // .sort({ _id: -1 })
+            // .exec()
+            
             // console.log(product)
             resolve(product)
         })
@@ -224,6 +229,37 @@ module.exports={
                 
             })
         })
-    }
+    },
+
+
+
+    /////////////sorting based on the popularity///////////
+
+    pupularityPro:()=>{
+        return new Promise (async (resolve, reject) => {
+            let product=await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({Totalclick:-1}).toArray()
+            resolve(product)
+            console.log("pro:",product);
+        })
+    },
+
+    ///////////////////price hight to low/////////////
+
+    hightTolow:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({offerPrice:-1}).toArray()
+            resolve(product)
+            
+        })
+    },
+
+    ////////////////////low to high/////////////////////
+    lowToHigh:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({offerPrice:1}).toArray()
+            resolve(product)
+            
+        })
+    },
 
 }

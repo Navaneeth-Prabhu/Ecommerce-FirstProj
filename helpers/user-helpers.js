@@ -1078,26 +1078,35 @@ changePaymentStatus:async (orderId)=>{
 
 /////////coupon/////////////
 buyWallet: function (orderId) {
-    db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(orderId)}).then((order) => {
-        db.get().collection(collection.WALLET_COLLECTION).findOne({userId: order.userId}).then((wallet) => {
-            if(order.totalAmount <= wallet.wall_amount) {
-                wallet.wall_amount = wallet.wall_amount - order.totalAmount
-                db.get().collection(collection.WALLET_COLLECTION).updateOne({userId: order.userId}, {
-                    $set:{
-                        wall_amount:wallet.wall_amount
-                    }
-                }).then(() => {
-                    db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(orderId)}, {
+    return new Promise((resolve, reject) => {
+        
+        db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(orderId)}).then((order) => {
+            db.get().collection(collection.WALLET_COLLECTION).findOne({userId: order.userId}).then((wallet) => {
+                if(order.totalAmount <= wallet.wall_amount) {
+                    wallet.wall_amount = wallet.wall_amount - order.totalAmount
+                    db.get().collection(collection.WALLET_COLLECTION).updateOne({userId: order.userId}, {
                         $set:{
-                            status:"Placed"
+                            wall_amount:wallet.wall_amount
                         }
-                    }).then(() => {
-                        resolve("true")
+                    }).then(async() => {
+                        
+                  let data=  await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(orderId)}, {
+                            $set:{
+                                status:"Placed"
+                            }
+                        })
+                        console.log({data});
+                        resolve(data)
+                        // .then((data) => {
+                        //     console.log("Data",data);
+                        //     resolve(true)
+                        // })
                     })
-                })
-            } else {
-                resolve("false")
-            }
+                }
+                // } else {
+                //     resolve(false)
+                // }
+            })
         })
     })
 }

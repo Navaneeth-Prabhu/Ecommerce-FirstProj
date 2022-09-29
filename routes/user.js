@@ -19,7 +19,10 @@ const categoryHelpers = require('../helpers/category-helpers');
 const couponHelpers = require('../helpers/coupon-helpers');
 const walletHelpers = require('../helpers/wallet-helpers')
 // import * as paypal from "../helpers/paypal";
+var db=require('../config/connection')
+var collection = require('../config/collections');
 
+var objectId = require('mongodb').ObjectId
 
 const client = require('twilio')(process.env.ACCOUNT_SID,process.env.AWTH_TOKEN)
 var creationFailed;
@@ -204,7 +207,11 @@ router.get('/logout', function(req, res) {
 
 /* GET home page. */
 router.get('/view-products',async function(req, res, next) {
-
+  let page = req.params.page || 1
+  if (req.query.page) {
+      page = req.query.page
+  }
+  const limit = 6
   let user=req.session.user;
 // console.log(user);
 // console.log("here user")
@@ -216,6 +223,11 @@ if(req.session.user){
   cartCount=await userHelpers.getCartCount(req.session.user._id)
   wishCount=await userHelpers.getWishCount(req.session.user._id)
 }
+// let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray().skip((page - 1) * limit)
+// .limit(limit * 1)
+// .sort({ _id: -1 })
+// .exec()
+
 productHelper.getAllProducts().then((product)=>{
   console.log("pro:",product);
   res.render('user/view-products',{user,product,cartCount,wishCount})
@@ -561,11 +573,13 @@ router.post('/checkout',async(req,res)=>{
       else if(req.body['payment-method']==='Wallet'){
         
         userHelpers.buyWallet(orderId).then((response) => {
-          if(response == "true"){
-            res.json({ cod_success: true });
+          console.log({response});
+          if(response == true){
+            console.log("in respor true");
+            res.json({ wallet_success: true });
           } else {
-            res.json(true)
-          }
+            res.json({ wallet_success: false })
+          } 
         })
         
       }else{
@@ -975,6 +989,21 @@ router.post('/wallet',async(req,res)=>{
 
 })
 
+
+//////////////////Sort By////////////////////
+
+router.get('/view-products/popularity',async(req,res)=>{
+  let product = productHelper.pupularityPro()
+  res.render('/view-products/popularity',{product})
+})
+router.get('/view-products/lowTOhigh',async(req,res)=>{
+  let product = productHelper.lowToHigh()
+  res.render('/view-products/lowTOhigh',{product})
+})
+router.get('/view-products/hightTOlow',async(req,res)=>{
+  let product = productHelper.hightTolow()
+  res.render('/view-products/hightTOlow',{product})
+})
 
 
 module.exports = router;
