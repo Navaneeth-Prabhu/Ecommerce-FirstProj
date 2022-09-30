@@ -64,7 +64,12 @@
                     <!-- Category -->
                    {{#if this.delivered}}
                    __
+                
                    {{else}}
+                   {{#if this.Cancelled}}
+                   --
+                   {{else}}
+
                     <div>
                     <label class="col-md-4 control-label" for="stock_alert"></label>  
                     <select name="status" class="form-group form-select" aria-label="Default select example">
@@ -73,9 +78,10 @@
 
                     <option id="status" value="Placed" >Placed</option>
                     <option id="status" value="Shipped" >Shipped</option>
-                    <option id="status" value="Canceled" >Cancelled</option>
+                    <option id="status" value="Cancelled" >Cancelled</option>
                     <option id="status" value="Delivered" >Delivered</option>
                     </div>
+                    {{/if}}
                     {{/if}}
 
                     </select>

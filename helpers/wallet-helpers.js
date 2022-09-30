@@ -10,44 +10,69 @@ const { verify } = require('jsonwebtoken');
 module.exports ={
     
 
-    addtoWallet:(details,userId)=>{
+    addtoWallet:(price,userId)=>{
 
-        details.userId = userId
+        // details.userId = userId
         return new Promise(async(resolve,reject)=>{
-        walletExist = await db.get().collection(collection.WALLET_COLLECTION).findOne({userId:userId})
-        if(walletExist){
-            let ctotal = await db.get().collection(collection.WALLET_COLLECTION).findOne({userId: userId}, {wall_amount:1, _id: 0})
+            // let wallet=0
+            let ctotal=await db.get().collection(collection.USER_COLLECTION).findOne({_id:userId})
+            console.log("ctotal:",ctotal.wallet);
             console.log(ctotal);
-            let currenttotal = Number(ctotal.wall_amount)
-            let ntotal = Number(details.wall_amount)+ currenttotal;
-            if(ntotal > 0){
-                db.get().collection(collection.WALLET_COLLECTION).updateOne({userId:userId},{
-                $set: {
-                    wall_amount: ntotal
-                }
-            }).then(() => {
-                resolve(true)
-            })
-            } else {
-                db.get().collection(collection.WALLET_COLLECTION).updateOne({userId:userId},{
-                    $set: {
-                        wall_amount: 0
-                    }
-                }).then(() => {
-                    resolve(0)
+            let currenttotal=Number(ctotal.wallet)
+            console.log(currenttotal);
+            console.log(price);
+            let ntotal = Number(price.wall_amount)+currenttotal
+            await db.get().collection(collection.USER_COLLECTION).updateOne({_id:userId},
+                {$set:{
+                    wallet:ntotal
+                     }
+                }).then(()=>{
+                    resolve(true)
                 })
-            }
             
-        } else{
-            details.userId= objectId(details.userId)
-             db.get().collection(collection.WALLET_COLLECTION).insertOne(details).then((response)=>{
-               resolve(response)
-           })
-        }
           
            
        })
     },
+
+    // addtoWallet:(details,userId)=>{
+
+    //     details.userId = userId
+    //     return new Promise(async(resolve,reject)=>{
+    //     walletExist = await db.get().collection(collection.WALLET_COLLECTION).findOne({userId:userId})
+    //     if(walletExist){
+    //         let ctotal = await db.get().collection(collection.WALLET_COLLECTION).findOne({userId: userId}, {wall_amount:1, _id: 0})
+    //         console.log(ctotal);
+    //         let currenttotal = Number(ctotal.wall_amount)
+    //         let ntotal = Number(details.wall_amount)+ currenttotal;
+    //         if(ntotal > 0){
+    //             db.get().collection(collection.WALLET_COLLECTION).updateOne({userId:userId},{
+    //             $set: {
+    //                 wall_amount: ntotal
+    //             }
+    //         }).then(() => {
+    //             resolve(true)
+    //         })
+    //         } else {
+    //             db.get().collection(collection.WALLET_COLLECTION).updateOne({userId:userId},{
+    //                 $set: {
+    //                     wall_amount: 0
+    //                 }
+    //             }).then(() => {
+    //                 resolve(0)
+    //             })
+    //         }
+            
+    //     } else{
+    //         details.userId= objectId(details.userId)
+    //          db.get().collection(collection.WALLET_COLLECTION).insertOne(details).then((response)=>{
+    //            resolve(response)
+    //        })
+    //     }
+          
+           
+    //    })
+    // },
 
     getWallet: function (userId) {
         return new Promise( async function(resolve, reject) {
@@ -55,7 +80,15 @@ module.exports ={
                 resolve(wallet)
             })
         })
-    }
+    },
 
+    // referalWallet:function(userId){
+    //     return new Promise(async function(resolve,reject){
+    //         db.get().collection(collection.USER_COLLECTION).updateOne({userId:userId},
+    //             {
+    //                 $set:
+    //             })
+    //     })
+    // }
 
 }

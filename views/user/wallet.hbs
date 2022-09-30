@@ -1,8 +1,21 @@
-<h2>wallet</h2>
 
+{{!-- 
 <form action="/wallet?userId={{user._id}}" method="post">
  <label for="wallet">amount</label>
     <input type="number" name="wall_amount" id="wall_amount">
 
     <center><button type="submit" class="btn btn-primary float-center">add</button></center>
-</form>
+</form> --}}
+
+<div class="container">
+    <h2>wallet</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+
+            <p>wallet Amount</p>
+            <strong>{{user.wallet}}</strong>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ const { ORDER_COLLECTION } = require('../config/collections');
 const categoryHelpers = require('../helpers/category-helpers');
 const couponHelper = require('../helpers/coupon-helpers');
 const { Chart } = require('chart.js');
+const { report } = require('../routes/user');
 
 console.log("here 2")
 
@@ -26,6 +27,10 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
     let newDate = []
     no= 0
     let u_no =0
+
+    let report = await userHelper.getAllDeliveredOrder()
+    // console.log("jjjjjj")
+
     await userHelper.getAllUserOrders().then((orders)=>{
       
       // console.log("in try: ",orders);
@@ -72,10 +77,14 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
           u_no++
          
      
-          });})
+          });
+        })
           
+         
+
+            
+            res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no,report});
           
-      res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no});
     });
  
       
@@ -96,6 +105,12 @@ router.get('/dashboard/day',auth.adminCookieJWTAuth,async (req,res)=>{
 })
 router.get('/dashboard/week',auth.adminCookieJWTAuth,async (req,res)=>{
   await chartHelper.findOrderByMonth().then((data)=>{
+    res.json(data)
+  })
+})
+router.get('/dashboard/category',auth.adminCookieJWTAuth,async (req,res)=>{
+  await chartHelper.categoryStatus().then((data)=>{
+    // console.log(data);
     res.json(data)
   })
 })
@@ -418,8 +433,8 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
             element.delivered = true;
           } else if (element.status == "Shipped") {
             element.shipped = true;
-          } else if(element.status == "cancelled") {
-            element.delivered = true;
+          } else if(element.status == "Cancelled") {
+            element.Cancelled = true;
           }else if(element.status == "Return"){
             element.delivered = true
           }

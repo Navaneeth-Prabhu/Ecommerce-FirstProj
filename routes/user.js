@@ -71,10 +71,13 @@ router.post('/signup', function(req,res) {
     if(response == false){
       creationFailed="Signup failed! Email Id exists";
     }
-    if(req.session.fromAdmin){
-      res.redirect('/')
-      req.session.fromAdmin = false
-    }else{
+    else if (response == "invalid referal"){
+      creationFailed="invalid referal"
+    }
+    // else if(req.session.fromAdmin){
+    //   res.redirect('/')
+    //   req.session.fromAdmin = false
+    else{
     res.redirect('/login')
     }
   }) 
@@ -229,7 +232,7 @@ if(req.session.user){
 // .exec()
 
 productHelper.getAllProducts().then((product)=>{
-  console.log("pro:",product);
+  // console.log("pro:",product);
   res.render('user/view-products',{user,product,cartCount,wishCount})
 })
 });
@@ -510,20 +513,104 @@ router.get('/checkout/',async(req,res)=>{
 
 })
 
+// router.post('/add',async(req,res)=>{
+//   try {
+//     // console.log("Checkout form body", req.body);
+    
+//     let products = await userHelpers.getCartProductList(req.session.user._id);
+//     // if(products=='no'){
+//     //   res.redirect('/index')
+//     // }else{
+
+    
+
+//     let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
+   
+//     let offerPrice = 0
+//     await userHelpers.getCartProduct(req.session.user._id).then((products)=>{
+//       products.forEach((data) => {
+
+
+//         try {
+//           if (data.product.offerPrice) {
+//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+//             // offerPrice=
+      
+//           } else {
+//             data.subTotal = Number(data.quantity) * Number(data.product.price);
+           
+//           }
+//          total+=data.subTotal
+//         } catch (error) {
+//           data.subTotal = Number(data.quantity) * Number(data.product.price);
+        
+//           offerPrice+=data.subTotal
+//         }
+//          if (req.body.coupon) {
+//           let off = Number(req.body.coupon)
+//           offerPrice= offerPrice-(offerPrice*(off/100))
+          
+//          }
+       
+       
+//       });
+
+
+//     }).catch(()=>{res.redirect('/error')});
+      
+//     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
+//     req.body.UserId = req.session.user._id;
+//     await userHelpers.placeOrder(req.body, products,offerPrice, totalPrice).then((orderId) => {
+      
+
+//       if(req.body['payment-method']==='COD'){
+//         res.json({cod_success:true})
+//       }
+//       else if(req.body['payment-method']==='paypal'){
+        
+//         res.json({ cod_success: true });
+//       }
+//       else if(req.body['payment-method']==='Wallet'){
+        
+//         userHelpers.buyWallet(orderId).then((response) => {
+//           console.log({response});
+//           if(response == true){
+//             console.log("in respor true");
+//             res.json({ wallet_success: true });
+//           } else {
+//             res.json({ wallet_success: false })
+//           } 
+//         })
+        
+//       }else{
+//         userHelpers.generateRazorPay(orderId,totalPrice,offerPrice).then((response)=>{
+//           // console.log('resop:',response);
+//           res.json(response)
+//         })
+//       }
+//     }).catch(()=>{res.redirect('/orderSuccessfully')});
+//   } catch (err) {
+//     console.log(err);
+//     res.redirect('/error')
+//   }
+
+// })
+
+
+
+
+
 router.post('/checkout',async(req,res)=>{
   try {
     // console.log("Checkout form body", req.body);
     
     let products = await userHelpers.getCartProductList(req.session.user._id);
+    // if(products=='no'){
+    //   res.redirect('/index')
+    // }else{
 
-    // products.products.forEach(data=>{
-      
-    //   userHelper
-    //   .removeWish(req.session.user._id, data.item)
-    //   .then((response) => {
-    //     console.log('');
-    //   }).catch(()=>{res.redirect('/error')});;
-    // })
+    
+
     let user = await userHelpers.getUserDetails(req.session.user._id).catch(()=>{res.redirect('/error')});;
    
     let offerPrice = 0
@@ -556,7 +643,7 @@ router.post('/checkout',async(req,res)=>{
       });
 
 
-    }).catch(()=>{res.redirect('/error')});;
+    }).catch(()=>{res.redirect('/error')});
       
     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
     req.body.UserId = req.session.user._id;
@@ -588,7 +675,7 @@ router.post('/checkout',async(req,res)=>{
           res.json(response)
         })
       }
-    }).catch(()=>{res.redirect('/orderSuccessfully')});;
+    }).catch(()=>{res.redirect('/orderSuccessfully')});
   } catch (err) {
     console.log(err);
     res.redirect('/error')
@@ -596,56 +683,6 @@ router.post('/checkout',async(req,res)=>{
 
 })
 
-
-
-
-// router.post('/checkout',async(req,res)=>{
-  
-//   console.log("in post checkout",req.body['payment-method']);
-//   let products = await userHelpers.getCartProductList(req.body.userId)
-
-//   // if(products.length>0){
-//     let offerPrice =0;
-//     await userHelpers.getCartProduct(req.body.userId).then((products)=>{
-//       products.forEach((data)=>{
-//         try {
-//           if(data.product.offerPrice){
-//             console.log("offerpro :",data.product.offerPrice);
-//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice)
-//             offerPrice+=data.subTotal
-//           }else{
-//             offerPrice=0
-//           }
-          
-//         }
-//         catch(error){
-
-//         }
-//       })
-//     })
-//     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
-  
-//     userHelpers.placeOrder(req.body,products,offerPrice,totalPrice).then((orderId)=>{
-//     console.log("in checkout:",orderId);
-//     console.log("body:",req.body);
-//       if(req.body['payment-method']==='COD'){
-//         res.json({cod_success:true})
-//       }
-//       else if(req.body['payment-method']==='paypal'){
-        
-//         res.json({ cod_success: true });
-//       }else{
-//         userHelpers.generateRazorPay(orderId,totalPrice,offerPrice).then((response)=>{
-//           console.log('resop:',response);
-//           res.json(response)
-//         })
-//       }
-//     })
-//   // }else{
-
-//   //   res.redirect('/login')
-//   // }
-// })
 
 
 
@@ -683,7 +720,7 @@ router.get('/order-history',async(req,res)=>{
           element.delivered = true;
         } else if (element.status == "Shipped") {
           element.shipped = true;
-        } else if(element.status == "cancelled") {
+        } else if(element.status == "Cancelled") {
           element.cancelled = true;
         }else if (element.status == "Return") {
           element.Return = true
@@ -717,7 +754,7 @@ router.get('/return-order/:data',async(req,res)=>{
   }
 })
 
-router.get('/view-order-products/:id',async(req,res)=>{
+router.get('/order-pro/:id',async(req,res)=>{
   if(req.session.loggedIn){
     // console.log("param",req.params.id);
     let products= await userHelpers.getOrderProducts(req.params.id)
@@ -739,7 +776,7 @@ router.get('/view-order-products/:id',async(req,res)=>{
 
 router.get('/user-profile',async(req,res)=>{
   if(req.session.loggedIn){
-
+    
     res.render('user/user-profile',{user:req.session.user,profile:true,passErr:req.session.changePasswordError, success: req.session.success})
     req.session.changePasswordError=null;
     req.session.success = null
@@ -750,6 +787,8 @@ router.get('/user-profile',async(req,res)=>{
 })
 
 router.post('/user-profile',async(req,res)=>{
+
+  // let wallet=db.get().collection(collection.WALLET_COLLECTION)
   await userHelpers.updateUser(req.session.user,req.body).then(()=>{
     req.session.user.Name = req.body.Name
     req.session.user.number=req.body.number
@@ -932,6 +971,16 @@ router.post('/verifyCoupon',async function(req,res){
         
        
       });
+      // let wallet = await walletHelpers.getWallet(req.session.user._id)
+      // // console.log(wallet);
+      // let gwallet
+      // if(Number(wallet.wall_amount) >= Number(total)) {
+      //   console.log("in wallet if ");
+      //   gwallet = true
+      // } else {
+      //   console.log("in else wallet");
+      //   gwallet = false
+      // }
     
     // let user = await userHelpers.getUserDetails(req.session.user._id);
     // let address = false;
@@ -941,7 +990,7 @@ router.post('/verifyCoupon',async function(req,res){
     let address =await userHelpers.viewAddress(req.session.user._id)
 
     couponHelpers.verifyCoupon(req.body).then((coupon)=>{
-      couponHelpers.usedCoupon(req.session.user._id)
+     
       console.log(req.body);
       console.log('cou: ',coupon);
       if(coupon){
@@ -969,8 +1018,9 @@ router.get('/invoice',async function(req,res){
 /////////////////Wallet////////////
 router.get('/wallet',async(req,res)=>{
   if(req.session.loggedIn){
-
-    res.render('user/wallet',{user:req.session.user})
+    // console.log(wallet);
+    // await userHelpers.getUserDetails(user:req.session._id)
+    res.render('user/wallet',{user:req.session.user,profile:true})
   }else{
     res.redirect('/login')
   }
@@ -993,16 +1043,23 @@ router.post('/wallet',async(req,res)=>{
 //////////////////Sort By////////////////////
 
 router.get('/view-products/popularity',async(req,res)=>{
-  let product = productHelper.pupularityPro()
-  res.render('/view-products/popularity',{product})
+   productHelper.pupularityPro().then((product)=>{
+  // console.log("pro",product);
+  res.render('user/view-products',{product})
+   })
 })
 router.get('/view-products/lowTOhigh',async(req,res)=>{
-  let product = productHelper.lowToHigh()
-  res.render('/view-products/lowTOhigh',{product})
+    productHelper.lowToHigh().then((product)=>{
+    console.log("in viewo ro");
+    res.render('user/view-products',{product})
+  })
 })
 router.get('/view-products/hightTOlow',async(req,res)=>{
-  let product = productHelper.hightTolow()
-  res.render('/view-products/hightTOlow',{product})
+  productHelper.hightTolow().then((product)=>{
+    res.render('user/view-products',{product})
+
+  })
+ 
 })
 
 

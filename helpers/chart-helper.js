@@ -78,8 +78,52 @@ module.exports ={
                     $sort:{detail:-1}
                 }
             ]).toArray()
-            console.log(data);
+            // console.log(data);
             resolve(data)
         })
     },
+
+    categoryStatus:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{ date:{
+                        $gte: new Date(new Date().getMonth()-10)
+                        }
+                    }
+                },
+                {
+                  $lookup:  {
+                    from:'product',
+                    localField:'products.item',
+                    foreignField:'_id',
+                    as:'pro'
+                  },
+
+                },
+                {
+                    $unwind:'$pro'            
+                },
+                {
+                    $project:{
+                        cat:"$pro.SubCategory"
+                    }
+                },
+                {
+                    $group:{
+                        _id:"$cat",
+                        count:{$sum:1},
+                        detail:{$first:"$$ROOT"}
+                    }
+                },
+                // {
+
+                // }
+
+
+            ]).toArray()
+            resolve(data)
+            // console.log(data.detail.cat);
+        })
+    }
 }

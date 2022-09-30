@@ -14,8 +14,8 @@
         <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
             <thead>
                 <tr >
-                    <th scope="col">Starts</th>
-                    <th scope="col">Ends</th>
+                    {{!-- <th scope="col">Starts</th> --}}
+                    {{!-- <th scope="col">Ends</th> --}}
                     <th scope="col">Category</th>
                     <th scope="col">offer</th>
                    
@@ -27,8 +27,8 @@
                 {{#each categories}}
                 <tr>
                     {{#if offer}}
-                    <td>{{this.validFrom}}</td>
-                    <td>{{this.validTill}}</td>
+                    {{!-- <td>{{this.validFrom}}</td> --}}
+                    {{!-- <td>{{this.validTill}}</td> --}}
                     <td>{{this.Category_name}}</td>
                     <td>{{this.offer}}</td>
                      <td><a href="/admin/delete-offer?id={{this.Category_name}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Category_name}}  ?')">Delete</a></td>

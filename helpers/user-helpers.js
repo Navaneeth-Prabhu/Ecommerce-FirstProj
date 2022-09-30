@@ -9,7 +9,7 @@ const Razorpay = require('razorpay');
 const { resolve } = require('path')
 const { resolveObjectURL } = require('buffer')
 const walletHelpers = require('./wallet-helpers')
-
+const shortid = require('shortid')
 // import fetch from "node-fetch";
 // import "dotenv/config"; // loads env variables from .env file
 
@@ -26,10 +26,38 @@ var instance = new Razorpay({
 module.exports={
     doSignup:function(userData) {
         return new Promise(async function (resolve, reject) {
-            var isThere = await db.get().collection(collection.USER_COLLECTION).findOne({ Email: userData.Email })
+            let isThere = await db.get().collection(collection.USER_COLLECTION).findOne({ Email: userData.Email })
+            let isref = 'a'
+            console.log(userData.referal_code);
+            if(userData.referal_code){
+
+              isref = await db.get().collection(collection.USER_COLLECTION).findOne({referal_code:userData.referal_code})
+
+            }
+            if(isref){
+                
+                
+                console.log("userid: ",isref._id);
+                let total = Number(isref.wallet)+ 100;
+                db.get().collection(collection.USER_COLLECTION).findOneAndUpdate({_id:objectId(isref._id)},{
+                    $set:{
+                        wallet:total
+                    }
+                })
+                
+        
+            }
+            console.log(isref);
             if (isThere) {
                 resolve(false)
-            } else {
+            }else if(!isref){
+                resolve("invalid referal")
+            } 
+            else {
+                let wallet = 0
+                let referal_code = shortid.generate()
+                userData.referal_code =referal_code
+                userData.wallet=wallet
                 userData.Password = await bcrypt.hash(userData.Password, 10);
                 userData.blocked = false;
                 db.get().collection(collection.USER_COLLECTION).insertOne(userData).then((data) => {
@@ -603,7 +631,7 @@ module.exports={
                     
                 }
             }
-            // db.get().collection(collection.PRODUCT_COLLECTION).updateOne({$inc:{"stock":-1}})
+            // db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:orderObj.products},{$inc:{stock:products.quantity}})
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
                 // db.get().collection(collection.PRODUCT_COLLECTION)
                 db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
@@ -655,13 +683,19 @@ module.exports={
 
 
     getCartProductList:(userId)=>{
-        return new Promise(async(resolve,reject)=>{
+        try{
 
-            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
-            // console.log(cart);
-            resolve(cart.products)
-            // console.log(cart.products);
-        })
+            return new Promise(async(resolve,reject)=>{
+    
+                let cart = await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+                
+                resolve(cart.products)
+                
+            })
+        }catch(err){
+
+            resolve('no')
+        }
     },
 
 
@@ -675,11 +709,18 @@ module.exports={
     },
     getAllUserOrders:()=>{
         return new Promise(async(resolve,reject)=>{
-            let userPro= await db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+            let userPro= await db.get().collection(collection.ORDER_COLLECTION).find().sort({date:-1}).toArray()
 
                 resolve(userPro)
            
         
+        })
+    },
+    getAllDeliveredOrder:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let report= await db.get().collection(collection.ORDER_COLLECTION).find({status:"Delivered"}).toArray()
+            console.log("repo",report); 
+                resolve(report)
         })
     },
 
@@ -750,6 +791,44 @@ module.exports={
     cancelOrder:(body,details)=>{
 
 
+
+            
+            return new Promise((resolve,reject)=>{
+
+            
+            
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
+                {
+                    $set:{
+                        status:'Cancelled'
+                    }
+                    
+                    
+                    
+                }).then((response)=>{
+                    console.log();
+                    db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(details)}).then((order) => {
+                        console.log("order",order);
+                        if(order.status == "Cancelled" || order.status == "Return"){
+                            console.log("inside if");
+                            let price = {
+                                wall_amount: order.totalAmount
+                            }
+                            console.log(price,"price");
+                            walletHelpers.addtoWallet(price,order.userId)
+                        }
+                    })
+                    resolve()
+                    console.log(details);
+                 console.log('in updateStatus');
+            })
+            })
+   
+},
+
+    returnOrder:(body,details)=>{
+
+
         return new Promise((resolve,reject)=>{
 
             
@@ -768,48 +847,12 @@ module.exports={
                     console.log("order",order);
                     if(order.status == "Cancelled" || order.status == "Return"){
                         console.log("inside if");
-                        let price = {
-                            wall_amount: order.totalAmount
-                        }
+                        let price = order.totalAmount
+                        
                         console.log(price,"price");
                         walletHelpers.addtoWallet(price,order.userId)
                     }
                 })
-                resolve()
-                console.log(details);
-             console.log('in updateStatus');
-        })
-        })
-    },
-
-    returnOrder:(body,details)=>{
-
-
-        return new Promise((resolve,reject)=>{
-
-            
-            // console.log('in updateStatus');
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(details)},
-            {
-                $set:{
-                    status:'Return'
-                }
-                
-                
-                
-            }).then((response)=>{
-                db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(details)}).then((order) => {
-                    console.log("order",order);
-                    if(order.status == "Cancelled" || order.status == "Return"){
-                        console.log("inside if");
-                        let price = {
-                            wall_amount: order.totalAmount
-                        }
-                        console.log(price,"price");
-                        walletHelpers.addtoWallet(price,order.userId)
-                    }
-                })
-
                 resolve()
                 console.log(details);
              console.log('in updateStatus');
@@ -935,13 +978,23 @@ changePassword:(userId,newPassword)=>{
 /////////////////////////////PAYMENT///////////////////
 
 
-generateRazorPay:(orderId,total)=>{
+generateRazorPay:(orderId,total,offer)=>{
     return new Promise((resolve,reject)=>{
-        var options={
-            amount:total*100,
-            currency:"INR",
-            receipt:""+orderId
-        };
+        var options=0
+        if(offer){
+
+            options={
+                amount:offer*100,
+                currency:"INR",
+                receipt:""+orderId
+            };
+        }else{
+            options={
+                amount:total*100,
+                currency:"INR",
+                receipt:""+orderId
+            };
+        }
         instance.orders.create(options, function (err, order) {
             if (err) {
               console.log(err);
@@ -1087,6 +1140,39 @@ buyWallet: function (orderId) {
                     db.get().collection(collection.WALLET_COLLECTION).updateOne({userId: order.userId}, {
                         $set:{
                             wall_amount:wallet.wall_amount
+                        }
+                    }).then(async() => {
+                        
+                  let data=  await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectId(orderId)}, {
+                            $set:{
+                                status:"Placed"
+                            }
+                        })
+                        console.log({data});
+                        resolve(data)
+                        // .then((data) => {
+                        //     console.log("Data",data);
+                        //     resolve(true)
+                        // })
+                    })
+                }
+                // } else {
+                //     resolve(false)
+                // }
+            })
+        })
+    })
+},
+buyWallet: function (orderId) {
+    return new Promise((resolve, reject) => {
+        
+        db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectId(orderId)}).then((order) => {
+            db.get().collection(collection.USER_COLLECTION).findOne({_id: order.userId}).then((wallet) => {
+                if(order.totalAmount <= wallet.wallet) {
+                    wallet.wallet = wallet.wallet - order.totalAmount
+                    db.get().collection(collection.USER_COLLECTION).updateOne({_id: order.userId}, {
+                        $set:{
+                            wallet:wallet.wallet
                         }
                     }).then(async() => {
                         

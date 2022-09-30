@@ -239,7 +239,7 @@ module.exports={
         return new Promise (async (resolve, reject) => {
             let product=await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({Totalclick:-1}).toArray()
             resolve(product)
-            console.log("pro:",product);
+            // console.log("pro:",product);
         })
     },
 
@@ -257,8 +257,8 @@ module.exports={
     lowToHigh:()=>{
         return new Promise(async(resolve,reject)=>{
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({offerPrice:1}).toArray()
-            resolve(product)
-            
+            resolve(product)    
+            // console.log("lh",product);
         })
     },
 

@@ -48,9 +48,10 @@ module.exports = {
   verifyCoupon: (coupon) => {
     return new Promise(async (resolve, reject) => {
       try {
-    
+    console.log(coupon);
       db.get().collection(collection.COUPON_COLLECTION).findOne({
         coupon: coupon.coupon
+        
       }).then((res) => {
         
         console.log(res);
@@ -66,9 +67,10 @@ module.exports = {
     
   },
 
-  usedCoupon:(userId,couponId)=>{
-    let userObj={
-      user: objectId(userId)
+  usedCoupon:(couponId,userId)=>{
+    let couponObj={
+      coupon:couponId,
+      users: objectId(userId)
     }
     return new Promise(async(resolve)=>{
 
@@ -81,13 +83,13 @@ module.exports = {
           // db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)})
         }else{
           db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)},{
-            $push:{user:userObj}
+            $push:{user:userId}
           }).then((response)=>{
             resolve()
           })
         }
       }else{
-        db.get().collection(collection.USED_COUPON_COLLECTION).insertOne(userObj).then((response)=>{
+        db.get().collection(collection.USED_COUPON_COLLECTION).insertOne(couponObj).then((response)=>{
           resolve()
         })
       }
