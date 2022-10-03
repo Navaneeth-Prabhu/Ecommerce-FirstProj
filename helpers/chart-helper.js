@@ -82,6 +82,43 @@ module.exports ={
             resolve(data)
         })
     },
+    findOrderByYear:()=>{
+        return new Promise(async (resolve, reject) => {
+            let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match: {
+                        date: {
+                            $gte: new Date(new Date().getYear() - 10)
+                        }
+                    }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        year: { $year: "$date" },
+                        month: { $month: "$date" },
+                        day: { $dayOfMonth: "$date" },
+                        dayOfWeek: { $dayOfWeek: "$date" },
+                        week: { $week: "$date" }
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$year',
+                        count: { $sum: 1 },
+                        detail: { $first: '$$ROOT' }
+                    }
+                },
+                {
+                    $sort: { detail: -1 }
+                }
+            ])
+            console.log("chart:",data);
+            resolve(data)
+        })
+    },
 
     categoryStatus:()=>{
         return new Promise(async(resolve,reject)=>{

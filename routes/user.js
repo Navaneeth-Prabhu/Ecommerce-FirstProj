@@ -59,7 +59,7 @@ router.get('/signup', function(req,res) {
   if(req.session.loggedIn){
     res.redirect('/')
   }else{
-    res.render('user/signup')
+    res.render('user/signup',{noPartial:true})
   }
 });
 
@@ -122,12 +122,12 @@ router.post('/login', function(req, res) {
 
 
 
-router.get('/OTP-login', function(req, res) {
+router.get('/user_otp', function(req, res) {
   // console.log('got it');
   res.render('user/user_otp')
 })
 
-router.post('/OTP-login', function(req, res) {
+router.post('/user_otp', function(req, res) {
 
   try {
     console.log("getting here");
@@ -139,33 +139,25 @@ router.post('/OTP-login', function(req, res) {
         .verifications.create({
           to:`+91${req.body.number}`,
           channel:'sms'
+        }).then((data)=>{
+          console.log(data);
         })
-        res.render('user/OTP-login')
+        res.render('user/OTP-login',{number,noPartial:true})
    
   } catch (error) {
     console.log(error);
   }
       
   })
-  // router.post('/otp',(req,res)=>{
-  
-  //   console.log('get jfsa;d')
-  //   phone_number = req.body.phone_number;
-  //   client.verify
-  //   .services(process.env.TWILIO_SERVICE_ID)
-  //   .verifications.create({
-  //     to:`+91${req.body.phone__number}`,
-  //     channel:'sms'
-  //   })
-   
-  //   res.render('users/otp',{no__partials:true})
-  // })
 
 
 
-router.post('/enter-otp',(req,res)=>{
+router.post('/OTP-login',(req,res)=>{
+  console.log();
   const otp=req.body.otp
+  const number = req.body.number
   console.log('otp',otp);
+  console.log('num',number);
   client.verify
   .services(process.env.SERVICE_ID)
   .verificationChecks.create({
@@ -174,13 +166,14 @@ router.post('/enter-otp',(req,res)=>{
   }).then((response)=>{
     console.log(response);
     if(response.valid==true){
+
       userHelpers.findTheUser(req.body.number).then((response)=>{
         if(response == 'blocked'){
           console.log('blocked');
         }else if(response){
           console.log("userlogedin");
           req.session.loggedIn=true
-          req.session.user=response.user
+          req.session.user=response
           res.redirect('/')
         }else{
           console.log("incorrect otp");
@@ -188,11 +181,24 @@ router.post('/enter-otp',(req,res)=>{
       })
     }
   })
-  res.redirect('/')
+ 
 })
 
+router.post('/checkotp', (req, res) => {
+  const { otp, number } = req.body
+  try {
+    client.verify.services(serverSID).verificationChecks.create({ to: `+91${number}`, code: otp }).then((resp) => {
+      if (!resp.valid) {
+        res.render('user/checkOtp', { otperror: 'Enter valid OTP' ,noPartial:true})
+      } else {
+        res.redirect('/');
+      }
 
-
+    })
+  } catch (err) {
+    console.log(err + "hoi this is error")
+  }
+})
 
 
 
@@ -276,11 +282,14 @@ router.get('/productDetails',function(req,res){
 // })
 
 router.get('/cart',async function(req,res){
-  try {
+  if(req.session.loggedIn){
+
+  
+  // try {
     let total = 0
     await userHelpers.getCartProduct(req.session.user._id).then(async(products)=>{
       products.forEach((data) => {
-
+        console.log("data",data);
         try {
           if (data.product.offerPrice) {
             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
@@ -305,18 +314,22 @@ router.get('/cart',async function(req,res){
     // let total = await userHelper.getTotalAmount(req.session.user._id);
     
   
-    let categories = await categoryHelpers.getAllCategory().catch((err)=>{console.log(err,"hello"); res.redirect('/error')})
+    // let categories = await categoryHelpers.getAllCategory().catch((err)=>{console.log(err,"hello"); res.redirect('/error')})
     
     
    console.log("tot: ",total);
-    res.render("user/cart", { products, total, user: req.session.user,categories});
-  }).catch((error)=>{
-    console.log(error,"hi");
-    res.redirect('/error')});
-  } catch (err) {
-    console.log(err,"hey");
-    res.redirect('/error')
+    res.render("user/cart", { products, total, user: req.session.user});
+  })
+  // .catch((error)=>{
+  //   console.log(error,"hi");
+  //   res.redirect('/error')});
+  }else{
+    res.redirect('/login')
   }
+  // } catch (err) {
+  //   console.log(err,"hey");
+  //   res.redirect('/error')
+  // }
 })
 
 
@@ -396,7 +409,7 @@ router.post('/change-product-quantity',(req,res,next)=>{
 router.post('/delete-cart-product',(req,res,next)=>{
   if(req.session.loggedIn){
 
-    console.log(req.body);
+    // console.log(req.body);
     console.log('delete-pro');
     userHelpers.deleteCartProduct(req.body).then((response)=>{
       res.json(response)
@@ -498,12 +511,15 @@ router.get('/checkout/',async(req,res)=>{
     let wallet = await walletHelpers.getWallet(req.session.user._id)
     // console.log(wallet);
     let gwallet
-    if(Number(wallet.wall_amount) >= Number(total)) {
-      console.log("in wallet if ");
-      gwallet = true
-    } else {
-      console.log("in else wallet");
-      gwallet = false
+    if(wallet){
+
+      if(Number(wallet.wall_amount) >= Number(total)) {
+        console.log("in wallet if ");
+        gwallet = true
+      } else {
+        console.log("in else wallet");
+        gwallet = false
+      }
     }
     res.render("user/checkout", { total, user: req.session.user,userDetails, address, gwallet });
   } catch (err) {
@@ -776,7 +792,7 @@ router.get('/order-pro/:id',async(req,res)=>{
 
 router.get('/user-profile',async(req,res)=>{
   if(req.session.loggedIn){
-    
+    console.log("in get");
     res.render('user/user-profile',{user:req.session.user,profile:true,passErr:req.session.changePasswordError, success: req.session.success})
     req.session.changePasswordError=null;
     req.session.success = null
@@ -787,8 +803,9 @@ router.get('/user-profile',async(req,res)=>{
 })
 
 router.post('/user-profile',async(req,res)=>{
-
+  console.log("in post");
   // let wallet=db.get().collection(collection.WALLET_COLLECTION)
+  console.log("body",req.body.Name);
   await userHelpers.updateUser(req.session.user,req.body).then(()=>{
     req.session.user.Name = req.body.Name
     req.session.user.number=req.body.number
@@ -943,67 +960,67 @@ router.post("/api/orders/:orderId/capture", async (req, res) => {
 
 
 
-///////////////Verify coupon///////
-router.post('/verifyCoupon',async function(req,res){
-  // try {
-    let total = 0
-    let products = await userHelpers.getCartProduct(req.session.user._id).catch(()=>{res.redirect('/error')});;
-      products.forEach((data) => {
+// ///////////////Verify coupon///////
+// router.post('/verifyCoupon',async function(req,res){
+//   // try {
+//     let total = 0
+//     let products = await userHelpers.getCartProduct(req.session.user._id).catch(()=>{res.redirect('/error')});;
+//       products.forEach((data) => {
 
   
-        try {
-          if (data.product.offerPrice) {
-            data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+//         try {
+//           if (data.product.offerPrice) {
+//             data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
       
-          } else {
-            data.subTotal = Number(data.quantity) * Number(data.product.price);
+//           } else {
+//             data.subTotal = Number(data.quantity) * Number(data.product.price);
            
-          }
-         total+=data.subTotal
-        } catch (error) {
+//           }
+//          total+=data.subTotal
+//         } catch (error) {
           
-          data.subTotal = Number(data.quantity) * Number(data.product.price);
+//           data.subTotal = Number(data.quantity) * Number(data.product.price);
         
-          total+=data.subTotal
-        }
+//           total+=data.subTotal
+//         }
          
        
         
        
-      });
-      // let wallet = await walletHelpers.getWallet(req.session.user._id)
-      // // console.log(wallet);
-      // let gwallet
-      // if(Number(wallet.wall_amount) >= Number(total)) {
-      //   console.log("in wallet if ");
-      //   gwallet = true
-      // } else {
-      //   console.log("in else wallet");
-      //   gwallet = false
-      // }
+//       });
+//       // let wallet = await walletHelpers.getWallet(req.session.user._id)
+//       // // console.log(wallet);
+//       // let gwallet
+//       // if(Number(wallet.wall_amount) >= Number(total)) {
+//       //   console.log("in wallet if ");
+//       //   gwallet = true
+//       // } else {
+//       //   console.log("in else wallet");
+//       //   gwallet = false
+//       // }
     
-    // let user = await userHelpers.getUserDetails(req.session.user._id);
-    // let address = false;
-    // if (user.address) {
-    //   address = user.address;
-    // }
-    let address =await userHelpers.viewAddress(req.session.user._id)
+//     // let user = await userHelpers.getUserDetails(req.session.user._id);
+//     // let address = false;
+//     // if (user.address) {
+//     //   address = user.address;
+//     // }
+//     let address =await userHelpers.viewAddress(req.session.user._id)
 
-    couponHelpers.verifyCoupon(req.body).then((coupon)=>{
+//     couponHelpers.verifyCoupon(req.body).then((coupon)=>{
      
-      console.log(req.body);
-      console.log('cou: ',coupon);
-      if(coupon){
-        total = total - (total* (Number(coupon.off)/100));
-      }
-      res.render("user/checkout", { total, user: req.session.user, address,coupon });
-    });
+//       console.log(req.body);
+//       console.log('cou: ',coupon);
+//       if(coupon){
+//         total = total - (total* (Number(coupon.off)/100));
+//       }
+//       res.render("user/checkout", { total, user: req.session.user, address,coupon });
+//     });
    
-  // } catch (err) {
-  //   console.log(err);
-  //   res.redirect('/error')
-  // }
-})
+//   // } catch (err) {
+//   //   console.log(err);
+//   //   res.redirect('/error')
+//   // }
+// })
 
 
     
@@ -1018,26 +1035,31 @@ router.get('/invoice',async function(req,res){
 /////////////////Wallet////////////
 router.get('/wallet',async(req,res)=>{
   if(req.session.loggedIn){
-    // console.log(wallet);
-    // await userHelpers.getUserDetails(user:req.session._id)
-    res.render('user/wallet',{user:req.session.user,profile:true})
-  }else{
-    res.redirect('/login')
-  }
-})
-
-router.post('/wallet',async(req,res)=>{
-  if(req.session.loggedIn){
-
-    let total = 0
-    await walletHelpers.addtoWallet(req.body,req.session.user._id).then(()=>{
-      res.redirect('/wallet')
+    
+    console.log(req.session.user._id);
+    walletHelpers.getWalletTrans(req.session.user._id).then((wallet)=>{
+  
+      res.render('user/wallet',{user:req.session.user,wallet})
     })
+    
+    // res.render('user/wallet',{user:req.session.user,profile:true})
   }else{
     res.redirect('/login')
   }
-
 })
+
+// router.post('/wallet',async(req,res)=>{
+//   if(req.session.loggedIn){
+
+//     let total = 0
+//     await walletHelpers.addtoWallet(req.body,req.session.user._id).then(()=>{
+//       res.redirect('/wallet')
+//     })
+//   }else{
+//     res.redirect('/login')
+//   }
+
+// })
 
 
 //////////////////Sort By////////////////////
@@ -1060,6 +1082,101 @@ router.get('/view-products/hightTOlow',async(req,res)=>{
 
   })
  
+})
+
+
+
+
+router.post('/applyCoupon',async(req,res)=>{
+  let {promo} = req.body
+  console.log(promo);
+  console.log('asdf');
+
+  
+  // let total = 0
+  // let products = await userHelpers.getCartProduct(req.session.user._id).catch(()=>{res.redirect('/error')});;
+  //   products.forEach((data) => {
+
+
+  //     try {
+  //       if (data.product.offerPrice) {
+  //         data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
+    
+  //       } else {
+  //         data.subTotal = Number(data.quantity) * Number(data.product.price);
+         
+  //       }
+  //      total+=data.subTotal
+  //     } catch (error) {
+        
+  //       data.subTotal = Number(data.quantity) * Number(data.product.price);
+      
+  //       total+=data.subTotal
+  //     }
+     
+  //   });
+    // let wallet = await walletHelpers.getWallet(req.session.user._id)
+    // // console.log(wallet);
+    // let gwallet
+    // if(Number(wallet.wall_amount) >= Number(total)) {
+    //   console.log("in wallet if ");
+    //   gwallet = true
+    // } else {
+    //   console.log("in else wallet");
+    //   gwallet = false
+    // }
+  
+  // let user = await userHelpers.getUserDetails(req.session.user._id);
+  // let address = false;
+  // if (user.address) {
+  //   address = user.address;
+  // }
+  // let address =await userHelpers.viewAddress(req.session.user._id)
+
+  couponHelpers.verifyCoupon(promo).then((coupon)=>{
+   
+    console.log('cou: ',coupon);
+    if(coupon){
+      res.json({coupon,status:true})
+      // res.json({status:"true"})
+      // total = total - (total* (Number(coupon.off)/100));
+    }
+    // res.render("user/checkout", { total, user: req.session.user, address,coupon });
+  });
+ 
+})
+
+
+
+/////////////MEN////////////////
+
+router.get('/mens',async(req,res)=>{
+  productHelper.getMenWatch().then((product)=>{
+  
+    res.render('user/mens',{product})
+     })
+})
+router.get('/womens',async(req,res)=>{
+  productHelper.getWomenWatch().then((product)=>{
+  
+    res.render('user/womens',{product})
+     })
+})
+
+/////////Coupon///////
+
+router.get('/view-coupon',(req,res)=>{
+  couponHelpers.getCoupons().then((coupon)=>{
+  
+    res.render('user/view-coupon',{coupon})
+  })
+})
+
+/////////////////WALLET////////////////
+
+router.get('/wallet',(req,res)=>{
+  console.log("in wallet get");
+
 })
 
 

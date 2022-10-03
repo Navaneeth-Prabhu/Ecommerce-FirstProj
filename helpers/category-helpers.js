@@ -135,7 +135,7 @@ module.exports ={
                 // }else{
                 
 
-                    await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId,}).toArray().then((res)=>{
+                    await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
                         res.forEach(data=>{
                          
                             let price = Number(data.price)

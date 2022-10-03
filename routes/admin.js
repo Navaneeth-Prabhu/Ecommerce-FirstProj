@@ -108,6 +108,12 @@ router.get('/dashboard/week',auth.adminCookieJWTAuth,async (req,res)=>{
     res.json(data)
   })
 })
+router.get('/dashboard/month',auth.adminCookieJWTAuth,async (req,res)=>{
+  await chartHelper.findOrderByYear().then((data)=>{
+    console.log("hy:",data);
+    res.json(data)
+  })
+})
 router.get('/dashboard/category',auth.adminCookieJWTAuth,async (req,res)=>{
   await chartHelper.categoryStatus().then((data)=>{
     // console.log(data);
@@ -433,9 +439,11 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
             element.delivered = true;
           } else if (element.status == "Shipped") {
             element.shipped = true;
-          } else if(element.status == "Cancelled") {
+          }
+           else if(element.status == "Cancelled") {
             element.Cancelled = true;
-          }else if(element.status == "Return"){
+          }
+          else if(element.status == "Return"){
             element.delivered = true
           }
         });
@@ -554,178 +562,8 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     })
 
 
-//////admin dashboard GRAPH///////////
 
 
-
-    // router.get("/stats", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
-    
-    //   try {
-    //     const data = await  db.get().collection(collection.ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-    //         $project: {
-    //           month: { $month: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$month",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
-    
-    // router.get("/stats2", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
-    
-    //   try {
-    //     const data = await  db.get().collection(collection.ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-          
-    //         $project: {
-    //           week: { $week: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$week",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
-    // router.get("/stats3", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
-    
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-          
-    //         $project: {
-    //           dayOfMonth: { $dayOfMonth: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$dayOfMonth",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
-    
-    // router.get("/stats4", auth.adminCookieJWTAuth, async (req, res) => {
-    //   const today = new Date();
-    //   const latYear = today.setFullYear(today.setFullYear() - 1);
-    
-    //   try {
-    //     const data = await  db.get().collection(ORDER_COLLECTION).aggregate([
-    //       {
-    //         $match:{
-    //             status:"Delivered"
-    //         },
-    //       },
-    //       {
-    //         $project: {
-    //           year: { $year: "$delivery_details.date" },
-    //           total:"$totalAmount"
-    //         },
-    //       },
-    //       {
-    //         $group: {
-    //           _id: "$year",
-    //           total: { $sum: "$total" },
-    //         },
-    //       },
-    //     ]).sort({ _id: -1 }).toArray();
-    //     res.status(200).json(data)
-    //     console.log(data);
-    //   } catch (err) {
-    //     res.status(500).json(err).redirect('/error');
-    //     console.log(err);
-    //   }
-    // });
-    
-    // router.get('/getMostStats', auth.adminCookieJWTAuth,async (req,res)=>{
-     
-    // console.log("in most stat");
-    //   await productHelper.getMostStats().then(async(response)=>{
-    //   let top = 0
-    //   for (let i= 0; i < response.length-1; i++) {
-    //     if (response[i].count<response[i+1].count) {
-    //       top  = response[i+1]
-    //     }
-    //   }
-    // productHelper.getProductDetails(top._id).then(async(product)=>{
-    //    try {
-    //      product.count = top.count
-        
-    //   } catch (error) {
-    //     console.log("wait for top");
-    //   }
-     
-    //   res.json(product)
-    // })
-    // })
-    // })
-
-
-    // router.get('/get-order-details',auth.adminCookieJWTAuth,async(req,res)=>{
-  
-    //     try {
-    //       userHelper.getAllUserOrders().then((orders) => {
-    //        console.log("hear",orders);
-    //         res.json(orders);
-    //         // res.send(orders)
-    //       }).catch(()=>{res.redirect('/error')});
-    //     } catch (err) {
-    //       console.log(err);
-    //       res.redirect('/error')
-    //     }
-  
-
-    // })
 
 
 
@@ -790,6 +628,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
           console.log("same");
         }else{
 
+          // let off = Number(req.body.off)
           couponHelper.addCoupon(req.body).catch(()=>{res.redirect('/error')})
             res.redirect("/admin/coupons");
     
@@ -829,5 +668,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     })
   
 
+
+  
 
 module.exports = router;

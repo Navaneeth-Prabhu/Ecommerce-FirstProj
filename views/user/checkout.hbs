@@ -107,7 +107,7 @@
                     <a class="btn btn-primary" href="/add-address?userId={{user._id}}">Add-Address</a>
                   {{#each address}}
                     <label for="address" id="addressLabel" class=" radio-inline">
-                    <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id"  onclick="addtoplace( `{{this.address}}`,`{{this.city}}`,`{{this.state}}`,`{{this.pin}}`)">
+                    <input type="radio" name="address" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}" id="address_id"  onclick="addtoplace( `{{this.address}}`,`{{this.city}}`,`{{this.state}}`,`{{this.pin}}`)" required>
                     {{this.address}},{{this.city}}
                     <input type="text" name="address_id" id="address_id" value="{{this._id}}" hidden>
                     {{!-- <input type="text" name="" id="" value="{{this.address}},{{this.city}},{{this.state}},{{this.pin}}"  /> --}}
@@ -142,6 +142,7 @@
                     <button class="btn btn-dark clr" type="submit" id="co">Place order</button>
                   </div>
                 </div>
+
               </form>
             </div>
             {{!-- <div class="payment">
@@ -176,18 +177,28 @@
                     <li class="border-bottom my-2"></li>
                     {{!-- <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$351</span></li> --}}
                     {{!-- <li class="border-bottom my-2"></li> --}}
-                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>${{total}}</span></li>
+                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>{{total}}</span></li><br>
+                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Offer</strong><span id="total">{{total}}</span></li>
                      
                     <li>
 
                     </li>
                     <li>
-                      <form action="/verifyCoupon" method="post">
+                      {{!-- <form action="/verifyCoupon" method="post"> --}}
+                       <div class="input-group">
                         <div class="input-group mb-0">
-                          <input class="form-control" type="text" placeholder="Enter your coupon" name="coupon" id="coupon">
-                          <button class="btn btn-dark btn-sm w-100" type="submit"> <i class="fas fa-gift me-2"></i>Apply coupon</button>
+                          <input class="form-control" type="text" placeholder="Enter your coupon" name="coupon" id="applycoup" value="helo">
+                          <button class="btn btn-dark btn-sm w-100" type="submit" onclick="addcoupon()"> Apply coupon</button>
                         </div>
-                      </form>
+                       </div>
+                      {{!-- </form> --}}
+                      {{!-- <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code" name="coupon" id="applycoup">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary" onclick="addcoupon()">Redeem</button>
+                            <p id="msg" style="color:rgb(255, 0, 0) "></p>
+                        </div>
+                      </div> --}}
                     </li>
                   </ul>
                 </div>
@@ -197,50 +208,6 @@
 
         </section>
       
-      {{!-- <footer class="bg-dark text-white">
-        <div class="container py-4">
-          <div class="row py-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#!">Online Stores</a></li>
-                <li><a class="footer-link" href="#!">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">What We Do</a></li>
-                <li><a class="footer-link" href="#!">Available Services</a></li>
-                <li><a class="footer-link" href="#!">Latest Posts</a></li>
-                <li><a class="footer-link" href="#!">FAQs</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <h6 class="text-uppercase mb-3">Social media</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Twitter</a></li>
-                <li><a class="footer-link" href="#!">Instagram</a></li>
-                <li><a class="footer-link" href="#!">Tumblr</a></li>
-                <li><a class="footer-link" href="#!">Pinterest</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-top pt-4" style="border-color: #1d1d1d !important">
-            <div class="row">
-              <div class="col-md-6 text-center text-md-start">
-                <p class="small text-muted mb-0">&copy; 2021 All rights reserved.</p>
-              </div>
-              <div class="col-md-6 text-center text-md-end">
-                <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p>
-                <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer> --}}
       <!-- JavaScript files-->
       <!-- JavaScript files-->
       {{!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -436,4 +403,59 @@ paypal
     let pinname = document.getElementById('pins').value = pin
 
   }
+
+  function addcoupon() {
+                console.log("in add coupon")
+                let sum = document.getElementById('total').innerHTML
+
+                 let coupon = document.getElementById('couponvalue')
+                let couponname = document.getElementById('applycoup').value   
+                  let couponusing = document.getElementById('couponusing')
+                alert(couponname)
+                console.log("sum:",sum)
+                console.log("coupon:",coupon)
+                $.ajax({
+                    url: '/applyCoupon',
+                    method: 'post',
+                    data: { promo: couponname },
+
+                    success: (response) => {
+                        console.log(response);
+                        if (response.status == false) {
+                            let error = document.getElementById('msg')
+                            error.innerHTML = 'Enter valid Promocode'
+                        } else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'COUPON APPLIED',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            
+                            if( Number(sum)-(Number(sum)*(Number(response.coupon.off)/100)) > 20000)
+                            {
+                              document.getElementById('total').innerHTML =  Number(sum)-1000;
+                              let input= document.getElementById('offerp')
+                              input.value =  Number(sum)-1000;
+                              console.log("hehe",input.value)
+                              console.log("sum:",sum)
+
+                            }else{
+                              document.getElementById('total').innerHTML =  Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
+                              let input= document.getElementById('offerp')
+                              input.value = Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
+                              console.log("hehe",input.value)
+                              console.log("sum:",sum)
+
+                            }
+      
+
+                         
+                           
+                        }
+                    }
+                })
+            }
 </script>
+                {{!-- let sum= document.getElementById('total').value --}}

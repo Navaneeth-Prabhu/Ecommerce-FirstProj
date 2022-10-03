@@ -1,21 +1,187 @@
+<style>
+.circle {
+  height: 150px;
+  width: 150px;
+  z-index: 99;
+  border-radius: 50%;
+
+}
+</style>
+{{!-- <div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 bg-primary">
+                <div class="d-flex justify-content-center">    
+                  <div class="circle bg-dark my-3">
+                     <small></small>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 col-sm-6 my-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+
+                              <p>wallet Amount</p>
+                              <strong>{{user.wallet}}</strong>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-12 col-sm-6 my-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+
+                              <p>wallet Amount</p>
+                              <strong>{{user.wallet}}</strong>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-12 col-sm-6 my-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+
+                              <p>wallet Amount</p>
+                              <strong>{{user.wallet}}</strong>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-12 col-sm-6 my-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+
+                              <p>wallet Amount</p>
+                              <strong>{{user.wallet}}</strong>
+                            </div>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                  <div class="row">
+</div>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+
 <div class="container">
-  <div class="d-flex">
+  <div class="row py-5">
+
+  <div class="col-md-3 ">
+    <div class="card bg-primary">
+
+<p></p>
+    </div>
+  </div>
+  <div class="col-md-9">
+
+     <div class="main">
+        {{!-- <h2>IDENTITY</h2> --}}
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="row">
+                  <div class="col-6 py-3">
+                     <tr>
+                             <td>Email</td>
+                            <td>:</td>
+                            <td>{{user.Name}}</td>
+                        </tr>
+                  </div>
+                  <div class="col-6 py-3">
+                    <tr>
+                            <td>Email</td>
+                            <td>:</td>
+                            <td>{{user.Email}}</td>
+                        </tr>
+                  </div>
+                  <div class="col-6 py-3">
+                
+                            <td>Phone</td>
+                            <td>:</td>
+                            <td>{{user.number}}</td>
+                        
+                  </div>
+                  <div class="col-6 py-3">
+                    <tr>
+                            <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+<i class="fa fa-pen fa-xs edit px-1"></i>Edit Profile</button>
+</button>
+                        </tr>
+                  </div>
+
+                </div>
+                   
+              
+            </div>
+        </div>
+</div>
+  </div>
+
+  <div class="row py-5">
+    <div class="col-md-3">
+      <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
+        <a href="/order-history" style="color:white"><div class="card-body">
+         <i class="fa fa-gift" aria-hidden="true"></i> My Orders
+        </div></a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
+        <a href="/wishlist" style="color:white"><div class="card-body">
+          <i class="fa fa-heart" aria-hidden="true"></i> Wishlist
+        </div></a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center" style="background: rgb(131,58,180);
+background: linear-gradient(80deg, rgba(131,58,180,1) 0%, rgba(235,29,253,1) 100%);">
+        <a href="/view-coupon" style="color:white"><div class="card-body">
+          Coupon
+        </div></a>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center" style="background: rgb(131,58,180);
+background: linear-gradient(83deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 88%, rgba(252,176,69,1) 100%);">
+        <a href="/wallet" style="color:white"><div class="card-body">
+          Wallet
+        </div></a>
+      </div>
+    </div>
+    
 
   </div>
-</div>
+  </div>
 
 
 
-<div class="container">
-    <div class="row">
-    {{!-- <div class="col-md-6 m-auto">
-      <p>referal code: {{user.referal_code}}</p>
-      <p>Wallet:{{user.wallet}}</p>
-    </div> --}}
-    <div class="col-md-6 m-auto">
-        <div class="container mt-5 pl-5">
-            <h2 class="text-center">Profile</h2>
-                <form action="/user-profile" method="post" id="userpro" name="userpro">
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <h2 class="text-center">Profile</h2>
+                                <form action="/user-profile" method="post" id="userpro" name="userpro">
               
                 {{#if success}}
                  <div class="alert alert-success" role="alert">
@@ -40,7 +206,7 @@
                         <input type="number" name="number" id="" class="form-control" value="{{user.number}}">
                     </div>
 
-                    <div class="form-group row">
+                    {{!-- <div class="form-group row">
                         <label for="Password"  style="font-size:small">Password</label>
                         <div class="col-9">
 
@@ -50,72 +216,21 @@
 
                     <button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#exampleModalCenter">change</button>
                         </div>
-                        {{!-- <button class="btn btn-success" data-target="#changePass" data-toggle="modal">change password</button> --}}
-                    </div>
+                     
+                    </div> --}}
                     {{!-- <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already have account ?</a> --}}
                     <button type="submit" class="btn tbn-sm btn-dark ">SAVE</button>
                 </form>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <h2>wallet</h2>
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-
-            <p>wallet Amount</p>
-            <strong>{{user.wallet}}</strong>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Change Password</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
-      <div class="modal-body">
-        {{!-- <form class="form" role="form" autocomplete="off"> --}}
-            <form action="/changePass" method="post" id="changePass" name="changePass">
-                <div class="form-group">
-                        <label for="inputPasswordOld">Current Password</label>
-                            <input type="password" name="password" class="form-control" id="inputPasswordOld" required="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPasswordNew">New Password</label>
-                                    <input type="password" name="newPassword" class="form-control" id="inputPasswordNew" required="">
-                                    <span class="form-text small text-muted">
-                                            The password must be 8-20 characters, and must <em>not</em> contain spaces.
-                                        </span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPasswordNewVerify">Verify</label>
-                                    <input type="password" name="confirmPassword" class="form-control" id="inputPasswordNewVerify" required="">
-                                    <span class="form-text small text-muted">
-                                            To confirm, type the new password again.
-                                    </span>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-lg float-right rounded" onclick="'storeData();">Save</button>
-                                </div>
-                            </form>
-      </div>
-      {{!-- <div class="modal-footer">
+  
+      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
+      </div>
     </div>
   </div>
 </div>
+
+
 
 
 

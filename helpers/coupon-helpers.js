@@ -45,12 +45,12 @@ module.exports = {
     });
   },
   
-  verifyCoupon: (coupon) => {
+  verifyCoupon: (promo) => {
     return new Promise(async (resolve, reject) => {
       try {
-    console.log(coupon);
+    // console.log(coupon);
       db.get().collection(collection.COUPON_COLLECTION).findOne({
-        coupon: coupon.coupon
+        coupon: promo
         
       }).then((res) => {
         

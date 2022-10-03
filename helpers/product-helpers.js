@@ -114,7 +114,7 @@ module.exports={
         return new Promise (async (resolve, reject) => {
             let product=await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({Totalclick:-1}).limit(3).toArray()
             resolve(product)
-            console.log("pro:",product);
+            // console.log("pro:",product);
         })
     },
 
@@ -128,6 +128,13 @@ module.exports={
     getMenWatch:() => {
         return new Promise (async (resolve, reject) => {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).find({Category:'Men'}).toArray()
+            // console.log(product)
+            resolve(product)
+        })
+    },
+    getWomenWatch:() => {
+        return new Promise (async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).find({Category:'Women'}).toArray()
             // console.log(product)
             resolve(product)
         })

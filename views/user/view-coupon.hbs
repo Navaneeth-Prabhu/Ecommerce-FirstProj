@@ -1,0 +1,245 @@
+    {{!-- padding: 40px 80px; --}}
+<style>
+    /*the complete project is in the following link:
+https://github.com/vkive/coupon-code.git
+Follow me on Codepen
+*/
+
+
+.coupon-card{
+    background: linear-gradient(135deg, #7158fe, #9d4de6);
+    color: #fff;
+    text-align: center;
+
+    border-radius: 15px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
+    position: relative;
+
+}
+.logo{
+    width: 80px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+}
+.coupon-card h3{
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 40px;
+
+}
+.coupon-card p{
+    font-size: 15px;
+
+}
+.coupon-row{
+    display: flex;
+    align-items: center;
+    margin: 25px auto;
+    width: fit-content;
+
+}
+#cpnCode{
+    border: 1px dashed #fff;
+    padding: 10px 20px;
+    border-right: 0;
+
+}
+#cpnBtn{
+    border: 1px solid #fff;
+    background: #fff;
+    padding: 10px 20px;
+    color: #7158fe;
+    cursor: pointer;
+}
+.circle1, .circle2{
+    background: #ffffff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+.circle1{
+    left: -25px;
+}
+.circle2{
+    right: -25px;
+}
+
+.card {
+  width: 400px;
+  height: 180px;
+  border-radius: 5px;
+  box-shadow:0 10px 10px 0 rgb(0 0 0 / 15%);
+  background-color: #fff;
+  padding: 10px 10px;
+  position: relative;
+}
+
+
+
+.main,
+.copy-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+}
+.card::after {
+  position: absolute;
+  content: "";
+  height: 40px;
+  right: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color: #ffffff;
+  width: 40px;
+}
+
+.card::before {
+  position: absolute;
+  content: "";
+  height: 40px;
+  left: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color: #ffffff;
+  width: 40px;
+}
+
+.co-img img {
+  width: 100px;
+  height: 100px;
+}
+.vertical {
+  border-left: 5px dotted black;
+  height: 100px;
+  position: absolute;
+  left: 40%;
+}
+
+.content h1 {
+  font-size: 35px;
+  margin-left: -20px;
+  color: #565656;
+}
+
+.content h1 span {
+  font-size: 18px;
+}
+.content h2 {
+  font-size: 18px;
+  margin-left: -20px;
+  color: #565656;
+  text-transform: uppercase;
+}
+
+.content p {
+  font-size: 16px;
+  color: #696969;
+  margin-left: -20px;
+}
+
+.copy-button {
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #e1e1e1;
+}
+
+.copy-button input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.copy-button button {
+  padding: 5px 20px;
+  background-color: #dc143c;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.buy{
+ position: absolute;
+  content: "";
+  bottom: 20px;
+  left:20px;
+  background-color: #dc143c;
+ }
+
+</style>
+
+
+    {{!-- <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> Coupon Code Web Design</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head> --}}
+ 
+        <div class="container my-5">
+            <h2>Coupons</h2>
+            <div class="row my-4">
+
+            {{#each coupon}}
+            <div class="col-md-4">
+
+            <div class="coupon-card my-1 mx-1">
+                <div class="card-body">
+
+                {{!-- <img src="https://i.postimg.cc/KvTqpZq9/uber.png" class="logo"> --}}
+                <h3><span>{{this.off}}</span> % flat off on all </h3>
+                <di class="coupon-row">
+                    <p><span class="cpnCode" id="cpnCode">{{this.coupon}}</span></p>
+
+                    <p><span class="cpnBtn" id="cpnBtn">COPY CODE</span></p>
+                </di>
+                <p>Valid Till: {{this.date_end}}</p>
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                </div>
+            </div>
+            </div>
+            {{/each}}
+            </div>
+        </div>
+
+
+
+
+<script>
+     let cpnBtn = document.querySelectorAll(".cpnBtn");
+            let cpnCode = document.querySelectorAll(".cpnCode");
+            let length=cpnBtn.length
+console.log('working ',length)
+for(let j=0;j<length;j++){
+    console.log(j)
+      console.log(cpnBtn[2])
+            console.log(cpnBtn.length,'is the length')
+        cpnBtn[j].addEventListener('click',(e)=>{
+               console.log('clicked')
+                   navigator.clipboard.writeText(cpnCode[j].innerHTML);
+          cpnBtn[j].innerHTML ="COPIED";
+               setTimeout(function(){
+               cpnBtn[j].innerHTML="COPY CODE";
+               }, 4000);
+           })
+}
+          
+       
+   
+
+
+
+</script>

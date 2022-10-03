@@ -68,9 +68,11 @@
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">OfferPrice</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th> --}}
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th> --}}
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
+                      {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th> --}}
                     </tr>
                   </thead>
                   <tbody class="border-0">
@@ -79,13 +81,25 @@
                     <tr>
                      
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}.jpg" alt="..." width="70"/></a>
-                          <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{this.product.product_title}}</a></strong></div>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="70"/></a>
+                          <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link">{{this.product.product_title}}</a></strong></div>
                         </div>
                       </th>
                   
                       <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">${{this.product.price}}</p>
+                        <p class="mb-0 small">{{this.product.price}}</p>
+                      </td>
+                      {{#if this.product.offerPrice}}
+                         <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">{{this.product.offerPrice}}</p>
+                      </td>
+                      {{else}}
+                      <p>--</p>
+                      {{/if}}
+
+                      <td class="p-3 align-middle border-light">
+                        <button class="btn  btn-dark"
+                                onclick="addToCart('{{this.product._id}}')">Add to Cart</button>
                       </td>
                      
                       {{!-- <td class="p-3 align-middle border-light">
@@ -100,11 +114,11 @@
                           </div>
                         </div>
                       </td> --}}
-                        <td class="p-3 align-middle border-light"><button onclick="WishproductDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
+                        {{!-- <td class="p-3 align-middle border-light"><button onclick="WishproductDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td> --}}
                       {{!-- <td class="p-3 align-middle border-light">
                         <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p>
                       </td> --}}
-                      {{!-- <td class="p-3 align-middle border-light"><a href="/delete-product?id={{this._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
+                      {{!-- <td class="p-3 align-middle border-light"><a href="/delete-product?id={{this.product._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
                     </tr>
                    {{/each}}
                   </tbody>

@@ -1,3 +1,10 @@
+<style>
+  .dataTables_paginate,
+  .dataTables_filter,
+  .dataTables_info {
+    visibility: hidden;
+  }
+</style>
 <!-- Sale & Revenue Start -->
 <section class="p-3 pb-5 dash">
 
@@ -62,24 +69,31 @@
       <canvas id="chart3">
       </canvas>
     </div>
+    {{!-- <div class="col-sm-12 col-xl-6 mb-4">
+      <h6 class="mb-0">year</h6>
+      <canvas id="chart4">
+      </canvas>
+    </div> --}}
   </div>
 
 
   </div>
-<table id="report" class="display" style="width:100%">
-        <thead>
+<table id="report" class="display" style="width:100%;visibility:hidden">
+        <thead style="visibility:hidden">
             <tr>
                 <th>date</th>
+                <th>orderID</th>
                 <th>total</th>
                 <th>offer</th>
                 <th>paymentMethod</th>
        
             </tr>
         </thead>
-        <tbody>
+        <tbody >
           {{#each report}}
             <tr>
                 <td>{{this.delivery_details.date}}</td>
+                <td>{{this._id}}</td>
                 <td>{{this.totalAmount}}</td>
                 {{#if offerPrice}}
                 <td>{{this.offerPrice}}</td>
@@ -121,6 +135,7 @@
   let myChart = document.getElementById('chart')
   let myChart2 = document.getElementById('chart2')
   let myChart3 = document.getElementById('chart3')
+  let myChart4 = document.getElementById('chart4')
 </script>
 <script src="/javascripts/chart/chart.min.js"></script>
 
@@ -224,6 +239,8 @@
                     }
                 })
             })
+
+
   fetch('/admin/dashboard/category', {
             method: 'get',
         }).then((val) => val.json())
