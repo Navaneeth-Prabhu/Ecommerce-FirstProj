@@ -267,13 +267,22 @@
                     <div class="product text-center">
                       <div class="mb-3 position-relative">
                         <div class="badge text-white"> </div><a class="d-block"
-                          href="/productDetails?id={{this._id}}"> <a href="" class=""><div class="float-right"><i class="far fa-heart me-1 "></i></div></a> <img src="/product-images/{{this._id}}1.jpg" alt="..."
+                          href="/productDetails?id={{this._id}}">  <img src="/product-images/{{this._id}}1.jpg" alt="..."
                             style="height:20rem;widht:20rem"></a>
+                            {{!-- <button  onclick="wish({{this._id}})" class="btn"><div class="float-right"><i class="far fa-heart me-1 "></i></div></button> --}}
                         <div class="product-overlay">
                           <ul class="mb-0 list-inline">
                             <li class="list-inline-item m-0 p-0">
-                              <a class="btn btn-sm btn-outline-dark"
-                                href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li>
+
+                              
+                              <button class="btn btn-sm btn-outline-dark"
+                                onclick="wish('{{this._id}}')"><i class="far fa-heart"></i></button></li>
+
+
+
+
+
+                                {{!-- href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></button></li> --}}
                                 {{!-- href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
                             {{!-- <li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark"
                                 onclick="addToWishlist('{{this._id}}')"><i class="far fa-heart"></i></button></li> --}}
@@ -527,27 +536,34 @@
         })();
   /////////////////end///////////////////
 
+function checkWish(){
+  fetch(`/check-wishlist/${proId}`).then(response=>response.json())
+  .then(response=>{
+    console.log(response)
+
+  })
+}
 
 
 
-function wishList(userId,proId){
+function wish(proId){
+console.log(proId)
     $.ajax({
-        url:'/wish-list',
-        data:{
-            user:userId,
-            proId:proId
-        },
-        method:'post',
-        success:(response)=>{
-            if (response.status){
-                $('#like'+proId).hide()
-                $('#like2'+proId).hide()
-               
+        url:`/add-to-wishlist/${proId}`,
 
-            }else{
-                $('#like'+proId).show()
-                $('#like2'+proId).show()
-            }
+        method:'get',
+        success:(response)=>{
+          if(response.status){
+            
+           Swal.fire(
+            'Good job!',
+             'You clicked the button!',
+             'success'
+        )
+        let count=$('#wish-count').html()
+            count=parseInt(count)+1
+            $("#wish-count").html(count)
+          }
                 
         }
 

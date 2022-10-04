@@ -102,55 +102,47 @@ module.exports ={
                 })
             })
         },
-        addCategoryOff:(catId,offer,validTill, validFrom)=>{
+        addCategoryOff:(catId,offer,validTill)=>{
  
             return new Promise(async(resolve,reject)=>{
                 
                 // try {
                     let offerPrice = []
                 let off=Number(offer)
-                let offTill = validTill
-                console.log(catId);
-                let offFrom = validFrom
-                let date = new Date()
-                // let currentDate = moment(date).format('YYYY-MM-DD')
-                let ppa = {category:catId} 
-                // if (catId.validTill < currentDate) {
-                //     db.get().collection(collection.CATEGORY_COLLECTION).findOneAndUpdate({ _id: objectId(catId) },
-                //         {
-                //             $unset: {
-                //                 "offer": categories[i].offer,
-                                
-                //             }
-                //         })
-                //         products.forEach(data=>{
-                //             db.get().collection(collection.PRODUCT_COLLECTION).updateMany({category:catId},
-                //                 {
-                //                     $unset: {
-                //                         "offerPrice" :data.offerPrice,
-                //                     }
-                //                 })
-                //         })
-                       
-                // }else{
-                
 
-                    await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
-                        res.forEach(data=>{
-                         
-                            let price = Number(data.price)
-                            offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
-                        })
-                       offerPrice.forEach(data=>{
-                        db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
-                       })
-                       console.log("cat"+ catId);
-                       db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name:catId},{$set:{offer:off,validTill:offTill, validFrom: offFrom}},{upsert: true}).then((res)=>{
-                        
-                       })
+                let offTill = validTill
+                console.log("off",validTill);
+                // let offFrom = validFrom
+                let date = new Date()
+                let today = new Date().toISOString().slice(0, 10)
+                
+                let ppa = {category:catId} 
+
+                    
+            //  if (offTill > today) {
+                
+           
+                await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
+                    res.forEach(data=>{
+                     
+                        let price = Number(data.price)
+                        offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
                     })
-                // }
-              resolve()
+                   offerPrice.forEach(data=>{
+                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
+                   })
+                   console.log("cat"+ catId);
+                   db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name:catId},{$set:{offer:off,validTill:offTill}},{upsert: true}).then((res)=>{
+                    
+                   })
+                })
+            // }
+          resolve()
+
+            // }else{
+            //     console.log("invalid");
+            // }
+
                 // } catch (error) {
                 //     reject()
                 // } 

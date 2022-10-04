@@ -65,6 +65,7 @@
                 <div class="row gy-3">
                   <div class="col-lg-6">
                     <input class="form-control form-control-lg" type="number" id="offerp" name="offerp" value="{{total}}" hidden>
+                    <input class="form-control form-control-lg" type="text" id="couponId" name="couponId">
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
                     <input class="form-control form-control-lg" type="text" id="name" name="name" value="{{user.Name}}">
                   </div>
@@ -75,19 +76,19 @@
        
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="address">Address</label>
-                    <input class="form-control form-control-lg" type="text" id="addresss" name="address" value="">
+                    <input class="form-control form-control-lg" type="text" id="addresss" name="address" value="" required>
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="city">city</label>
-                    <input class="form-control form-control-lg" type="text" id="citys" name="city" value="">
+                    <input class="form-control form-control-lg" type="text" id="citys" name="city" value="" required>
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="state">State</label>
-                    <input class="form-control form-control-lg" type="text" id="states" name="state" value="">
+                    <input class="form-control form-control-lg" type="text" id="states" name="state" value="" required>
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="pin">pin</label>
-                    <input class="form-control form-control-lg" type="number" id="pins" name="pin" value="">
+                    <input class="form-control form-control-lg" type="number" id="pins" name="pin" value="" required>
                   </div>
                   {{!-- <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="company">Company name (optional) </label>
@@ -188,6 +189,7 @@
                        <div class="input-group">
                         <div class="input-group mb-0">
                           <input class="form-control" type="text" placeholder="Enter your coupon" name="coupon" id="applycoup" value="helo">
+                          <p id="msg" class="text-danger"></p>
                           <button class="btn btn-dark btn-sm w-100" type="submit" onclick="addcoupon()"> Apply coupon</button>
                         </div>
                        </div>
@@ -407,13 +409,13 @@ paypal
   function addcoupon() {
                 console.log("in add coupon")
                 let sum = document.getElementById('total').innerHTML
-
+                let coupId= document.getElementById("couponId")
                  let coupon = document.getElementById('couponvalue')
                 let couponname = document.getElementById('applycoup').value   
                   let couponusing = document.getElementById('couponusing')
-                alert(couponname)
-                console.log("sum:",sum)
-                console.log("coupon:",coupon)
+              
+      
+          
                 $.ajax({
                     url: '/applyCoupon',
                     method: 'post',
@@ -421,7 +423,9 @@ paypal
 
                     success: (response) => {
                         console.log(response);
-                        if (response.status == false) {
+                  
+                        if (response.status==false) {
+                          console.log('kindi')
                             let error = document.getElementById('msg')
                             error.innerHTML = 'Enter valid Promocode'
                         } else {
@@ -438,15 +442,16 @@ paypal
                               document.getElementById('total').innerHTML =  Number(sum)-1000;
                               let input= document.getElementById('offerp')
                               input.value =  Number(sum)-1000;
-                              console.log("hehe",input.value)
-                              console.log("sum:",sum)
+                              coupId.value=response.coupon._id
+                      
+                      
 
                             }else{
                               document.getElementById('total').innerHTML =  Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
                               let input= document.getElementById('offerp')
                               input.value = Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
-                              console.log("hehe",input.value)
-                              console.log("sum:",sum)
+                              coupId.value=response.coupon._id
+                     
 
                             }
       

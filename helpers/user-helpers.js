@@ -9,6 +9,7 @@ const Razorpay = require('razorpay');
 const { resolve } = require('path')
 const { resolveObjectURL } = require('buffer')
 const walletHelpers = require('./wallet-helpers')
+const couponHelpers = require('./coupon-helpers')
 const shortid = require('shortid')
 // import fetch from "node-fetch";
 // import "dotenv/config"; // loads env variables from .env file
@@ -201,13 +202,7 @@ module.exports={
                         $set: {
                             Name: userDetails.Name,
                             number:userDetails.number,
-                            // Email:userDetails.Email,
-                            // Password: userDetails.Password,
-                            // blocked: userDetails.blocked,
-                            // address: userDetails.address,
-                            // city:userDetails.city,
-                            // state:userDetails.state,
-                            // pin:userDetails.pin
+
                         }
                     }).then((response) => {
                         console.log(response);
@@ -594,13 +589,19 @@ module.exports={
         });
       },
 
+      checkWish:(userId,productId)=>{
+
+      },
 
 
 
+    placeOrder:(order,products,offerPrice,totalPrice,userId)=>{
+    
+        return new Promise(async(resolve,reject)=>{
+            let {couponId} = order;
+            console.log("id",couponId);
+            console.log("userid",userId);
 
-    placeOrder:(order,products,offerPrice,totalPrice)=>{
-        console.log(order,"order");
-        return new Promise((resolve,reject)=>{
             var today = new Date();
             var orderDate= new Date()
             var dd = String(orderDate.getDate()).padStart(2, '0');
@@ -610,6 +611,18 @@ module.exports={
             orderDate = mm + '-' + dd + '-' + yyyy;
             order.Date=orderDate
             // let date = new Date()
+
+            if(couponId){
+                // let couponUsed = await couponHelpers.verifyCoupon()
+                // console.log("usedcou",couponUsed);
+                await couponHelpers.usedCoupon(couponId,userId).then((data)=>{
+                    console.log(data);
+                })
+            }
+
+
+
+
             let status = order["payment-method"] === "COD" || order["payment-method"] === "paypal" ? "placed" : "pending";
             let orderObj
             if(order.offerp==totalPrice){

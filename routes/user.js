@@ -257,30 +257,6 @@ router.get('/productDetails',function(req,res){
 
 
 
-
-// router.get('/cart',async function(req,res){
-
-  
-//   if(req.session.loggedIn){
-//     let products=await userHelpers.getCartProduct(req.session.user._id)
-//   //  let address=await userHelpers.getUserAddress(req.)
-//   let totalOfferAmount =0
-//     let totalAmount =0
-//     if(products.length > 0){
-      
-//       totalAmount = await userHelpers.getTotalAmount(req.session.user._id)
-//       totalOfferAmount = await userHelpers.getOfferTotalAmount(req.session.user._id)
-      
-//     }
-//     // console.log(address);
-//     res.render('user/cart',{products,user:req.session.user,totalAmount,totalOfferAmount})
-
-//   }
-//   else{
-//     res.redirect('/login')
-//   }
-// })
-
 router.get('/cart',async function(req,res){
   if(req.session.loggedIn){
 
@@ -435,10 +411,9 @@ router.get('/wishlist',async(req,res)=>{
 
 router.get('/add-to-wishlist/:id',(req,res)=>{
   if(req.session.loggedIn){
-
+    console.log(req.params.id);
     userHelpers.addToWishlist(req.params.id,req.session.user._id).then(()=>{
-      res.redirect('/view-products')
-      console.log('in add to wishlist');
+    res.json({status:true})
     })
   }else{
     res.redirect('/login')
@@ -458,6 +433,15 @@ router.post('/delete-wish-product',(req,res,next)=>{
     res.redirect('/login')
   }
 })
+
+
+
+router.get('/check-wishlist',(req,res)=>{
+  userHelpers.checkWish(productId)
+})
+
+
+
 
 // router.get('/delete-cart-product/', function(req, res) {
 // if(req.session.loggedIn){
@@ -663,7 +647,7 @@ router.post('/checkout',async(req,res)=>{
       
     let totalPrice= await userHelpers.getTotalAmount(req.body.userId)
     req.body.UserId = req.session.user._id;
-    await userHelpers.placeOrder(req.body, products,offerPrice, totalPrice).then((orderId) => {
+    await userHelpers.placeOrder(req.body, products,offerPrice, totalPrice,req.session.user._id).then((orderId) => {
       
 
       if(req.body['payment-method']==='COD'){
@@ -805,7 +789,7 @@ router.get('/user-profile',async(req,res)=>{
 router.post('/user-profile',async(req,res)=>{
   console.log("in post");
   // let wallet=db.get().collection(collection.WALLET_COLLECTION)
-  console.log("body",req.body.Name);
+  console.log("body",req.body);
   await userHelpers.updateUser(req.session.user,req.body).then(()=>{
     req.session.user.Name = req.body.Name
     req.session.user.number=req.body.number
@@ -1089,57 +1073,21 @@ router.get('/view-products/hightTOlow',async(req,res)=>{
 
 router.post('/applyCoupon',async(req,res)=>{
   let {promo} = req.body
-  console.log(promo);
+  console.log("promo",promo);
   console.log('asdf');
 
   
-  // let total = 0
-  // let products = await userHelpers.getCartProduct(req.session.user._id).catch(()=>{res.redirect('/error')});;
-  //   products.forEach((data) => {
+ 
 
-
-  //     try {
-  //       if (data.product.offerPrice) {
-  //         data.subTotal = Number(data.quantity) * Number(data.product.offerPrice);
-    
-  //       } else {
-  //         data.subTotal = Number(data.quantity) * Number(data.product.price);
-         
-  //       }
-  //      total+=data.subTotal
-  //     } catch (error) {
-        
-  //       data.subTotal = Number(data.quantity) * Number(data.product.price);
-      
-  //       total+=data.subTotal
-  //     }
-     
-  //   });
-    // let wallet = await walletHelpers.getWallet(req.session.user._id)
-    // // console.log(wallet);
-    // let gwallet
-    // if(Number(wallet.wall_amount) >= Number(total)) {
-    //   console.log("in wallet if ");
-    //   gwallet = true
-    // } else {
-    //   console.log("in else wallet");
-    //   gwallet = false
-    // }
-  
-  // let user = await userHelpers.getUserDetails(req.session.user._id);
-  // let address = false;
-  // if (user.address) {
-  //   address = user.address;
-  // }
-  // let address =await userHelpers.viewAddress(req.session.user._id)
-
-  couponHelpers.verifyCoupon(promo).then((coupon)=>{
+  couponHelpers.verifyCoupon(promo,req.session.user._id).then((coupon)=>{
    
-    console.log('cou: ',coupon);
+    // console.log('cou: ',coupon);
     if(coupon){
-      res.json({coupon,status:true})
+      res.json(coupon)
       // res.json({status:"true"})
       // total = total - (total* (Number(coupon.off)/100));
+    }else{
+      res.json({status:false})
     }
     // res.render("user/checkout", { total, user: req.session.user, address,coupon });
   });
@@ -1166,6 +1114,8 @@ router.get('/womens',async(req,res)=>{
 /////////Coupon///////
 
 router.get('/view-coupon',(req,res)=>{
+  
+  
   couponHelpers.getCoupons().then((coupon)=>{
   
     res.render('user/view-coupon',{coupon})

@@ -45,18 +45,42 @@ module.exports = {
     });
   },
   
-  verifyCoupon: (promo) => {
+  verifyCoupon: (promo,userId) => {
+    console.log("uid",userId);
     return new Promise(async (resolve, reject) => {
       try {
     // console.log(coupon);
-      db.get().collection(collection.COUPON_COLLECTION).findOne({
-        coupon: promo
-        
-      }).then((res) => {
-        
-        console.log(res);
-        resolve(res)
-      })
+    let today = new Date().toISOString().slice(0, 10)
+    
+      let couponoff=await db.get().collection(collection.COUPON_COLLECTION).findOne({coupon:promo})
+      console.log("couoff:",couponoff);
+      if (couponoff){
+        if(couponoff.date_end > today){
+
+          let alreadyCoupon = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({coupon:couponoff._id})
+          if(alreadyCoupon){
+            alreadyUsed = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({users:objectId(userId)})
+            if(!alreadyUsed){
+  
+              // console.log(alreadyUsed);
+              // if(!alreadyUsed){
+      
+                console.log("used");
+                resolve(couponoff)
+              }else{
+                console.log('jim afhaifh ');
+                resolve()
+              }
+          
+          }
+        }else{
+          console.log("invalid");
+          resolve()
+        }
+      }else{
+        console.log("used coup il illa");
+        resolve()
+      }
           
     } catch (error) {
         console.log(error);
@@ -68,22 +92,33 @@ module.exports = {
   },
 
   usedCoupon:(couponId,userId)=>{
-    let couponObj={
-      coupon:couponId,
-      users: objectId(userId)
-    }
+    // 
+
+    let couponObj = {
+      coupon:objectId(couponId),
+      users:[objectId(userId)]
+  }
+    // let users={
+    //   users: objectId(userId)
+    // }
     return new Promise(async(resolve)=>{
 
       let usedCp= await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({coupon:objectId(couponId)})
       if(usedCp){
         
-        let userExist = usedCp.user.findIndex(user=>user==userId)
+          // alreadyUsed = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({users:objectId(userId)})
+          // if(!alreadyUsed){
+        
+        
+        let userExist = usedCp.users.findIndex(users=>users==userId)
         if(userExist!=-1){
-
+          console.log("user exist");
           // db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)})
         }else{
           db.get().collection(collection.USED_COUPON_COLLECTION).updateOne({coupon:objectId(couponId)},{
-            $push:{user:userId}
+            $push:{users:objectId(userId)}
+          
+            
           }).then((response)=>{
             resolve()
           })

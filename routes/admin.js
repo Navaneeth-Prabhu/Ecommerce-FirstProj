@@ -375,7 +375,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
   // });
   router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
     try {
-      categoryHelper.addCategories(req.body).catch(()=>{res.redirect('/error')})
+      categoryHelper.addCategory(req.body).catch(()=>{res.redirect('/error')})
         res.redirect("/admin/view-cateory");
 
       // redirect to /admin/manage-categories
@@ -587,8 +587,8 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
             let catId = req.body.SubCategory
             let off = req.body.offer
             let validTill = req.body.date_end
-            let validFrom = req.body.date_start
-            categoryHelper.addCategoryOff(catId,off,validTill, validFrom).then(()=>{
+            // let validFrom = req.body.date_start
+            categoryHelper.addCategoryOff(catId,off,validTill).then(()=>{
               res.redirect("/admin/view-offer")
             })
          }
