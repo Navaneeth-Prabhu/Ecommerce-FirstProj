@@ -55,31 +55,36 @@ module.exports = {
       let couponoff=await db.get().collection(collection.COUPON_COLLECTION).findOne({coupon:promo})
       console.log("couoff:",couponoff);
       if (couponoff){
+        console.log("in couponoff");
+
+
         if(couponoff.date_end > today){
 
-          let alreadyCoupon = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({coupon:couponoff._id})
-          if(alreadyCoupon){
-            alreadyUsed = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({users:objectId(userId)})
-            if(!alreadyUsed){
-  
-              // console.log(alreadyUsed);
-              // if(!alreadyUsed){
+          let alreadyCoupon = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({coupon:couponoff._id,users:objectId(userId)})
+          console.log("halo",alreadyCoupon);
+
+          if(!alreadyCoupon){
+            
+
+            // alreadyUsed = await db.get().collection(collection.USED_COUPON_COLLECTION).findOne({users:objectId(userId)})
+            // if(!alreadyUsed){
+    
       
-                console.log("used");
+              
                 resolve(couponoff)
               }else{
-                console.log('jim afhaifh ');
-                resolve()
+                console.log('jim rsrs ');
+                reject()
               }
           
-          }
+   
         }else{
           console.log("invalid");
-          resolve()
+          reject()
         }
       }else{
         console.log("used coup il illa");
-        resolve()
+        reject()
       }
           
     } catch (error) {

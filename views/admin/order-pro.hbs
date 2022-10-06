@@ -1,3 +1,4 @@
+
          <div class="page-holder">
 
          <div class="container">
@@ -29,9 +30,9 @@
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
-
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Offer Price</strong></th>
                     </tr>
                   </thead>
                   <tbody class="border-0" style="font-size: large;">
@@ -40,24 +41,32 @@
                     <tr>
                      
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="80"/></a>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" ><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="80"/></a>
                           {{!-- <div class="ms-3 m-5"><strong class="h7"> {{this.product.product_title}}</strong></div> --}}
-                          <div class="ms-3 m-5"><strong class="h7"> {{this.product.product_description}}</strong></div>
+                          <div class="ms-3 m-5"><p>{{this.product.product_title}}</p><strong class="h7"> {{this.product.product_description}}</strong></div>
                         </div>
                       </th>
-                  
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">₹ {{this.product.price}}</p>
-                      </td>
-                     
-                  
-                 
                     <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">{{this.quantity}}</p>
                       </td>
                   
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">₹ {{this.product.price}}</p>
                       </td>
-
+                      {{#if offerPrice}}
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
+                      </td>
+                      {{else}}
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">--</p>
+                      </td>
+                      {{/if}}
+                     
+                  
+                 
+                  
+               
                       
                     </tr>
                    {{/each}}

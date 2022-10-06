@@ -9,8 +9,8 @@
             {{/if}} --}}
             <a href="/admin/add-category" class="btn btn-primary ml-auto m-3">Add Category</a>
         </div>
-        <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
-            <thead>
+        <table class="table mt-5" id="myTable" style="background-color: rgb(228, 228, 228); ">
+            {{!-- <thead> --}}
                 <tr >
                     <th scope="col">Date</th>
                     <th scope="col">Category</th>
@@ -18,8 +18,9 @@
                    
                     <th scope="col">delete</th>
                 </tr>
-            </thead>
-            <tbody>
+            
+            {{!-- </thead> --}}
+            <tbody >
                 {{#each category}}
                 <tr>
                     <td>{{this.Date}}</td>

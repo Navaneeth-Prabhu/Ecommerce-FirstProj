@@ -23,7 +23,7 @@
         </section>
         <section class="py-5">
           {{!-- <h2 class="h5 text-uppercase mb-4">Shopping cart</h2> --}}
-          {{order._id}}
+        
           <div class="row">
             <div class="col-lg-12 mb-4 mb-lg-0">
               <!-- CART TABLE-->
@@ -32,8 +32,9 @@
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Offer</strong></th>
 
                     </tr>
                   </thead>
@@ -41,6 +42,7 @@
 
                     {{#each products}}
                     <tr>
+                 
                      
                       <th class="ps-0 py-3 border-light" scope="row">
                         <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="80"/></a>
@@ -48,17 +50,23 @@
                         </div>
                       </th>
                   
+                    <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">{{this.quantity}}</p>
+                      </td>
+
+
+
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">${{this.product.price}}</p>
+                      </td>
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">${{this.product.offerPrice}}</p>
                       </td>
                      
                   
                  
-                    <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{this.quantity}}</p>
-                      </td>
                   
-                      </td>
+                
 
                       
                     </tr>

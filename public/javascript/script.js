@@ -4,6 +4,22 @@ function addToCart(productId){
       method:'get',
       success:(response)=>{
         if(response.status){
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: 'Added to Cart'
+          })
             let count=$('#cart-count').html()
             count=parseInt(count)+1
             $("#cart-count").html(count)

@@ -84,6 +84,13 @@
       {{/if}}
   {{/if}}
       {{{body}}}
+
+{{#if user}}
+  {{#if noPartial}}
+  {{else}}
+      {{>footer}}
+  {{/if}}
+{{/if}}
     <!-- Optional JavaScript -->
     <script>
       $(document).ready( function () {

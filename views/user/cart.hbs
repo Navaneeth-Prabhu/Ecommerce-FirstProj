@@ -29,9 +29,9 @@
                   <thead class="bg-light">
                     <tr>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Offer</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th> --}}
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                     </tr>
@@ -47,14 +47,7 @@
                         </div>
                       </th>
                   
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">₹ {{this.product.price}}</p>
-                      </td>
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
-                      </td>
-                     
-                      <td class="p-3 align-middle border-light">
+                                        <td class="p-3 align-middle border-light">
                         <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                           <div class="quantity">
                             
@@ -71,11 +64,16 @@
                           </div>
                         </div>
                       </td>
-                      {{!-- <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p>
-                      </td> --}}
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">₹ {{this.product.price}}</p>
+                      </td>
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
+                      </td>
+                     
+
                         {{!-- <td><a href="/user/delete-cart-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.product._id}}  ?')">Delete</a></td> --}}
-                      <td class="p-3 align-middle border-light"><button onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
+                      <td class="p-3 align-middle border-light"><button class="btn" onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
                        {{!-- <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr> --}}
                        {{!-- <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td> --}}
                       {{!-- <td class="p-3 align-middle border-light"><a href="/user/delete-cart-product?id={{this._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
@@ -101,12 +99,14 @@
                 <div class="card-body">
                   <h5 class="text-uppercase mb-4">Cart total</h5>
                   <ul class="list-unstyled mb-0">
+         
                     {{!-- <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li> --}}
                     <li class="border-bottom my-2"></li>
+
                     {{!-- {{#if product.offerPrice}} --}}
                     {{!-- <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{totalOfferAmount}}</span></li> --}}
                     {{!-- {{else}} --}}
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{total}}</span></li>
+                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">{{total}}</span></li>
                     {{!-- {{/if}} --}}
                     <li>
 
@@ -114,14 +114,14 @@
                   </ul>
                 </div>
               </div>
-            {{#each address}}
+            {{!-- {{#each address}}
             <div class="form-check">
               <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
               <label class="form-check-label" for="flexRadioDefault1">
               {{address.address}}
               </label>
             </div>
-            {{/each}}
+            {{/each}} --}}
 
             </div>
           </div>
@@ -197,7 +197,7 @@
     })
   }
 
-    function productDelete(cartId,productId,prodName,userId){
+    function productDelete(cartId,prodName,userId){
 
     swal({
         title: "Are you sure?",
@@ -209,10 +209,10 @@
       .then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url:'/delete-cart-product',
+                url:'/delete-cart-product?id='+proId,
                 data:{
                   user:userId,
-                   product:productId,
+           
                    cart:cartId
                },
                method:'post',

@@ -19,7 +19,7 @@ var session=require('express-session')
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-app.engine('hbs', hbs.engine({extname:'hbs', defaultLayout:'layout', layoutsDir:__dirname+'/views/layout/', partialsDir:__dirname+'/views/partials/',handlebars: allowInsecurePrototypeAccess(Handlebars)}))
+// app.engine('hbs', hbs.engine({extname:'hbs', defaultLayout:'layout', layoutsDir:__dirname+'/views/layout/', partialsDir:__dirname+'/views/partials/',handlebars: allowInsecurePrototypeAccess(Handlebars)}))
 
 
 app.use(logger('dev'));
@@ -43,6 +43,41 @@ app.use('/admin', adminRouter);
 //   next(createError(404));
 // });
 
+const exhbs= hbs.create({
+  extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/',
+
+
+  helpers:{
+    iff:function (a,b,options){
+      
+     
+      a=a.toString();
+      b=b.toString();
+      
+      if ( a === b ){
+       
+        return "<h2>"+ options.fn({status:true}) +"</h2>"
+      }else{
+        
+        
+      }
+    },
+    off:function (a,b,options){
+     
+    
+      
+     
+       
+        return parseInt(a-(a*(b/100)))
+  
+    }
+  }
+
+})
+
+
+app.engine('hbs',exhbs.engine)
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -54,14 +89,16 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-Handlebars.registerHelper('for', function(from, to, incr, block) {
-  var accum = '';
-  for(var i = from; i < to; i += incr)
-      accum += block.fn(i);
-  return accum;
-});
 
 
+// app.get('/error',(req,res)=>{
+//   if (req.session.admin) {
+//     res.render('error',{admin:true});
+//   }
+//   else{
+//     res.render('error');
+//   }
+// })
 
 
 module.exports = app;

@@ -1,9 +1,10 @@
 
 <div class="container">
 
-<div id="content">
+<div id="content" class="my-4 card p-3" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+  <h2 class="text-center">ADD Address</h2>
 
-                <form action="/add-address?userId={{user._id}}" method="post">
+                <form action="/add-address?userId={{user._id}}" method="post" class="my-4">
                 <div class="row gy-3">
                     {{!-- <input type="text" name="userId" id="userId" value="{{user._id}}" > --}}
                   <div class="col-lg-6">
@@ -41,13 +42,41 @@
                   </div>
                   <input type="text" name="add_type" value="Primary" hidden>
                  
-                  <div class="col-lg-12 form-group">
-                    <button class="btn btn-dark" type="submit">Save</button>
+                  <div class="col-lg-12 form-group ">
+                    <button class="btn btn-dark col-3 float-right mt-4" type="submit">Save</button>
                   </div>
                 </div>
               </form>
     </div>
+    <h3 class="text-center my-5">Saved Address</h3>
+
+    {{#each address}}
+    <div class="card my-2" style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+      <div class="card-body">
+
+    <div class="d-flex justify-content-between">
+    <div>
+
+    <h3>{{this.name}}</h3>
+    <p>{{this.address}},{{this.city}},{{this.state}},{{this.pin}}</p>
+    <p></p>
+    </div>
+
+    <div>
+        
+        <td><a href="/edit-address?id={{this._id}}" class="btn btn-primary">Edit</a></td>
+
+        <td><a href="/delete-address?id={{this._id}}" class="btn btn-danger">Delete</a></td>
+    </div>
+    </div>
+      </div>
+    </div>
+    {{/each}}
 </div>
+
+
+
+
 
 
 

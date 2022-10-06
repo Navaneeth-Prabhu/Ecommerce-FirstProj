@@ -17,6 +17,9 @@ const couponHelper = require('../helpers/coupon-helpers');
 const { Chart } = require('chart.js');
 const { report } = require('../routes/user');
 
+var db=require('../config/connection')
+var collection = require('../config/collections');
+
 console.log("here 2")
 
 /* GET users listing. */
@@ -27,10 +30,15 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
     let newDate = []
     no= 0
     let u_no =0
-
+    let order =0
     let report = await userHelper.getAllDeliveredOrder()
     // console.log("jjjjjj")
-
+    // await userHelper.getAllUserOrders().then((orders)=>{
+      
+    // })
+    order_count= await db.get().collection(collection.ORDER_COLLECTION).find().count()
+    console.log("order:",order);
+    
     await userHelper.getAllUserOrders().then((orders)=>{
       
       // console.log("in try: ",orders);
@@ -83,7 +91,7 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
          
 
             
-            res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no,report});
+            res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no,report,order_count});
           
     });
  
@@ -373,9 +381,10 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
   //     res.render('admin/add-category',{admin:true, adminLoggedIn:req.session.adminLoggedIn})
   //   })
   // });
+
   router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
     try {
-      categoryHelper.addCategory(req.body).catch(()=>{res.redirect('/error')})
+      categoryHelper.addCategory(req.body)
         res.redirect("/admin/view-cateory");
 
       // redirect to /admin/manage-categories
@@ -587,8 +596,8 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
             let catId = req.body.SubCategory
             let off = req.body.offer
             let validTill = req.body.date_end
-            // let validFrom = req.body.date_start
-            categoryHelper.addCategoryOff(catId,off,validTill).then(()=>{
+            let validFrom = req.body.date_start
+            categoryHelper.addCategoryOff(catId,off,validTill,validFrom).then(()=>{
               res.redirect("/admin/view-offer")
             })
          }

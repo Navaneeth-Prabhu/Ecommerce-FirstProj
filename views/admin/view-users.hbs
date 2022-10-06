@@ -20,7 +20,7 @@
                     <th scope="col">Status</th>
                     {{!-- <th scope="col">Password</th> --}}
                     <th scope="col">edit</th>
-                    <th scope="col">delete</th>
+                    {{!-- <th scope="col">delete</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +39,7 @@
                     <td><a href="/admin/block-user?id={{this._id}}"><button type="button" class="btn btn-danger">Block</button></a></td>
                     {{/if}}
 
-                    <td><a href="/admin/delete-user?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td>
+                    {{!-- <td><a href="/admin/delete-user?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td> --}}
                 </tr>
                 {{/each}}
             </tbody>

@@ -50,6 +50,7 @@ module.exports ={
                 transactionamount: details.wall_amount,
                 isDebit:false,
                 date:date,
+                message:'credited due to cancelling the product'
             }
         walletExist = await db.get().collection(collection.WALLET_COLLECTION).findOne({userId:userId})
         if(walletExist){
@@ -116,15 +117,6 @@ module.exports ={
         })
     },
 
-    // referalWallet:function(userId){
-    //     return new Promise(async function(resolve,reject){
-    //         db.get().collection(collection.USER_COLLECTION).updateOne({userId:userId},
-    //             {
-    //                 $set:
-    //             })
-    //     })
-    // }
-
 
     getWalletTrans:(userId)=>{
         console.log(userId);
@@ -141,6 +133,7 @@ module.exports ={
                         transactionamount:'$walletobj.transactionamount',
                         isDebit:'$walletobj.isDebit',
                         date:'$walletobj.date',
+                        message:'$walletobj.message',
                         
 
                     }
@@ -150,7 +143,8 @@ module.exports ={
                     $project:{
                         transactionamount:1,
                         isDebit:1,
-                        date:1
+                        date:1,
+                        message:1
                     }
                  }
 

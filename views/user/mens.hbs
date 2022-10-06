@@ -1,8 +1,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Goldman&display=swap" rel="stylesheet">
 <style>
-  *{
+  * {
     font-family: 'Goldman', cursive;
   }
+
   .product-grid {
     font-family: 'Poppins', sans-serif;
     text-align: center;
@@ -133,7 +134,114 @@
     .product-grid {
       margin-bottom: 30px;
     }
+
+
   }
+
+
+  
+
+
+  
+  .icon {
+  height: 20px;
+  width: 20px;
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.like {
+  border: none;
+  height: 25px;
+  width: 50px;
+  background: transparent;
+  outline: none;
+  display: flex;
+  justify-items: center;
+  text-align: center;
+  border-radius: 60%;
+}
+
+.icon-like {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+
+  justify-items: center;
+}
+.icon-liked {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+
+  justify-items: center;
+  z-index: -1;
+}
+
+.like:focus {
+  outline: 0;
+}
+.remove-btn {
+  border-radius: 50%;
+  border: none;
+
+  background-color: red;
+  color: black;
+  height: 30px;
+  width: 30px;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.3em;
+  text-align: center;
+}
+.remove-btn:focus {
+  outline: 0;
+}
+.iconliked {
+  background: transparent;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+
+  justify-self: center;
+
+  z-index: 2;
+  bottom: 5px;
+}
+.liked {
+  border: none;
+  height: 25px;
+  width: 25px;
+  background: transparent;
+  outline: none;
+
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  position: absolute;
+  border-radius: 60%;
+  right: 17px;
+
+  z-index: 2;
+}
+.liked:focus {
+  outline: 0;
+}
+
+.like-btns {
+  height: 25px;
+  width: 25px;
+  float: right;
+}
+.hide-like-btn {
+  display: none;
+}
+
 </style>
 
 <section>
@@ -145,7 +253,7 @@
 
       <div class="container">
         <!-- HERO SECTION-->
-        <section class="py bg-light"><img class="img-fluid" src="/images/MEN.png" alt="">
+        <section class="py bg-light"><img class="img-fluid" src="/images/men.png" alt="">
           <div class="container">
             <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
               <div class="col-lg-6">
@@ -165,7 +273,6 @@
         <section class="py-5">
           <div class="container p-0">
             <div class="row">
-              <!-- SHOP SIDEBAR-->
 
               <!-- SHOP LISTING-->
               <div class="col-lg-12 order-1 order-lg-2 mb-5 mb-lg-0">
@@ -203,28 +310,58 @@
                 </div>
                 <div class="row">
                   <!-- PRODUCT-->
+
                   {{#each product}}
                   <div class="col-lg-4 col-sm-6 my-4">
                     <div class="product text-center">
                       <div class="mb-3 position-relative">
-                        <div class="badge text-white"> </div><a class="d-block"
-                          href="/productDetails?id={{this._id}}"> <a href=""><div class="float-right"><i class="far fa-heart me-1 "></i></div></a> <img src="/product-images/{{this._id}}1.jpg" alt="..."
-                            style="height:20rem;widht:20rem"></a>
+                        <div class="badge text-white"> </div><a class="d-block" href="/productDetails?id={{this._id}}">
+                          <img src="/product-images/{{this._id}}1.jpg" alt="..." style="height:20rem;widht:20rem"></a>
+
+
+                                  {{#if ../user}}<div class="like-btns">
+                                 <button
+                                  onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
+                                    id="like{{this._id}}" class="icon-like" src="/images/heart.png"
+                                    alt=""><img id="liked{{this._id}}" class="icon-liked"
+                                    src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}
+                                    {{#if status}}
+
+                                <button id="likebtn{{../this.id}}"
+                                  onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                                  class="liked float-right liked{{../../this._id}}"><img class="iconliked "
+                                    src="/images/liked.png" alt=""></button>
+                                {{/if}}
+                                {{/iff}}{{/each}}
+                              </div>{{/if}}
+
+
                         <div class="product-overlay">
                           <ul class="mb-0 list-inline">
                             <li class="list-inline-item m-0 p-0">
-                              <a class="btn btn-sm btn-outline-dark"
-                                href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li>
-                                {{!-- href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
+
+
+
+                            </li>
+
+
+
+
+                            {{!-- href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></button></li> --}}
+                            {{!-- href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
                             {{!-- <li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark"
                                 onclick="addToWishlist('{{this._id}}')"><i class="far fa-heart"></i></button></li> --}}
                             {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
                                 href="/add-to-cart/{{this._id}}">Add to cart</a></li>/ --}}
                             <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
                                 onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
+
+
+                            {{#if ../user}}
                             <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
                                 href="/productDetails?id={{this._id}}" data-bs-toggle="modal"><i
                                   class="fas fa-expand"></i></a></li>
+                            {{/if}}
                           </ul>
                         </div>
                       </div>
@@ -235,7 +372,8 @@
                             style="color: gray; font-size:x-small">{{this.product_title}}</a>
                         </h6>
                         <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
-                            href="/productDetails?id={{this._id}}" style="font-size: 14px;">{{this.product_description}}</a>
+                            href="/productDetails?id={{this._id}}"
+                            style="font-size: 14px;">{{this.product_description}}</a>
                         </h6>
                       </div>
                       {{#if this.offerPrice}}
@@ -249,7 +387,8 @@
                       </div>
                       {{else}}
                       <p class="small d-flex justify-content-start ml-5"><span class="font-weight-bold">₹</span>
-                        <strong>{{this.price}}</strong></p>
+                        <strong>{{this.price}}</strong>
+                      </p>
                       {{/if}}
 
                     </div>
@@ -257,60 +396,7 @@
                   {{/each}}
 
 
-                  <div class="row">
-                    {{#each product}}
-                    <div class="col-lg-4 col-sm-6 my-3">
-                      <div class="product-grid">
-                        <div class="product-image d-flex justify-content-center" style="height: 370;width:200">
-                          <div>
 
-                            <a href="/add-to-wishlist/{{this._id}}" class="image w-75 h-75">
-                              <img src="/product-images/{{this._id}}1.jpg">
-                            </a>
-                          </div>
-                          {{!-- <span class="product-discount-label">-23%</span> --}}
-                          <ul class="product-links">
-                            <li><a href="#"><i class="fa fa-search"></i></a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-random"></i></a></li>
-                          </ul>
-                          <a href="" class="add-to-cart">Add to Cart</a>
-                        </div>
-                        {{!-- <div class="product-content"> --}}
-                          {{!-- <h3 class="title"><a href="#">Women's Blouse Top</a></h3>
-                          <div class="price">$53.55 <span>$68.88</span></div> --}}
-
-                          <div class="my-2">
-
-                            <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
-                                href="/productDetails?id={{this._id}}"
-                                style="color: gray; font-size:x-small">{{this.product_title}}</a>
-                            </h6>
-                            <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
-                                href="/productDetails?id={{this._id}}"
-                                style="font-size:14px;">{{this.product_description}}</a>
-                            </h6>
-                          </div>
-                          {{#if this.offerPrice}}
-                          <div class="d-flex justify-content-start ml-5">
-
-                            <p class="small"><strong>₹{{this.offerPrice}}</p></strong>
-
-                            <p class="small text-muted ml-3"><span class="font-weight-bold">₹</span><del
-                                style="color: rgb(170, 170, 170);">{{this.price}}</del>
-                            </p>
-                          </div>
-                          {{else}}
-                          <p class="small d-flex justify-content-start ml-5"><span class="font-weight-bold">₹</span>
-                            <strong>{{this.price}}</strong></p>
-                          {{/if}}
-                          {{!--
-                        </div> --}}
-                      </div>
-                    </div>
-
-                    {{/each}}
-                  </div>
 
 
                   <!-- PAGINATION-->
@@ -330,51 +416,7 @@
             </div>
         </section>
       </div>
-      {{!-- <footer class="bg-dark text-white">
-        <div class="container py-4">
-          <div class="row py-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#!">Online Stores</a></li>
-                <li><a class="footer-link" href="#!">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">What We Do</a></li>
-                <li><a class="footer-link" href="#!">Available Services</a></li>
-                <li><a class="footer-link" href="#!">Latest Posts</a></li>
-                <li><a class="footer-link" href="#!">FAQs</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <h6 class="text-uppercase mb-3">Social media</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Twitter</a></li>
-                <li><a class="footer-link" href="#!">Instagram</a></li>
-                <li><a class="footer-link" href="#!">Tumblr</a></li>
-                <li><a class="footer-link" href="#!">Pinterest</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-top pt-4" style="border-color: #1d1d1d !important">
-            <div class="row">
-              <div class="col-md-6 text-center text-md-start">
-                <p class="small text-muted mb-0">&copy; 2021 All rights reserved.</p>
-              </div>
-              <div class="col-md-6 text-center text-md-end">
-                <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor"
-                    href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p>
-                <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer> --}}
+
       <!-- JavaScript files-->
       <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <script src="/vendor/glightbox/js/glightbox.min.js"></script>
@@ -466,89 +508,185 @@
           new FilterProduct().run();
           new SortProduct().run();
         })();
-  /////////////////end///////////////////
+        /////////////////end///////////////////
 
+        function checkWish() {
+          fetch(`/check-wishlist/${proId}`).then(response => response.json())
+            .then(response => {
+              console.log(response)
 
-
-
-function wishList(userId,proId){
-    $.ajax({
-        url:'/wish-list',
-        data:{
-            user:userId,
-            proId:proId
-        },
-        method:'post',
-        success:(response)=>{
-            if (response.status){
-                $('#like'+proId).hide()
-                $('#like2'+proId).hide()
-               
-
-            }else{
-                $('#like'+proId).show()
-                $('#like2'+proId).show()
-            }
-                
-        }
-
-
-    })
-}
-
-function unWish(userId, proId) {
-    let div = document.querySelector(".liked"+proId)
-    div.classList.add("hide-like-btn")
-    
-    
-    $.ajax({
-        url: '/wish-list',
-        data:{
-            user:userId,
-            proId:proId
-        },
-        method:'post',
-        success: (response) => {
-            console.log(response);
-            if (!response.status) {
-               
-            }
-            
-        }
-    })
-   
-}
-// Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
-//     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
-// });
-
-function removeWish(proId){
-    swal({
-        title: "Are you sure?",
-        text: "remove  from wishlist",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-            $.ajax({
-                url:'/remove-wish?id='+proId,
-                method:'get',
-                success:(response)=>{
-                    
-                    location.reload();
-                }
-                
             })
-        
-        } else {
-      
         }
-      });
-  
-}
 
+
+
+        function wish(proId) {
+          console.log(proId)
+          $.ajax({
+            url: `/add-to-wishlist/${proId}`,
+
+            method: 'get',
+            success: (response) => {
+              console.log("respo",response)
+              if (response.status) {
+
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Signed in successfully'
+                })
+                let count = $('#wish-count').html()
+                count = parseInt(count) + 1
+                $("#wish-count").html(count)
+              }
+
+            }
+
+
+          })
+        }
+
+        function wishList(userId, proId) {
+          console.log("pro", proId)
+          console.log("user", userId)
+          $.ajax({
+            url: '/wish-list',
+            data: {
+              user: userId,
+              proId: proId
+            },
+            method: 'post',
+            success: (response) => {
+              if (response.status) {
+
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'bottom-end',
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Added to Wishlist'
+                })
+                $('#like' + proId).hide()
+                $('#like2' + proId).hide()
+
+
+              } else {
+                $('#like' + proId).show()
+                $('#like2' + proId).show()
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'bottom-end',
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Removed from Wishlist'
+                })
+              }
+
+            }
+
+
+          })
+        }
+
+        function unWish(userId, proId) {
+           console.log("pro", proId)
+          console.log("user", userId)
+          let div = document.querySelector(".liked" + proId)
+          div.classList.add("hide-like-btn")
+
+
+          $.ajax({
+            url: '/wish-list',
+            data: {
+              user: userId,
+              proId: proId
+            },
+            method: 'post',
+            success: (response) => {
+              console.log(response);
+              if (!response.status) {
+
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'bottom-end',
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+                Toast.fire({
+                  icon: 'success',
+                  title: 'removed from Wishlist'
+                })
+              }
+
+            }
+          })
+
+        }
+        // Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+        //     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+        // });
+
+        function removeWish(proId) {
+          swal({
+            title: "Are you sure?",
+            text: "remove  from wishlist",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+            .then((willDelete) => {
+              if (willDelete) {
+                $.ajax({
+                  url: '/remove-wish?id=' + proId,
+                  method: 'get',
+                  success: (response) => {
+
+                    location.reload();
+                  }
+
+                })
+
+              } else {
+
+              }
+            });
+
+        }
       </script>
 
 

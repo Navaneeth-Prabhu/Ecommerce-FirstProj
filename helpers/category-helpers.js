@@ -20,7 +20,7 @@ module.exports ={
             category.Date=today
 
         
-        db.get().collection(collection.CATEGORY_COLLECTION,offer).insertOne(category).then((data) => {
+        db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data) => {
             console.log(data);
 
             callback(data)
@@ -102,7 +102,7 @@ module.exports ={
                 })
             })
         },
-        addCategoryOff:(catId,offer,validTill)=>{
+        addCategoryOff:(catId,offer,validTill,validFrom)=>{
  
             return new Promise(async(resolve,reject)=>{
                 
@@ -112,40 +112,47 @@ module.exports ={
 
                 let offTill = validTill
                 console.log("off",validTill);
-                // let offFrom = validFrom
-                let date = new Date()
+                let offFrom = validFrom
+
+                // let date = new Date()
+
                 let today = new Date().toISOString().slice(0, 10)
                 
                 let ppa = {category:catId} 
 
                     
-            //  if (offTill > today) {
                 
-           
                 await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
                     res.forEach(data=>{
+                                 if(today> offFrom){
+                                      if (offTill > today) {
+                                 let price = Number(data.price)
+                                 offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
+                                      }
+                                    }
+                             })
+                            offerPrice.forEach(data=>{
+                             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
+                            })
+                            console.log("cat"+ catId);
+                            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name:catId},{$set:{offer:off,validFrom:offFrom,validTill:offTill}},{upsert: true}).then((res)=>{
+                             
+                            })
+                         })
                      
-                        let price = Number(data.price)
-                        offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
-                    })
-                   offerPrice.forEach(data=>{
-                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:data.proId},{$set:{offerPrice:data.offerPrice}})
-                   })
-                   console.log("cat"+ catId);
-                   db.get().collection(collection.CATEGORY_COLLECTION).updateOne({Category_name:catId},{$set:{offer:off,validTill:offTill}},{upsert: true}).then((res)=>{
-                    
-                   })
-                })
-            // }
-          resolve()
+                     resolve()
+                     
+    
+                
+           
 
             // }else{
             //     console.log("invalid");
             // }
 
-                // } catch (error) {
-                //     reject()
-                // } 
+            //     } catch (error) {
+            //         reject()
+            //     } 
             })    
        },
        deleteCategoryOffer:(catId) => {

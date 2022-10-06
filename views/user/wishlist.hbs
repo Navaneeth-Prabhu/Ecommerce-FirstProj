@@ -58,7 +58,7 @@
           </div>
         </section>
         <section class="py-5">
-          <h2 class="h5 text-uppercase mb-4">Shopping cart</h2>
+        
           <div class="row">
             <div class="col-lg-8 mb-4 mb-lg-0">
               <!-- CART TABLE-->
@@ -69,6 +69,7 @@
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">OfferPrice</strong></th>
+                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Cart</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th> --}}
                       {{!-- <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Total</strong></th> --}}
@@ -94,7 +95,10 @@
                         <p class="mb-0 small">{{this.product.offerPrice}}</p>
                       </td>
                       {{else}}
+                      <td class="p-3 align-middle border-light">
+
                       <p>--</p>
+                      </td>
                       {{/if}}
 
                       <td class="p-3 align-middle border-light">
@@ -102,23 +106,10 @@
                                 onclick="addToCart('{{this.product._id}}')">Add to Cart</button>
                       </td>
                      
-                      {{!-- <td class="p-3 align-middle border-light">
-                        <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
-                          <div class="quantity">
-                            
-                 
-                            <button class="dec-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)"><i class="fas fa-caret-left"></i></button>
-                           
-                            <span id="{{this.product._id}}">{{this.quantity}}</span>
-                            <button class="inc-btn p-0" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)"><i class="fas fa-caret-right"></i></button>
-                          </div>
-                        </div>
-                      </td> --}}
-                        {{!-- <td class="p-3 align-middle border-light"><button onclick="WishproductDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td> --}}
-                      {{!-- <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small" id="totalPro">RS.{{totalProAmo}}</p>
-                      </td> --}}
-                      {{!-- <td class="p-3 align-middle border-light"><a href="/delete-product?id={{this.product._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
+
+                      <td class="p-3 align-middle border-light">
+                        <button onclick="removeWish('{{this.product._id}}')">delete</button>
+                      </td>
                     </tr>
                    {{/each}}
                   </tbody>
@@ -156,50 +147,7 @@
           </div>
         </section>
       </div>
-      {{!-- <footer class="bg-dark text-white">
-        <div class="container py-4">
-          <div class="row py-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#!">Online Stores</a></li>
-                <li><a class="footer-link" href="#!">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">What We Do</a></li>
-                <li><a class="footer-link" href="#!">Available Services</a></li>
-                <li><a class="footer-link" href="#!">Latest Posts</a></li>
-                <li><a class="footer-link" href="#!">FAQs</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <h6 class="text-uppercase mb-3">Social media</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Twitter</a></li>
-                <li><a class="footer-link" href="#!">Instagram</a></li>
-                <li><a class="footer-link" href="#!">Tumblr</a></li>
-                <li><a class="footer-link" href="#!">Pinterest</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-top pt-4" style="border-color: #1d1d1d !important">
-            <div class="row">
-              <div class="col-md-6 text-center text-md-start">
-                <p class="small text-muted mb-0">&copy; 2021 All rights reserved.</p>
-              </div>
-              <div class="col-md-6 text-center text-md-end">
-                <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstrapious.com/p/boutique-bootstrap-e-commerce-template">Bootstrapious</a></p>
-                <!-- If you want to remove the backlink, please purchase the Attribution-Free License. See details in readme.txt or license.txt. Thanks!-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer> --}}
+
       <!-- JavaScript files-->
       {{!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <script src="vendor/glightbox/js/glightbox.min.js"></script>
@@ -278,6 +226,24 @@
       });
 
  
+}
+
+function removeWish(proId){
+  console.log(proId)
+
+      
+     
+            $.ajax({
+                url:'/remove-wish?id='+proId,
+                method:'get',
+                success:(response)=>{   
+                    location.reload();
+                }
+            })
+                
+
+    
+  
 }
 
 </script>
