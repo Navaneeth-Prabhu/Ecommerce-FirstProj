@@ -131,9 +131,11 @@ router.get('/dashboard/category',auth.adminCookieJWTAuth,async (req,res)=>{
 
 
 router.get('/login',auth.adminLoggedIn, function(req,res) {
+  console.log("-----------/log");
   if(req.session.adminLoggedIn){
     res.redirect('/admin')
   }else{
+    console.log("---------------not loggedin")
     res.render('admin/login-admin',{admin:false, loginError:req.session.adminLoginError, adminLoggedIn:req.session.adminLoggedIn})
     req.session.adminLoginError = null
   }
@@ -162,10 +164,10 @@ router.post('/login', function(req, res) {
   }else{
     console.log("admin not logged in");
     req.session.adminLoginError="Invalid Username or Password"
-    res.redirect('/login')
+    res.redirect('admin/login')
   }
 });
-
+            
 router.get('/logout', function(req, res) {
 
 
@@ -668,6 +670,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     router.get('/delete-coupon',auth.adminCookieJWTAuth,function(req,res){
       try {
         let proid=req.query.id
+        console.log("pro",proid);
       couponHelper.deleteCoupon(proid).catch(()=>{res.redirect('/error')})
         res.redirect("/admin/coupons")
       } catch (err) {

@@ -10,19 +10,19 @@
                 <form action="/admin/add-offer/" method="post" enctype="multipart/form-data" >
                    <div class="form-group">
                     <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                     <input id="offer_name" name="offer_name" placeholder="TITLE" class="form-control input-md" required="" type="text">
                     
                         
                     </div>
                     </div>
                     <label class="col-md-4 control-label" for="product_weight">offer</label>  
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                     <input id="offer" name="offer" placeholder="" class="form-control input-md" required="" type="number">
 
 
                     <div>
-                    <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>  
+                    <label class="col-md-12 control-label  mt-4" for="stock_alert">SUB-CATEGORY</label>  
                     <select name="SubCategory" class="form-group form-select" aria-label="Default select example">
                     <div class="col-md-4">
                     <option selected>Select category</option>
@@ -36,12 +36,18 @@
 
                     </div>
                   
-
-
-                        
-                    
+ <label class="col-md-4 control-label  mt-4" for="product_weight">Start</label> 
+                    <div class="col-md-12">
                     <input type="date" name="date_start" id="date_start">
+                    </div>
+
+
+                     <label class="col-md-4 control-label  mt-4 " for="product_weight">End</label> 
+                        <div class="col-md-12  mb-4">
                     <input type="date" name="date_end" id="date_end">
+
+                        </div>
+                    
 
                     {{!-- <!-- Button -->
                     <div class="form-group">

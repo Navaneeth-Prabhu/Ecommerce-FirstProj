@@ -110,9 +110,9 @@
            <div> <p>{{this.message}}</p></div> 
                 {{#if this.isDebit}}
                 
-   <div><p style="color: rgb(0, 150, 13);">+ {{this.transactionamount}}</p></div> 
+   <div><p style="color: rgb(150, 0, 0);">- {{this.transactionamount}}</p></div> 
     {{else}}
-    <div><p style="color:rgb(255, 0, 0); ">- {{this.transactionamount}}</p></div>
+    <div><p style="color:rgb(0, 192, 29); ">+ {{this.transactionamount}}</p></div>
     {{/if}}
         </div>
     {{/each}}

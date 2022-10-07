@@ -232,18 +232,23 @@
       success:(response)=>{ 
         if(response.cod_success)
         {
+          
           location.href='/orderSucessfull'
           
         } else if(response.wallet_success == true) {
-          console.log('hi hi hihihihihihihihiiihhii')
+         
           location.href = '/orderSucessfull'
+        }
+        else if(response.wallet_fail) {
+          location.href = '/orderSucessfull'
+            
         }
         else if(response) {
-          location.href = '/orderSucessfull'
+          razorPayment(response)
         }
         else{
-            razorPayment(response)
-            console.log('helo:',response)
+        location.href = '/orderSucessfull'
+
         }    
         }
     })

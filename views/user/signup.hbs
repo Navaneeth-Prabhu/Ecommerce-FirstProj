@@ -4,6 +4,10 @@
             <h2 class="text-center">Create new Account</h2>
                 <form action="/signup" method="post" id="signup" name="signup">
                     <div class="form-group">
+                    
+                {{!-- <div class="alert alert-danger" role="alert"> --}}
+                    
+
                         <label for="Password">Name</label>
                         <input type="text" name="Name" id="" class="form-control" placeholder="Enter name">
                     </div>
@@ -22,6 +26,7 @@
                     <div class="form-group">
                         <label for="referal">referal</label>
                         <input type="text" name="referal_code" id="" class="referal_code" placeholder="Enter Referal code">
+                        <span id="error" class="text-danger"></span>
                     </div>
                     <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already have account ?</a>
                     <button type="submit" class="btn btn-primary float-right">Signup</button>
@@ -93,7 +98,12 @@
           data: $("#signup").serialize(),
           method: "POST",
           success: function (response) {  
-            window.location.reload();
+            if(response.status == "error"){
+              let a = document.getElementById('error')
+              a.innerHTML = 'invalid referal'
+            }else{
+              location.href = '/login'
+            }
           },
           error: function (err) {
             err = jQuery.parseJSON(err.responseText);

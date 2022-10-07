@@ -4,22 +4,22 @@
 <div id="content" class="my-4 card p-3" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
   <h2 class="text-center">ADD Address</h2>
 
-                <form action="/add-address?userId={{user._id}}" method="post" class="my-4">
+                <form action="/add-address?userId={{user._id}}" method="post" class="my-4" id="address">
                 <div class="row gy-3">
                     {{!-- <input type="text" name="userId" id="userId" value="{{user._id}}" > --}}
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
-                    <input class="form-control form-control-lg" type="text" name="name" id="firstName" value="{{address.name}}">
+                    <input class="form-control form-control-lg" type="text" name="name" id="firstName" value="{{address.name}}" required>
                   </div>
 
 
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="phone">Phone number </label>
-                    <input class="form-control form-control-lg" type="tel" name="phone" id="phone" placeholder="e.g. +02 245354745">
+                    <input class="form-control form-control-lg" type="tel" name="phone" id="phone" placeholder="e.g. +02 245354745" required>
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="company">Pincode</label>
-                    <input class="form-control form-control-lg" type="number" name="pin" id="pin" placeholder=Pincode>
+                    <input class="form-control form-control-lg" type="number" name="pin" id="pin" placeholder="Pincode" required>
                   </div>
                   <div class="col-lg-6 form-group">
                     <label class="form-label text-sm text-uppercase" for="country">Country</label>
@@ -29,16 +29,16 @@
                   </div>
                   <div class="col-lg-12">
                     <label class="form-label text-sm text-uppercase" for="address">Address line 1 </label>
-                    <input class="form-control form-control-lg" type="text" name="address" id="address" placeholder="House number and street name">
+                    <input class="form-control form-control-lg" type="text" name="address" id="address" placeholder="House number and street name" required>
                   </div>
 
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="city">Town/City </label>
-                    <input class="form-control form-control-lg" type="text" name="city" id="city">
+                    <input class="form-control form-control-lg" type="text" name="city" id="city" required>
                   </div>
                   <div class="col-lg-6">
                     <label class="form-label text-sm text-uppercase" for="state">State</label>
-                    <input class="form-control form-control-lg" type="text" name="state" id="state">
+                    <input class="form-control form-control-lg" type="text" name="state" id="state" required>
                   </div>
                   <input type="text" name="add_type" value="Primary" hidden>
                  
@@ -73,6 +73,86 @@
     </div>
     {{/each}}
 </div>
+    <script>
+        $(document).ready(function () {
+    console.log("started");
+    jQuery.validator.addMethod(
+      "testUsername",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+      },
+      "Use only alphabets and undersore"
+    );
+    jQuery.validator.addMethod(
+      "testName",
+      function (value, element) {
+        return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+      },
+      "Use only alphabets"
+    );
+    
+    jQuery.validator.addMethod(
+      "minlength",
+      function (value, element, params) {
+        return this.optional(element) || value.trim().length >= params;
+      },
+      jQuery.validator.format("Please enter at least {0} characters.")
+    );
+    $("#address").validate({
+      rules: {
+        Name: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        address: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        city: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        state: {
+          required: true,
+          minlength: 4,
+          maxlength: 50,
+          testName : true,
+        },
+        phone: {
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+          number : true,
+        },
+        pin: {
+          required: true,
+          minlength: 6,
+          maxlength: 6,
+          number : true,
+        },
+        Email: {
+          required: true,
+          email: true,
+        },
+        Password: {
+          required: true,
+          minlength: 8,
+        },
+      },
+      submitHandler: function (form) {
+        // form.preventDefault();
+        console.log("recieved");
+
+      },
+    });
+  });
+    </script>
 
 
 

@@ -35,13 +35,14 @@ module.exports = {
 
   deleteCoupon: (proid) => {
     return new Promise(async (resolve, reject) => {
-      try {
+
         db.get()
           .collection(collections.COUPON_COLLECTION)
-          .removeOne({ _id: objectId(proid) });
-      } catch (error) {
-        reject();
-      }
+          .deleteOne({ _id: objectId(proid)}).then((response)=>{
+            console.log("repo",response);
+            resolve(response)
+          })
+
     });
   },
   

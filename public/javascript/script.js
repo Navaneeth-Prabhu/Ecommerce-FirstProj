@@ -23,6 +23,8 @@ function addToCart(productId){
             let count=$('#cart-count').html()
             count=parseInt(count)+1
             $("#cart-count").html(count)
+        }else{
+          location.href='/login'
         }
         // alert(response)
       }
@@ -42,100 +44,181 @@ function addToCartWish(productId){
       }
     })
   }
-//   function productDelete(cartId,productId,prodName){
+  function checkWish() {
+    fetch(`/check-wishlist/${proId}`).then(response => response.json())
+      .then(response => {
+        console.log(response)
 
-//     swal({
-//         title: "Are you sure?",
-//         text: "remove "+prodName+" from cart",
-//         icon: "warning",
-//         buttons: true,
-//         dangerMode: true,
-//       })
-//       .then((willDelete) => {
-//         if (willDelete) {
-//             $.ajax({
-//                 url:'/delete-cart-product',
-//                 data:{
-//                    product:productId,
-//                    cart:cartId
-//                },
-//                method:'post',
-//                success:(response)=>{
-//                    $('#tr'+proId).remove()
-//                    let msg=prodName+' removed'
-//                    $('#delete-msg').html(msg)
-                   
-           
-//                }
-//            })
-//           swal(prodName+" has removed from cart", {
-//             icon: "success",
-//           });
-//         } else {
-//           swal("deletion aborted");
-//         }
-//       });
-
- 
-// }
+      })
+  }
 
 
-//   function addToWishlist(userId,proId){
-//     $.ajax({
-//         url:'/add-to-wishlist/'+proId,
-//         data:{
-//             userId:userId,
-//             productId:proId
-//         },
-//         method:'post',
-//         success:(response)=>{
-//             if (response.status){
-//                 $('#like'+proId).hide()
-//                 $('#like2'+proId).hide()
-               
 
-//             }else{
-//                 $('#like'+proId).show()
-//                 $('#like2'+proId).show()
-//             }
-                
-//         }
+  function wish(proId) {
+    console.log(proId)
+    $.ajax({
+      url: `/add-to-wishlist/${proId}`,
+
+      method: 'get',
+      success: (response) => {
+        console.log("respo",response)
+        if (response.status) {
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
+          })
+          let count = $('#wish-count').html()
+          count = parseInt(count) + 1
+          $("#wish-count").html(count)
+        }
+
+      }
 
 
-//     })
-// }
+    })
+  }
 
-// function unWish(userId, proId) {
-//   let div = document.querySelector(".liked"+proId)
-//   div.classList.add("hide-like-btn")
-  
-  
-//   $.ajax({
-//       url: '/wishlist',
-//       data:{
-//           userId:userId,
-//           productId:proId
-//       },
-//       method:'post',
-//       success: (response) => {
-//           console.log(response);
-//           if (!response.status) {
-             
-//           }
-          
-//       }
-//   })
- 
-// }
-// function removeWish(proId){
-//   $.ajax({
-//       url:'/remove-wish?id='+proId,
-//       method:'get',
-//       success:(response)=>{
-          
-//           location.reload();
-//       }
-      
-//   })
-// }
+  function wishList(userId, proId) {
+    console.log("pro", proId)
+    console.log("user", userId)
+    $.ajax({
+      url: '/wish-list',
+      data: {
+        user: userId,
+        proId: proId
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.status) {
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Added to Wishlist'
+          })
+          $('#like' + proId).hide()
+          $('#like2' + proId).hide()
+
+
+        } else {
+          $('#like' + proId).show()
+          $('#like2' + proId).show()
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Removed from Wishlist'
+          })
+        }
+
+      }
+
+
+    })
+  }
+
+  function unWish(userId, proId) {
+     console.log("pro", proId)
+    console.log("user", userId)
+    let div = document.querySelector(".liked" + proId)
+    div.classList.add("hide-like-btn")
+
+
+    $.ajax({
+      url: '/wish-list',
+      data: {
+        user: userId,
+        proId: proId
+      },
+      method: 'post',
+      success: (response) => {
+        console.log(response);
+        if (!response.status) {
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'removed from Wishlist'
+          })
+        }
+
+      }
+    })
+
+  }
+  // Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+  //     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+  // });
+
+  function removeWish(proId) {
+    swal({
+      title: "Are you sure?",
+      text: "remove  from wishlist",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: '/remove-wish?id=' + proId,
+            method: 'get',
+            success: (response) => {
+
+              location.reload();
+            }
+
+          })
+
+        } else {
+
+        }
+      });
+
+  }
 

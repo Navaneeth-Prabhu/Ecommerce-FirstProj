@@ -1,4 +1,20 @@
-
+<style>
+  .small-images{
+    height: 30%;
+    width: 100%;
+    justify-content: space-around;
+    display: grid;
+    gap: .5rem;
+    position: absolute;
+        left: -16rem;
+  }
+  .small-images img{
+         height: 13rem;
+    width: auto;
+    display: flex;
+    cursor: pointer;
+    }
+</style>
 
 
 
@@ -53,11 +69,33 @@
 
                 <div class="col-sm-3 pl-sm-0"><button class="btn tbn-sm btn-dark"b type="button"  onclick="addToCart('{{product._id}}')">Add to Cart</button></div>
               </div>
-              <a class="text-dark p-0 mb-4 d-inline-block btn" href="/add-to-wishlist/{{product._id}}"><i class="far fa-heart me-2"></i>Add to wish list</a><br>
+              <div class="col-sm-3 pl-sm-0">
+
+             
+                  {{#if user}}<div class="like-btns" style="    float: inherit;
+    position: absolute;
+    left: 10rem;
+    top: -4rem;
+    border: 1px solid;
+    padding: 11px 19px 36px 31px;
+    border:none"> <button onclick="wishList('{{user._id}}','{{product._id}}')" class="like float-right "><img
+                id="like{{product._id}}" class="icon-like" src="/images/heart.png" alt=""><img id="liked{{product._id}}"
+                class="icon-liked" src="/images/liked.png"
+                alt=""></button> 
+                {{#each wishlist}} {{#ifCond this ../proId}}
+            <button id="likebtn{{../proId}}" onclick="unWish('{{../user._id}}','{{../proId}}')" class="liked float-right liked{{../proId}}"><img  class="iconliked" src="/images/liked.png"
+                alt=""></button>
+        
+            {{/ifCond}}{{/each}}</div>
+            {{/if}}
+              </div>
+
+
+              {{!-- <a class="text-dark p-0 mb-4 d-inline-block btn" href="/add-to-wishlist/{{product._id}}"><i class="far fa-heart me-2"></i>Add to wish list</a><br> --}}
               <ul class="list-unstyled small d-inline-block">
                
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong>{{product.Category}}</li>
-                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ms-2" href="#!">Innovation</a></li>
+                {{!-- <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ms-2" href="">Innovation</a></li> --}}
               </ul>
             </div>
           </div>

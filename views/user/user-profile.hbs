@@ -6,7 +6,6 @@
     border-radius: 50%;
 
   }
-  
 </style>
 
 
@@ -64,11 +63,12 @@ background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%)
               <div class="col-6 py-3">
                 <tr>
                   <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-primary my-1 mx-1" data-toggle="modal" data-target="#staticBackdrop">
+                  <button type="button" class="btn btn-primary my-1 mx-1" data-toggle="modal"
+                    data-target="#staticBackdrop">
                     <i class="fa fa-pen fa-xs edit px-1"></i>Edit Profile</button>
                   </button>
-                  <button type="button" class="btn btn-primary my-1 mx-1" data-toggle="modal" data-target="#exampleModal"
-    data-whatever="@getbootstrap">Change Password</button>
+                  <button type="button" class="btn btn-primary my-1 mx-1" data-toggle="modal"
+                    data-target="#exampleModal" data-whatever="@getbootstrap">Change Password</button>
                 </tr>
               </div>
               <div class="col-md-3 my-3">
@@ -83,264 +83,336 @@ background: linear-gradient(80deg, rgba(131,58,180,1) 0%, rgba(235,29,253,1) 100
               </div>
 
 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row py-5">
+        <div class="col-md-3 my-3" style="">
+          <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%); ">
+            <a href="/order-history" style="color:white">
+              <div class="card-body">
+                <i class="fa fa-gift" aria-hidden="true"></i> My Orders
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 my-3">
+          <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
+            <a href="/wishlist" style="color:white">
+              <div class="card-body">
+                <i class="fa fa-heart" aria-hidden="true"></i> Wishlist
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 my-3">
+          <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
+            <a href="/view-coupon" style="color:white">
+              <div class="card-body">
+                Coupon
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 my-3">
+          <div class="card text-center" style="background: rgb(83,105,118);
+background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
+            <a href="/wallet" style="color:white">
+              <div class="card-body"><i class="fa fa-credit-card f-left"></i>
+                Wallet
+              </div>
+            </a>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h2 class="text-center">Profile</h2>
+            <form action="/user-profile" method="POST">
+
+
+              <div class="form-group">
+
+                <label for="Password" style="font-size:small">Name</label>
+                <input type="text" name="Name" class="form-control" value="{{user.Name}}" required>
+              </div>
+              <div class="form-group">
+                <label for="" style="font-size:small">Email Address</label>
+                <input type="email" name="Email" class="form-control" value="{{user.Email}}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="" style="font-size:small">Phone</label>
+                <input type="number" name="number" class="form-control" value="{{user.number}}" required>
+              </div>
+
+
+              {{!-- <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already
+                have
+                account ?</a> --}}
+              <button type="submit" class="btn tbn-sm btn-dark ">SAVE</button>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row py-5">
-      <div class="col-md-3 my-3" style="">
-        <div class="card text-center" style="background: rgb(83,105,118);
-background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%); ">
-          <a href="/order-history" style="color:white">
-            <div class="card-body">
-              <i class="fa fa-gift" aria-hidden="true"></i> My Orders
-            </div>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-3 my-3">
-        <div class="card text-center" style="background: rgb(83,105,118);
-background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
-          <a href="/wishlist" style="color:white">
-            <div class="card-body">
-              <i class="fa fa-heart" aria-hidden="true"></i> Wishlist
-            </div>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-3 my-3">
-        <div class="card text-center" style="background: rgb(131,58,180);
-background: linear-gradient(80deg, rgba(131,58,180,1) 0%, rgba(235,29,253,1) 100%);">
-          <a href="/view-coupon" style="color:white">
-            <div class="card-body">
-              Coupon
-            </div>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-3 my-3">
-        <div class="card text-center" style="background: rgb(83,105,118);
-background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%);">
-          <a href="/wallet" style="color:white">
-            <div class="card-body"><i class="fa fa-credit-card f-left"></i>
-              Wallet
-            </div>
-          </a>
-        </div>
-      </div>
-
-
-
+    {{#if success}}
+    <div class="alert alert-success" role="alert">
+      Password changed successfully
     </div>
-  </div>
-
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h2 class="text-center">Profile</h2>
-          <form action="/user-profile" method="POST">
-
-
-            <div class="form-group">
-            {{#if success}}
-            <div class="alert alert-success" role="alert">
-              Password changed successfully
-            </div>
-            {{/if}}
-            {{#if passErr}}
-            <div class="alert alert-danger" role="alert">
-              {{passErr}}
-            </div>
-            {{/if}}
-              <label for="Password" style="font-size:small">Name</label>
-              <input type="text" name="Name" class="form-control" value="{{user.Name}}">
-            </div>
-            <div class="form-group">
-              <label for="" style="font-size:small">Email Address</label>
-              <input type="email" name="Email" class="form-control" value="{{user.Email}}" readonly>
-            </div>
-            <div class="form-group">
-              <label for="" style="font-size:small">Phone</label>
-              <input type="number" name="number" class="form-control" value="{{user.number}}">
-            </div>
-
-
-            {{!-- <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/login">Already have
-              account ?</a> --}}
-            <button type="submit" class="btn tbn-sm btn-dark ">SAVE</button>
-          </form>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+    {{/if}}
+    {{#if passErr}}
+    <div class="alert alert-danger" role="alert">
+      {{passErr}}
     </div>
-  </div>
+    {{/if}}
 
 
 
-  
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
 
-        <div class="modal-body">
+          <div class="modal-body">
           <form action="/changePass" method="POST">
 
             <div class="form-group">
               <label for="Password" style="font-size:small">OldPassword</label>
-              <input type="password" name="password" class="form-control">
+              <input type="password" name="password" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="" style="font-size:small">NewPassword</label>
-              <input type="password" name="newPassword" class="form-control" >
+              <input type="password" name="newPassword" class="form-control"required>
             </div>
             <div class="form-group">
               <label for="" style="font-size:small">ConfirmPassword</label>
-              <input type="password" name="confirmPassword" class="form-control" >
+              <input type="password" name="confirmPassword" class="form-control" required>
             </div>
              <button type="submit" class="btn btn-primary">Save</button>
             </form>
-          {{!-- <div class="form-group row">
-            <label for="Password" style="font-size:small">Password</label>
-            <div class="col-9">
+            {{!-- <div class="form-group row">
+              <label for="Password" style="font-size:small">Password</label>
+              <div class="col-9">
 
-              <input type="password" name="Password" id="" class="form-control" value="{{user.Password}}" readonly>
-            </div>
-            <div class="col-3">
+                <input type="password" name="Password" id="" class="form-control" value="{{user.Password}}" readonly>
+              </div>
+              <div class="col-3">
 
-              <button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal"
-                data-target="#exampleModalCenter">change</button>
-            </div>
+                <button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal"
+                  data-target="#exampleModalCenter">change</button>
+              </div>
 
-          </div> --}}
-        </div>
+            </div> --}}
+          </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Send message</button>
+          </div> --
         </div>
       </div>
     </div>
-  </div>
 
 
+ {{!-- <script>
+      function validateoldpassword() {
+        console.log('hihlihihhihihihihihhihhi')
+        let a = document.getElementById('oldpassword').value
+        let b = document.getElementById('oldpassError')
+        if (a.length < 8) {
+          b.innerHTML = 'Password must be greater than 8'
+          return false;
+        }
+        if (!a.match(/^[A-Za-z]*\s{0,1}?[A-Za-z]*\s{0,1}?[A-Za-z]*$/)) {
+          b.innerHTML = "Write Proper name";
+          return false;
+        }
+
+        if (a.length == 0 || a == '') {
+          b.innerHTML = "Name cannot be empty";
+          return false;
+        }
+        b.innerHTML = ''
+        return true;
+      }
+
+      function validcategory() {
+        if (!validateoldpassword() ) {
+          let a = document.getElementById('msg')
+          a.innerHTML = 'Fill the required'
+        }else{
+          changepass()
+          return true;
+        }
+          
+        
+      }
+        function changepass(){
+        console.log("in change ")
+    
+             $.ajax({
+              url: "/changePass",
+              data: $("#changePass").serialize(),
+              method: "POST",
+              success: (response) => {
+                if (response.status) {
+                  alert('Password Changed')
+                } else {
+                  alert('Failed')
+                }
+              }
+            error: function (err) {
+                err = jQuery.parseJSON(err.responseText);
+                console.log(err.message);
+                $("#error").text(err.message);
+              },
+            });
+       
+      
+}
 
 
+    </script> --}}
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
-  <!-- <script src="/validation.js"></script> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <!-- <script src="/validation.js"></script> -->
+
+   
+    <script>
+      $(document).ready(function () {
+        console.log("started");
+        jQuery.validator.addMethod(
+          "testUsername",
+          function (value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+          },
+          "Use only alphabets and undersore"
+        );
+        jQuery.validator.addMethod(
+          "testName",
+          function (value, element) {
+            return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+          },
+          "Use only alphabets"
+        );
+
+        jQuery.validator.addMethod(
+          "minlength",
+          function (value, element, params) {
+            return this.optional(element) || value.trim().length >= params;
+          },
+          jQuery.validator.format("Please enter at least {0} characters.")
+        );
+        $("#changePass").validate({
+          rules: {
+            Name: {
+              required: true,
+              minlength: 4,
+              maxlength: 50,
+              testName: true,
+            },
+            number: {
+              required: true,
+              minlength: 10,
+              maxlength: 10,
+              number: true,
+            },
+            Email: {
+              required: true,
+              email: true,
+            },
+            passwod: {
+              required: true,
+              minlength: 8,
+            },
+            newPassword: {
+              required: true,
+              minlength: 8,
+            },
+            confirmPassword: {
+              required: true,
+              minlength: 8,
+            },
+          },
+          submitHandler: function (form) {
+            // form.preventDefault();
+            console.log("recieved");
+            $.ajax({
+              url: "/changePass",
+              data: $("#changePass").serialize(),
+              method: "POST",
+              success: (response) => {
+                if (response.status) {
+                  alert('Password Changed')
+                } else {
+                  alert('Failed')
+                }
+              }
+            error: function (err) {
+                err = jQuery.parseJSON(err.responseText);
+                console.log(err.message);
+                $("#error").text(err.message);
+              },
+            });
+          },
+        });
+      });
+    </script>
+  </div> 
 
 
   <script>
-    $(document).ready(function () {
-      console.log("started");
-      jQuery.validator.addMethod(
-        "testUsername",
-        function (value, element) {
-          return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
-        },
-        "Use only alphabets and undersore"
-      );
-      jQuery.validator.addMethod(
-        "testName",
-        function (value, element) {
-          return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
-        },
-        "Use only alphabets"
-      );
+    // validation example for Login form
+    $("#btnLogin").click(function (event) {
 
-      jQuery.validator.addMethod(
-        "minlength",
-        function (value, element, params) {
-          return this.optional(element) || value.trim().length >= params;
-        },
-        jQuery.validator.format("Please enter at least {0} characters.")
-      );
-      $("#userpro").validate({
-        rules: {
-          Name: {
-            required: true,
-            minlength: 4,
-            maxlength: 50,
-            testName: true,
-          },
-          number: {
-            required: true,
-            minlength: 10,
-            maxlength: 10,
-            number: true,
-          },
-          Email: {
-            required: true,
-            email: true,
-          },
-          Password: {
-            required: true,
-            minlength: 8,
-          },
-        },
-        submitHandler: function (form) {
-          // form.preventDefault();
-          console.log("recieved");
-          $.ajax({
-            url: "/user-profile",
-            data: $("#changePass").serialize(),
-            method: "POST",
-            success: function (response) {
-              window.location.reload();
-            },
-            error: function (err) {
-              err = jQuery.parseJSON(err.responseText);
-              console.log(err.message);
-              $("#error").text(err.message);
-            },
-          });
-        },
-      });
+      var form = $("#loginForm");
+
+      if (form[0].checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      // if validation passed form
+      // would post to the server here
+
+      form.addClass('was-validated');
     });
+
+
   </script>
-</div>
-
-
-<script>
-  // validation example for Login form
-  $("#btnLogin").click(function (event) {
-
-    var form = $("#loginForm");
-
-    if (form[0].checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    // if validation passed form
-    // would post to the server here
-
-    form.addClass('was-validated');
-  });
-
-
-</script>

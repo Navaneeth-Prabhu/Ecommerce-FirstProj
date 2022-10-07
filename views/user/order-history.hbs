@@ -11,7 +11,7 @@
           <div class="col-lg-6 text-lg-end">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
-                <li class="breadcrumb-item"><a class="text-dark" href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-dark" href="/">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">ORDER</li>
               </ol>
             </nav>
@@ -50,9 +50,7 @@
               {{#each orders}}
               <tr>
 
-                {{#each pro}}
-                <p>helo</p>
-                {{/each}}
+              
                 {{!-- <th class="ps-0 py-3 border-light" scope="row">
 
                   <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link"
@@ -100,6 +98,8 @@
                 <td> <a href="/cancel-order/{{this._id}}" class="btn btn-dark">Cancel</a></td>
                 {{/if}}
                 {{/if}}
+
+                {{!-- <td><button onclick="downloadInvoice()">Download Invoice</button></td> --}}
                 {{!-- {{/if}} --}}
               </tr>
               {{/each}}
@@ -148,6 +148,124 @@
       document.body.insertBefore(div, document.body.childNodes[0]);
     }
   }
+
+
+  console.log("hi")
+
+let orders = {{orders}}
+console.log(orders)
+
+    function createInvoice() {
+  var data = getSampleData();
+	easyinvoice.createInvoice(data, function(result) {
+    document.getElementById('invoiceBase64').innerText = result.pdf;
+    /* console.log(result.pdf); */
+  });
+}
+
+function downloadInvoice() {
+  var data = getSampleData();
+	easyinvoice.createInvoice(data, function(result) {
+  	easyinvoice.download('myInvoice.pdf', result.pdf);
+    //	you can download like this as well:
+    //	easyinvoice.download();
+    //	easyinvoice.download('myInvoice.pdf');
+  });
+}
+
+function renderInvoice(){
+	var data = getSampleData();
+  document.getElementById("pdf").innerHTML = "loading...";
+	easyinvoice.createInvoice(data, function(result) {
+  	easyinvoice.render('pdf', result.pdf);
+  });
+}
+
+function getSampleData() {
+    return {
+        // "customize": {
+        //     "template": "SGVsbG8gd29ybGQh" // Must be base64 encoded html. This example contains 'Hello World!' in base64
+        // },
+        images: {
+            logo: 'https://public.easyinvoice.cloud/img/logo_en_original.png',
+          
+        },
+        sender: {
+            company: 'Sample Corp',
+            address: 'Sample Street 123',
+            zip: '1234 AB',
+            city: 'Sampletown',
+            country: 'Samplecountry'
+            // "custom1": "custom value 1",
+            // "custom2": "custom value 2",
+            // "custom3": "custom value 3"
+        },
+        client: {
+            company: 'Client Corp',
+            address: 'Clientstreet 456',
+            zip: '4567 CD',
+            city: 'Clientcity',
+            country: 'Clientcountry'
+            // "custom1": "custom value 1",
+            // "custom2": "custom value 2",
+            // "custom3": "custom value 3"
+        },
+        information: {
+            number: '2021.0001',
+            date: new Date(),
+            'due-date': '31-12-2021'
+        },
+        products: [
+            {
+                quantity: 2,
+                description: 'Product 1',
+                'tax-rate': 6,
+                price: 33.87
+            },
+            {
+                quantity: 2,
+                description: 'Product 1',
+                'tax-rate': 6,
+                price: 33.87
+            },
+            {
+                quantity: 2,
+                description: 'Product 1',
+                'tax-rate': 6,
+                price: 33.87
+            },
+           
+        ],
+        'bottom-notice': 'Kindly pay your invoice within 15 days.',
+        settings: {
+            currency: 'USD' // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+            // "locale": "nl-NL", // Defaults to en-US, used for number formatting (see docs)
+            // "taxNotation": "gst", // Defaults to vat
+            // "margin-top": 25, // Default to 25
+            // "margin-right": 25, // Default to 25
+            // "margin-left": 25, // Default to 25
+            // "margin-bottom": 25, // Default to 25
+            // "format": "Letter", // Defaults to A4,
+            // "height": "1000px", // allowed units: mm, cm, in, px
+ 		        // "width": "500px", // allowed units: mm, cm, in, px
+     		    // "orientation": "landscape", // portrait or landscape, defaults to portrait
+        }
+        // Used for translating the headers to your preferred language
+        // Defaults to English. Below example is translated to Dutch
+        // "translate": {
+        //     "invoice": "FACTUUR",
+        //     "number": "Nummer",
+        //     "date": "Datum",
+        //     "due-date": "Verloopdatum",
+        //     "subtotal": "Subtotaal",
+        //     "products": "Producten",
+        //     "quantity": "Aantal",
+        //     "price": "Prijs",
+        //     "product-total": "Totaal",
+        //     "total": "Totaal"
+        // },
+    };
+}
   // this is set to BootstrapTemple website as you cannot 
   // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
   // while using file:// protocol

@@ -88,11 +88,11 @@
                       </th>
                   
                       <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{this.product.price}}</p>
+                        <p class="mb-0 small">₹{{this.product.price}}</p>
                       </td>
                       {{#if this.product.offerPrice}}
                          <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{this.product.offerPrice}}</p>
+                        <p class="mb-0 small">₹{{this.product.offerPrice}}</p>
                       </td>
                       {{else}}
                       <td class="p-3 align-middle border-light">
@@ -108,7 +108,8 @@
                      
 
                       <td class="p-3 align-middle border-light">
-                        <button onclick="removeWish('{{this.product._id}}')">delete</button>
+                        <a class="btn btn-danger" href="/remove-wishlist?id={{this.product._id}}"> Delete</a>
+                        {{!-- <button onclick="removeWish('{{this.product._id}}')">delete</button> --}}
                       </td>
                     </tr>
                    {{/each}}
@@ -230,9 +231,6 @@
 
 function removeWish(proId){
   console.log(proId)
-
-      
-     
             $.ajax({
                 url:'/remove-wish?id='+proId,
                 method:'get',

@@ -19,6 +19,7 @@
             </div>
           </div>
         </section>
+        {{#if products}}
         <section class="py-5">
           <h2 class="h5 text-uppercase mb-4">Shopping cart</h2>
           <div class="row">
@@ -67,13 +68,19 @@
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">₹ {{this.product.price}}</p>
                       </td>
+                      {{#if this.product.offerPrice}}
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
                       </td>
+                      {{else}}
+                      <td class="p-3 align-middle border-light">
+                        <p class="mb-0 small">--</p>
+                      </td>
+                      {{/if}}
                      
 
                         {{!-- <td><a href="/user/delete-cart-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.product._id}}  ?')">Delete</a></td> --}}
-                      <td class="p-3 align-middle border-light"><button class="btn" onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
+                      <td class="p-3 align-middle border-light"><button class="btn" type="button" onclick="productDelete('{{this._id}}','{{this.product._id}}','{{this.product.product_title}},{{../user._id}}')"><i class="fas fa-trash-alt small text-muted"></i></button></td>
                        {{!-- <tr><div class="text-center text-success" ><h4 id="delete-msg"class="font-italic"></h4></div></tr> --}}
                        {{!-- <td><button  onclick="productDelete('{{this.product._id}}','{{this._id}}','{{this.product.productname}}')"class="betaButton">remove</button></td> --}}
                       {{!-- <td class="p-3 align-middle border-light"><a href="/user/delete-cart-product?id={{this._id}}"><i class="fas fa-trash-alt small text-muted"></i></a></td> --}}
@@ -85,10 +92,11 @@
               <!-- CART NAV-->
               <div class="bg-light px-4 py-3">
                 <div class="row align-items-center text-center">
-                  <div class="col-md-6 mb-3 mb-md-0 text-md-start"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a></div>
+                  <div class="col-md-6 mb-3 mb-md-0 text-md-start"><a class="btn btn-link p-0 text-dark btn-sm" href="/view-products"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a></div>
                   {{#if products}}
                   <div class="col-md-6 text-md-end"><a class="btn btn-outline-dark btn-sm" href="/checkout">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a></div>
                   {{else}}
+
                   {{/if}}
                 </div>
               </div>
@@ -126,6 +134,23 @@
             </div>
           </div>
         </section>
+        {{else}}
+        {{!-- <h1>cart ins empoty</h1> --}}
+        <div class="d-flex justify-content-center">
+          <div>
+            <img src="/images/no-cart.png" alt="YOUR CART IS EMPTY">
+          </div>
+
+        </div>
+        <div class="d-flex justify-content-center">
+          <div>
+
+           <a class="btn  p-0 text-dark btn-sm" href="/view-products"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a>
+          </div>
+        </div>
+        <div class="col-12 bg-primary mt-5"></div>
+
+        {{/if}}
       </div>
 
       <!-- JavaScript files-->
@@ -197,22 +222,23 @@
     })
   }
 
-    function productDelete(cartId,prodName,userId){
-
-    swal({
-        title: "Are you sure?",
-        text: "remove "+prodName+" from cart",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-            $.ajax({
+    function productDelete(cartId,proId,prodName,userId){
+      console.log("hiii")
+Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+                $.ajax({
                 url:'/delete-cart-product?id='+proId,
                 data:{
                   user:userId,
-           
+
                    cart:cartId
                },
                method:'post',
@@ -225,13 +251,14 @@
            
                }
            })
-          swal(prodName+" has removed from cart", {
-            icon: "success",
-          });
-        } else {
-          swal("deletion aborted");
-        }
-      });
+    Swal.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  }
+})
+
 
  
 }

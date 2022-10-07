@@ -74,12 +74,12 @@ module.exports={
                 })
             })
         
+            }else{
+                resolve("invalid referal")
             }
             console.log(isref);
             if (isThere) {
                 resolve(false)
-            }else if(!isref){
-                resolve("invalid referal")
             } 
             else {
                 // let wallet = 0
@@ -466,14 +466,16 @@ module.exports={
     
 
 
-      deleteCartProduct: (details) => {
+      deleteCartProduct: (product,details) => {
         
+        console.log(details);
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CART_COLLECTION)
             .updateOne({_id:objectId(details.cart)},
             {
-                $pull:{products:{item:objectId(details.product)}}
+                $pull:{products:{item:objectId(product)}}
             }).then((response)=>{
+                console.log("res",response);
                 resolve({removeProduct:true})
             })
         });
@@ -563,9 +565,13 @@ module.exports={
                     
                 }
             }
+            // cart=db.get().collection(collection.CART_COLLECTION).find({user:objectId(order.userId)})
+            // console.log("cart: ",cart);
             // db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:orderObj.products},{$inc:{stock:products.quantity}})
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
                 // db.get().collection(collection.PRODUCT_COLLECTION)
+                
+
                 db.get().collection(collection.CART_COLLECTION).deleteOne({user:objectId(order.userId)})
                 console.log("oder id:",response.insertedId);
                 resolve(response.insertedId)
@@ -635,6 +641,14 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let orders= await db.get().collection(collection.ORDER_COLLECTION)
               .find({userId:objectId(userId)}).sort({"date":-1}).toArray()
+           
+            resolve(orders)
+        })
+    }, getvViewOrders:(userId,orderid)=>{
+        console.log("-------------------------",orderid);
+        return new Promise(async(resolve,reject)=>{
+            let orders= await db.get().collection(collection.ORDER_COLLECTION)
+              .findOne({userId:objectId(userId),_id:objectId(orderid)})
            
             resolve(orders)
         })
@@ -1126,7 +1140,7 @@ buyWallet: function (orderId) {
                                 { _id: objectId(orderId) },
                                 {
                                   $set: {
-                                    status: "Placed",
+                                    status: "placed",
                                   },
                                 }
                               );
