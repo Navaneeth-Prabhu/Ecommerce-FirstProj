@@ -124,8 +124,8 @@ module.exports ={
                 
                 await db.get().collection(collection.PRODUCT_COLLECTION).find({SubCategory: catId}).toArray().then((res)=>{
                     res.forEach(data=>{
-                                 if(today> offFrom){
-                                      if (offTill > today) {
+                                 if(today >= offFrom){
+                                      if (offTill >= today) {
                                  let price = Number(data.price)
                                  offerPrice.push({offerPrice:parseInt(price-(price*(off/100))),proId:data._id})
                                       }

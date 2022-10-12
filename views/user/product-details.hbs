@@ -100,7 +100,7 @@
             </div>
           </div>
           <!-- DETAILS TABS-->
-          <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+          {{!-- <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
             <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
             <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
           </ul>
@@ -108,7 +108,7 @@
             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
               <div class="p-4 p-lg-5 bg-white">
                 <h6 class="text-uppercase">Product description </h6>
-                {{!-- <p class="text-muted text-sm mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> --}}
+                <p class="text-muted text-sm mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
               </div>
             </div>
             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
@@ -127,7 +127,7 @@
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
                         </ul>
-                        {{!-- <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> --}}
+                        <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                       </div>
                     </div>
                     <div class="d-flex">
@@ -142,82 +142,93 @@
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
                         </ul>
-                        {{!-- <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> --}}
+                        <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
           <!-- RELATED PRODUCTS-->
-          {{!-- <h2 class="h5 text-uppercase mb-4">Related products</h2>
+          <h2 class="h5 text-uppercase mb-4">Related products</h2>
           <div class="row">
             <!-- PRODUCT-->
-            <div class="col-lg-3 col-sm-6">
-              <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-1.jpg" alt="..."></a>
-                  <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" type="button"  onclick="addToCart('{{product._id}}')">Add to Cart</button></li>
-                      <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
-                    </ul>
+                  {{#each related}}
+                  <div class="col-lg-3 col-sm-6">
+                    <div class="product text-center">
+                      <div class="mb-3 position-relative">
+                        <div class="badge text-white"> </div><a class="d-block" href="/productDetails?id={{this._id}}">
+                          <img src="/product-images/{{this._id}}1.jpg" alt="..." style="height:20rem;widht:20rem"></a>
+
+
+                        {{#if ../user}}<div class="like-btns">
+                          <button onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
+                              id="like{{this._id}}" class="icon-like" src="/images/heart.png" alt=""><img
+                              id="liked{{this._id}}" class="icon-liked" src="/images/liked.png" alt=""></button>{{#each
+                          ../wishlists }}{{#iff this ../this._id}}
+                          {{#if status}}
+
+                          <button id="likebtn{{../this.id}}"
+                            onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                            class="liked float-right liked{{../../this._id}}"><img class="iconliked "
+                              src="/images/liked.png" alt=""></button>
+                          {{/if}}
+                          {{/iff}}{{/each}}
+                        </div>{{/if}}
+
+
+                        <div class="product-overlay">
+                          <ul class="mb-0 list-inline">
+                            <li class="list-inline-item m-0 p-0">
+
+
+
+                            </li>
+
+                            <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
+                                onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
+
+
+                            {{#if ../user}}
+                            <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
+                                href="/productDetails?id={{this._id}}" data-bs-toggle="modal"><i
+                                  class="fas fa-expand"></i></a></li>
+                            {{/if}}
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="my-2" style="">
+
+                        <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
+                            href="/productDetails?id={{this._id}}"
+                            style="color: gray; font-size:x-small">{{this.product_title}}</a>
+                        </h6>
+                        <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
+                            href="/productDetails?id={{this._id}}"
+                            style="font-size: 14px;">{{this.product_description}}</a>
+                        </h6>
+                      </div>
+                      {{#if this.offerPrice}}
+                      <div class="d-flex justify-content-start ml-5">
+
+                        <p class="small"><strong>₹{{this.offerPrice}}</p></strong>
+
+                        <p class="small text-muted ml-3"><span class="font-weight-bold">₹</span><del
+                            style="color: rgb(170, 170, 170);">{{this.price}}</del>
+                        </p>
+                      </div>
+                      {{else}}
+                      <p class="small d-flex justify-content-start ml-5"><span class="font-weight-bold">₹</span>
+                        <strong>{{this.price}}</strong>
+                      </p>
+                      {{/if}}
+
+                    </div>
                   </div>
-                </div>
-                <h6> <a class="reset-anchor" href="detail.html">Kui Ye Chen’s AirPods</a></h6>
-                <p class="small text-muted">$250</p>
-              </div>
-            </div>
-            <!-- PRODUCT-->
-            <div class="col-lg-3 col-sm-6">
-              <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-2.jpg" alt="..."></a>
-                  <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="#!">Add to cart</a></li>
-                      <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <h6> <a class="reset-anchor" href="detail.html">Air Jordan 12 gym red</a></h6>
-                <p class="small text-muted">$300</p>
-              </div>
-            </div>
-            <!-- PRODUCT-->
-            <div class="col-lg-3 col-sm-6">
-              <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-3.jpg" alt="..."></a>
-                  <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="#!">Add to cart</a></li>
-                      <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <h6> <a class="reset-anchor" href="detail.html">Cyan cotton t-shirt</a></h6>
-                <p class="small text-muted">$25</p>
-              </div>
-            </div>
-            <!-- PRODUCT-->
-            <div class="col-lg-3 col-sm-6">
-              <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-4.jpg" alt="..."></a>
-                  <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="#!">Add to cart</a></li>
-                      <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <h6> <a class="reset-anchor" href="detail.html">Timex Unisex Originals</a></h6>
-                <p class="small text-muted">$351</p>
-              </div>
-            </div>
-          </div> --}}
+                  {{/each}}
+          
+          </div>
         </div>
       </section>
 

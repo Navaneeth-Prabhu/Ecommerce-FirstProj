@@ -3,9 +3,6 @@
   * {
     font-family: 'Goldman', cursive;
   }
-
-
-
 </style>
 
 <section>
@@ -46,10 +43,6 @@
                   </div>
                   <div class="col-lg-6">
                     <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
-                      {{!-- <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i
-                            class="fas fa-th-large"></i></a></li>
-                      <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i
-                            class="fas fa-th"></i></a></li> --}}
                       <li class="list-inline-item">
                         <select class="selectpicker" data-customclass="form-control form-control-sm"
                           onchange="location = this.value">
@@ -72,7 +65,7 @@
                     </ul>
                   </div>
                 </div>
-                <div class="row">
+                {{!-- <div class="row">
                   <!-- PRODUCT-->
 
                   {{#each product}}
@@ -82,22 +75,24 @@
                         <div class="badge text-white"> </div><a class="d-block" href="/productDetails?id={{this._id}}">
                           <img src="/product-images/{{this._id}}1.jpg" alt="..." style="height:20rem;widht:20rem"></a>
 
+                        <div class="position-absolute top-0 start-100 translate-middle">
 
-                                                   {{#if ../user}}<div class="like-btns">
-                                 <button
-                                  onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
-                                    id="like{{this._id}}" class="icon-like" src="/images/heart.png"
-                                    alt=""><img id="liked{{this._id}}" class="icon-liked"
-                                    src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}
-                                    {{#if status}}
+                          {{#if ../user}}<div class="like-btns">
+                            <button onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
+                                id="like{{this._id}}" class="icon-like" src="/images/heart.png" alt=""><img
+                                id="liked{{this._id}}" class="icon-liked" src="/images/liked.png"
+                                alt=""></button>{{#each
+                            ../wishlist }}{{#iff this ../this._id}}
+                            {{#if status}}
 
-                                <button id="likebtn{{../this.id}}"
-                                  onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
-                                  class="liked float-right liked{{../../this._id}}"><img class="iconliked "
-                                    src="/images/liked.png" alt=""></button>
-                                {{/if}}
-                                {{/iff}}{{/each}}
-                              </div>{{/if}}
+                            <button id="likebtn{{../this.id}}"
+                              onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                              class="liked float-right liked{{../../this._id}}"><img class="iconliked "
+                                src="/images/liked.png" alt=""></button>
+                            {{/if}}
+                            {{/iff}}{{/each}}
+                          </div>{{/if}}
+                        </div>
 
 
                         <div class="product-overlay">
@@ -155,39 +150,149 @@
 
 
                   <!-- PAGINATION-->
-                  {{!-- <nav aria-label="Page navigation example">
+                  <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center justify-content-lg-end">
                       <li class="page-item mx-1"><a class="page-link" href="#!" aria-label="Previous"><span
                             aria-hidden="true">«</span></a></li>
-                      <li class="page-item mx-1 active"><a class="page-link" href="#!">1</a></li>
-                      <li class="page-item mx-1"><a class="page-link" href="#!">2</a></li>
-                      <li class="page-item mx-1"><a class="page-link" href="#!">3</a></li>
+                      <li class="page-item mx-1 active"><a class="page-link" href="?page={{1}}">1</a></li>
+                      <li class="page-item mx-1"><a class="page-link" href="?page={{2}}">2</a></li>
+                      <li class="page-item mx-1"><a class="page-link" href="?page={{3}}">3</a></li>
                       <li class="page-item ms-1"><a class="page-link" href="#!" aria-label="Next"><span
                             aria-hidden="true">»</span></a></li>
                     </ul>
-                  </nav> --}}
-  {{!-- <div class="pagination pagination-centered">
-  <ul>
-    {{#paginate pagination type="first"}}
-      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">First</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="previous"}}
-      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Prev</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="middle" limit="7"}}
-      <li {{#if active}}class="active"{{/if}}><a href="?p={{n}}">{{n}}</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="next"}}
-      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Next</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="last"}}
-      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Last</a></li>
-    {{/paginate}}
-  </ul>
-</div> --}}
+                  </nav>
+
+                </div> --}}
+                <div class="row d-flex justify-content-center">
+                  <!-- PRODUCT-->
+
+                  {{#each product}}
+                  <div class="col-lg-4 col-sm-6 my-4" style="width: 25rem;">
+                    <div class="card">
+                      {{!-- <div class="card-body"
+                        style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(233, 233, 233) 0px 0px 0px 1px inset;">
+                        --}}
+                        <div class="card-body"
+                          style=" box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(141, 141, 141, 0.15) 0px 0px 0px 1px;">
+                          <div class="product text-center">
+                            <div class="mb-3 position-relative">
+                              <div class="badge text-white"> </div><a class="d-block"
+                                href="/productDetails?id={{this._id}}">
+                                <img src="/product-images/{{this._id}}1.jpg" alt="..."
+                                  style="height:20rem;widht:20rem"></a>
+
+                              <div class="position-absolute top-0 start-100 translate-middle mt-2">
+
+                                {{#if ../user}}<div class="like-btns">
+                                  <button onclick="wishList('{{../user._id}}','{{this._id}}')"
+                                    class="like float-right  "><img id="like{{this._id}}" class="icon-like"
+                                      src="/images/heart.png" alt=""><img id="liked{{this._id}}" class="icon-liked"
+                                      src="/images/liked.png" alt=""></button>{{#each
+                                  ../wishlist }}{{#iff this ../this._id}}
+                                  {{#if status}}
+
+                                  <button id="likebtn{{../this.id}}"
+                                    onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                                    class="liked float-right liked{{../../this._id}}"><img class="iconliked "
+                                      src="/images/liked.png" alt=""></button>
+                                  {{/if}}
+                                  {{/iff}}{{/each}}
+                                </div>{{/if}}
+                              </div>
+
+
+
+                              <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                  <li class="list-inline-item m-0 p-0">
+
+
+
+                                  </li>
+
+                                  <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
+                                      onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
+
+
+                                  {{#if ../user}}
+                                  <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
+                                      href="/productDetails?id={{this._id}}" data-bs-toggle="modal"><i
+                                        class="fas fa-expand"></i></a></li>
+                                  {{/if}}
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="my-2" style="">
+
+                              <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
+                                  href="/productDetails?id={{this._id}}"
+                                  style="color: gray; font-size:x-small">{{this.product_title}}</a>
+                              </h6>
+                              <h6> <a class="reset-anchor d-flex justify-content-start ml-5"
+                                  href="/productDetails?id={{this._id}}"
+                                  style="font-size: 14px;">{{this.product_description}}</a>
+                              </h6>
+                            </div>
+                            {{#if this.offerPrice}}
+                            <div class="d-flex justify-content-start ml-5">
+
+                              <p class="small"><strong>₹{{this.offerPrice}}</p></strong>
+
+                              <p class="small text-muted ml-3"><span class="font-weight-bold">₹</span><del
+                                  style="color: rgb(170, 170, 170);">{{this.price}}</del>
+                              </p>
+                            </div>
+                            {{else}}
+                            <p class="small d-flex justify-content-start ml-5"><span class="font-weight-bold">₹</span>
+                              <strong>{{this.price}}</strong>
+                            </p>
+                            {{/if}}
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    {{/each}}
+
+
+
+
+
+                    <!-- PAGINATION-->
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination justify-content-center justify-content-lg-end">
+                        <li class="page-item mx-1"><a class="page-link" href="#!" aria-label="Previous"><span
+                              aria-hidden="true">«</span></a></li>
+                        <li class="page-item mx-1 active"><a class="page-link" href="?page=1">1</a></li>
+                        <li class="page-item mx-1"><a class="page-link" href="?page=2">2</a></li>
+                        <li class="page-item mx-1"><a class="page-link" href="?page=3">3</a></li>
+                        <li class="page-item ms-1"><a class="page-link" href="#!" aria-label="Next"><span
+                              aria-hidden="true">»</span></a></li>
+                      </ul>
+                    </nav>
+                    {{!-- <div class="pagination pagination-centered">
+                      <ul>
+                        {{#paginate pagination type="first"}}
+                        <li {{#if disabled}}class="disabled" {{/if}}><a href="?p={{n}}">First</a></li>
+                        {{/paginate}}
+                        {{#paginate pagination type="previous"}}
+                        <li {{#if disabled}}class="disabled" {{/if}}><a href="?p={{n}}">Prev</a></li>
+                        {{/paginate}}
+                        {{#paginate pagination type="middle" limit="7"}}
+                        <li {{#if active}}class="active" {{/if}}><a href="?p={{n}}">{{n}}</a></li>
+                        {{/paginate}}
+                        {{#paginate pagination type="next"}}
+                        <li {{#if disabled}}class="disabled" {{/if}}><a href="?p={{n}}">Next</a></li>
+                        {{/paginate}}
+                        {{#paginate pagination type="last"}}
+                        <li {{#if disabled}}class="disabled" {{/if}}><a href="?p={{n}}">Last</a></li>
+                        {{/paginate}}
+                      </ul>
+                    </div> --}}
+                  </div>
                 </div>
               </div>
-            </div>
         </section>
       </div>
 
@@ -284,7 +389,7 @@
         })();
         /////////////////end///////////////////
 
-       
+
       </script>
 
 

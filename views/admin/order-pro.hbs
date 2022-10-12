@@ -1,80 +1,69 @@
+<div class="page-holder">
 
-         <div class="page-holder">
+  <div class="container">
 
-         <div class="container">
-        <!-- HERO SECTION-->
-        <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-              <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">My Orders</h1>
-              </div>
-              <div class="col-lg-6 text-lg-end">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
-                    {{!-- <li class="breadcrumb-item"><a class="text-dark" href="index.htmlr">Home</a></li> --}}
-                    <li class="breadcrumb-item active" aria-current="page">Myorders</li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="py-5">
-          {{!-- <h2 class="h5 text-uppercase mb-4">Shopping cart</h2> --}}
-          <div class="row">
-            <div class="col-lg-12 mb-4 mb-lg-0">
-              <!-- CART TABLE-->
-              <div class="table-responsive mb-4">
-                <table class="table text-nowrap">
-                  <thead class="bg-light">
-                    <tr>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Offer Price</strong></th>
-                    </tr>
-                  </thead>
-                  <tbody class="border-0" style="font-size: large;">
+    <section class="py-5">
+      {{!-- <h2 class="h5 text-uppercase mb-4">Shopping cart</h2> --}}
+      <div class="row">
+        <div class="col-lg-12 mb-4 mb-lg-0">
+          <!-- CART TABLE-->
+          <div class="table-responsive mb-4">
+            <table class="table text-nowrap">
+              <thead class="bg-light">
+                <tr>
+                  <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Product</strong></th>
+                  <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Quantity</strong></th>
+                  <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Price</strong></th>
+                  <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">Offer Price</strong></th>
+                </tr>
+              </thead>
 
-                    {{#each products}}
-                    <tr>
-                     
-                      <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" ><img src="/product-images/{{this.product._id}}1.jpg" alt="..." width="80"/></a>
-                          {{!-- <div class="ms-3 m-5"><strong class="h7"> {{this.product.product_title}}</strong></div> --}}
-                          <div class="ms-3 m-5"><p>{{this.product.product_title}}</p><strong class="h7"> {{this.product.product_description}}</strong></div>
+              <div class="card">
+                <tbody class="border-0" style="font-size: large;">
+                  {{#each products}}
+                  <tr>
+
+                    <th class="ps-0 py-3 border-light" scope="row">
+                      <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link"><img
+                            src="/product-images/{{this.product._id}}1.jpg" alt="..." width="80" /></a>
+                        {{!-- <div class="ms-3 m-5"><strong class="h7"> {{this.product.product_title}}</strong></div>
+                        --}}
+                        <div class="ms-3 m-5">
+                          <p>{{this.product.product_title}}</p><strong class="h7">
+                            {{this.product.product_description}}</strong>
                         </div>
-                      </th>
+                      </div>
+                    </th>
                     <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{this.quantity}}</p>
-                      </td>
-                  
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">₹ {{this.product.price}}</p>
-                      </td>
-                      {{#if offerPrice}}
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
-                      </td>
-                      {{else}}
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">--</p>
-                      </td>
-                      {{/if}}
-                     
-                  
-                 
-                  
-               
-                      
-                    </tr>
-                   {{/each}}
-                  </tbody>
-                </table>
+                      <p class="mb-0 small">{{this.quantity}}</p>
+                    </td>
+
+                    <td class="p-3 align-middle border-light">
+                      <p class="mb-0 small">₹ {{this.product.price}}</p>
+                    </td>
+                    {{#if offerPrice}}
+                    <td class="p-3 align-middle border-light">
+                      <p class="mb-0 small">₹ {{this.product.offerPrice}}</p>
+                    </td>
+                    {{else}}
+                    <td class="p-3 align-middle border-light">
+                      <p class="mb-0 small">--</p>
+                    </td>
+                    {{/if}}
+
+
+
+
+
+
+                  </tr>
+                  {{/each}}
+                </tbody>
               </div>
 
-
+            </table>
           </div>
-        </section>
-         </div>
+
+        </div>
+    </section>
+  </div>

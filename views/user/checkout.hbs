@@ -28,7 +28,8 @@
               <form action="/checkout/?id={{user._id}}" method="post" id="checkout" name="checkout">
                 <div class="row gy-3">
                   <div class="col-lg-6">
-                    <input class="form-control form-control-lg" type="number" id="offerp" name="offerp" value="{{total}}" hidden>
+                    {{!-- <input class="form-control form-control-lg" type="number" id="totalPrice" name="totalPrice" value="{{total}}" > --}}
+                    {{!-- <input class="form-control form-control-lg" type="number" id="offerp" name="offerp" value="{{total}}" > --}}
                     <input class="form-control form-control-lg" type="text" id="couponId" name="couponId" hidden>
                     <label class="form-label text-sm text-uppercase" for="firstName">First name </label>
                     <input class="form-control form-control-lg" type="text" id="name" name="name" value="{{user.Name}}">
@@ -110,27 +111,6 @@
 
               </form>
             </div>
-            {{!-- <div class="payment">
-                            <p>Payment method</p>
-                            <label class="radio-inline" >
-                                <input type="radio" name="Payment-method" value="COD" onclick="toggle()" required>COD
-                            </label><br>
-                            <label class="radio-inline" >
-                                <input type="radio" name="Payment-method" value="paypal" onclick="toggle1()" required>Paypal
-                            </label><br>
-                            <label class="radio-inline mt-2">
-                                <input type="radio" name="Payment-method" value="Online-Payment" onclick="toggle()" required>Razorpay Payment
-                            </label><br><br>
-                            {{#if coupon}}
-                            <input type="text" name="coupon" value={{coupon.off}} style="display: none;">
-                            {{/if}}
-                            <button type="submit" class="float-rleft btn-primary clr" id="co">Checkout</button>
-                      
-                            <div id="paypal-button-container" style="margin-top: 1rem;" class="clr"></div>
-                        </div> --}}
-
-
-
 
             <!-- ORDER SUMMARY-->
             <div class="col-lg-4">
@@ -142,7 +122,8 @@
                     <li class="border-bottom my-2"></li>
                     {{!-- <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold"></strong><span class="text-muted small">$351</span></li> --}}
                     {{!-- <li class="border-bottom my-2"></li> --}}
-                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>{{total}}</span></li><br>
+                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span id="orginal">{{total}}</span></li><br>
+                    <li class="d-flex align-items-center justify-content-between d-none d-print-block"><strong class="text-uppercase small fw-bold">Total</strong><span id="off">{{total}}</span></li ><br>
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Offer</strong><span id="total">{{total}}</span></li>
                      
                     <li>
@@ -174,14 +155,7 @@
 
         </section>
       
-      <!-- JavaScript files-->
-      <!-- JavaScript files-->
-      {{!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="vendor/nouislider/nouislider.min.js"></script>
-      <script src="vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script> --}}
-      {{!-- <script src="javascript/front.js"></script> --}}
+      
       <script>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite - 
@@ -378,6 +352,7 @@ paypal
   function addcoupon() {
                console.log("in add coup")
                 let sum = document.getElementById('total').innerHTML
+                let orginal = document.getElementById('orginal').innerHTML
                 let coupId= document.getElementById("couponId")
                  let coupon = document.getElementById('couponvalue')
                 let couponname = document.getElementById('applycoup').value   
@@ -394,13 +369,13 @@ paypal
                         console.log(response);
                   
                         if (response.status==false) {
-                          console.log('kindi')
+                         
                             let error = document.getElementById('msg')
                             error.innerHTML = 'Enter valid Promocode'
                         } else {
                           
-                          document.getElementById('applycoup').readOnly=true
-                          document.getElementById('applyButton').style.display='none'
+                         // document.getElementById('applycoup').readOnly=true
+                      //    document.getElementById('applyButton').style.display='none'
                           document.getElementById('msg').style.display='none'
                             Swal.fire({
                                 position: 'top-end',
@@ -410,19 +385,20 @@ paypal
                                 timer: 1500
                             })
                             
-                            if( Number(sum)-(Number(sum)*(Number(response.coupon.off)/100)) > 20000)
+                            if( Number(orginal)-(Number(orginal)*(Number(response.coupon.off)/100)) > Number(response.coupon.CapAmount))
                             {
-                              document.getElementById('total').innerHTML =  Number(sum)-1000;
+                              document.getElementById('total').innerHTML =  Number(orginal)-Number(response.coupon.CapAmount);
                               let input= document.getElementById('offerp')
-                              input.value =  Number(sum)-1000;
+                              input.value =  Number(orginal)-1000;
                               coupId.value=response.coupon._id
+
                       
                       
 
                             }else{
-                              document.getElementById('total').innerHTML =  Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
+                              document.getElementById('total').innerHTML =  Number(orginal)-(Number(orginal)*(Number(response.coupon.off)/100));
                               let input= document.getElementById('offerp')
-                              input.value = Number(sum)-(Number(sum)*(Number(response.coupon.off)/100));
+                              input.value = Number(orginal)-(Number(orginal)*(Number(response.coupon.off)/100));
                               coupId.value=response.coupon._id
                      
 

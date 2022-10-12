@@ -1,300 +1,208 @@
-
-
 </fieldset>
 </form>
+  {{!-- <div class="col-md-12 m-auto"> --}}
+    <div class="container mt-5 pl-5">
+      <h2 class="text-center">ADD Product Data</h2>
 <div class="row">
-    <div class="col-md-6 m-auto">
-        <div class="container mt-5 pl-5">
-            <h2 class="text-center">ADD Product Data</h2>
-                <form action="/admin/add-product/" method="post" enctype="multipart/form-data" >
-                   <div class="form-group">
-                    <label class="col-md-4 control-label" for="product_weight">TITLE</label>  
-                    <div class="col-md">
-                    <input id="product_title" name="product_title" placeholder="TITLE" class="form-control input-md" required="" type="text">
-                        
-                    </div>
-                    </div>
+      <form action="/admin/add-product/" method="post" enctype="multipart/form-data">
 
-                    <!-- Textarea -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
-                    <div class="col-md">                     
-                        <textarea class="form-control" id="product_description" name="product_description"></textarea>
-                    </div>
-                    </div>
+   
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="product_weight">TITLE</label>
+          <div class="col-md">
+            <input id="product_title" name="product_title" placeholder="TITLE" class="form-control input-md" required=""
+              type="text">
 
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="stock_alert">STOCK</label>  
-                    <div class="col-md">
-                    <input id="stock" name="stock" placeholder="STOCK" class="form-control input-md" required="" type="number">
-                        
-                    </div>
-                    </div>
-
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="stock_alert">PRICE</label>  
-                    <div class="col-md">
-                    <input id="price" name="price" placeholder="PRICE" class="form-control input-md" required="" type="number">
-                        
-                    </div>
-                    </div>
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="stock_alert">proOff</label>  
-                    <div class="col-md">
-                    <input id="proOff" name="proOff" placeholder="Offer" class="form-control input-md" required="" type="number">
-                        
-                    </div>
-                    </div>
-
-
-                    <!-- Category -->
-                    <div>
-                    <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>  
-                    <select name="Category" class="form-group form-select" aria-label="Default select example">
-                    <div class="col-md">
-                    <label for="catogery">Category</label><br />
-                   
-
-                   {{!-- {{#each category}}
-                    <option value="{{this.Category_name}}" name="Category">{{category.Category_name}}</option> --}}
-                    <option id="Men" value="Men" >MEN</option>
-                    <option id="Women" value="Women" >Women</option>
-                    </div>
-                    {{!-- {{/each}} --}}
-                    </select>
-                    </div>
-
-
-                    <!--Sub-Category -->
-                    <div>
-                    <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>  
-                    <select name="SubCategory" class="form-group form-select" aria-label="Default select example">
-                    <div class="col-md">
-                    <option selected>Select category</option>
-                    <label for="catogery">Category</label><br />
-                   {{#each category}}
-                    <option  >{{this.Category_name}}</option>
-                    {{/each}}
-                    </div>
-                    </select>
-                    </div>
-
-                        
-                    
-
-                
-
-                    <!-- Text input-->
-                    {{!-- <div class="form-group">
-                    <label class="col-md-4 control-label" for="author">AUTHOR</label>  
-                    <div class="col-md-4">
-                    <input id="author" name="author" placeholder="AUTHOR" class="form-control input-md" required="" type="text">
-                        
-                    </div>
-                    </div> --}}
-
-    
-                    <!-- File Button --> 
-                    {{!-- <div class="form-group">
-                    <label class="col-md-4 control-label" for="filebutton">main_image</label>
-                    <div class="col-md-4">
-                        <input id="filebutton" name="filebutton" class="input-file" type="file">
-                    </div>
-                    </div> --}}
-                    <!-- File Button --> 
-                    <!-- File Button --> 
-
-                    
-                    {{!-- <div class="form-group">
-                 <img src="{{product._id}}" alt="" style="height: 100px;" id="imgView">
-                    <label class="col-md-4 control-label" for="filebutton" >images</label>
-                    <div class="col-md-4">
-                        <input id="Image" name="Image" class="input-file" type="file" onchange="viewImage(event)">
-                    </div>
-                    </div> --}}
-          <label for="">image</label><br />
-           <div id="crop">
-<img
- 
-  id="imgView1"
-  alt=""
-  style="height: 100px; width: 120px"
-
-  class="clr"
-/>
-
-<div class="vald-info" id="info"></div>
-<h5 class="error_form text-danger" id="image1_error_message"></h5>
-<div style="display: flex">
-  <div
-    id="image-box1"
-    class="image-container clr"
-    style="height: 300px; width: 20%"
-  ></div>
-  <button
-    type="button"
-    class="betaButton"
-    id="crop-btn1"
-    style="
-      margin-top: 10px;
-      display: none;
-      width: 50%;
-      margin: 20rem 0rem 0rem 0rem;
-    "
-  >
-    Crop
-  </button>
-</div>
-</div>
-
-
-          <input type="file" name="image1" class="form-control" onchange="changeImg(event)" id="image1" required/><br />
-          <label for="">image 2</label><br />
-           <div id="crop">
-<img
- 
-  id="imgView2"
-  alt=""
-  style="height: 100px; width: 120px"
-
- class="clr"
-/>
-
-<div class="vald-info" id="info"></div>
-<h5 class="error_form text-danger" id="image2_error_message"></h5>
-<div style="display: flex">
-  <div
-    id="image-box2"
-    class="image-container clr"
-    style="height: 300px; width: 20%"
-  ></div>
-  <button
-    type="button"
-    class="betaButton"
-    id="crop-btn2"
-    style="
-      margin-top: 10px;
-      display: none;
-      width: 50%;
-      margin: 20rem 0rem 0rem 0rem;
-    "
-  >
-    Crop
-  </button>
-</div>
-</div>
-
-
-          <input type="file" name="image2" class="form-control" onchange="changeImg2(event)" id="image2" required/><br />
-           <label for="">image 3</label><br />
-           <div id="crop">
-<img
- 
-  id="imgView3"
-  alt=""
-  style="height: 100px; width: 120px"
-
- class="clr"
-/>
-
-<div class="vald-info" id="info"></div>
-<h5 class="error_form text-danger" id="image3_error_message"></h5>
-<div style="display: flex">
-  <div
-    id="image-box3"
-    class="image-container clr"
-    style="height: 300px; width: 20%"
-  ></div>
-  <button
-    type="button"
-    class="betaButton"
-    id="crop-btn3"
-    style="
-      margin-top: 10px;
-      display: none;
-      width: 50%;
-      margin: 20rem 0rem 0rem 0rem;
-    "
-  >
-    Crop
-  </button>
-</div>
-</div>
-
-
-          <input type="file" name="image3" class="form-control" onchange="changeImg3(event)" id="image3" required/><br />
-          <label for="">Banner</label><br />
-           <div id="crop">
-<img
- 
-  id="imgView4"
-  alt=""
-  style="height: 100px; width: 120px"
-
- class="clr"
-/>
-
-<div class="vald-info" id="info"></div>
-<h5 class="error_form text-danger" id="image4_error_message"></h5>
-<div style="display: flex">
-  <div
-    id="image-box4"
-    class="image-container clr"
-    style="height: 300px; width: 20%"
-  ></div>
-  <button
-    type="button"
-    class="betaButton"
-    id="crop-btn4"
-    style="
-      margin-top: 10px;
-      display: none;
-      width: 50%;
-      margin: 20rem 0rem 0rem 0rem;
-    "
-  >
-    Crop
-  </button>
-</div>
-</div>
-
-
-          <input type="file" name="image4" class="form-control" onchange="changeImg4(event)" id="image4" required/><br />
-        {{!-- <!-- Button -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
-                    <div class="col-md-4">
-                        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
-                    </div>
-                    </div>
-                    <center> --}}
-                            <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
-                            <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none" href="/admin">Cancel</a></button>
-                    </center>
-                    
-                </form>
+          </div>
         </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
+          <div class="col-md">
+            <textarea class="form-control" id="product_description" name="product_description"></textarea>
+          </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="stock_alert">STOCK</label>
+          <div class="col-md">
+            <input id="stock" name="stock" placeholder="STOCK" class="form-control input-md" required="" type="number">
+
+          </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="stock_alert">PRICE</label>
+          <div class="col-md">
+            <input id="price" name="price" placeholder="PRICE" class="form-control input-md" required="" type="number">
+
+          </div>
+        </div>
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="stock_alert">proOff</label>
+          <div class="col-md">
+            <input id="proOff" name="proOff" placeholder="Offer" class="form-control input-md" required=""
+              type="number">
+
+          </div>
+        </div>
+
+
+        <!-- Category -->
+        <div>
+          <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>
+          <select name="Category" class="form-group form-select" aria-label="Default select example">
+            <div class="col-md">
+              <label for="catogery">Category</label><br />
+
+
+              {{!-- {{#each category}}
+              <option value="{{this.Category_name}}" name="Category">{{category.Category_name}}</option> --}}
+              <option id="Men" value="Men">MEN</option>
+              <option id="Women" value="Women">Women</option>
+            </div>
+            {{!-- {{/each}} --}}
+          </select>
+        </div>
+
+
+        <!--Sub-Category -->
+        <div>
+          <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>
+          <select name="SubCategory" class="form-group form-select" aria-label="Default select example">
+            <div class="col-md">
+              <option selected>Select category</option>
+              <label for="catogery">Category</label><br />
+              {{#each category}}
+              <option>{{this.Category_name}}</option>
+              {{/each}}
+            </div>
+          </select>
+        </div>
+
+
+        <label for="">image</label><br />
+        <div id="crop">
+          <img id="imgView1" alt="" style="height: 100px; width: 120px" class="clr" />
+
+          <div class="vald-info" id="info"></div>
+          <h5 class="error_form text-danger" id="image1_error_message"></h5>
+          <div style="display: flex">
+            <div id="image-box1" class="image-container clr" style="height: 300px; width: 20%"></div>
+            <button type="button" class="betaButton" id="crop-btn1" style="
+      margin-top: 10px;
+      display: none;
+      width: 50%;
+      margin: 20rem 0rem 0rem 0rem;
+    ">
+              Crop
+            </button>
+          </div>
+        </div>
+
+
+        <input type="file" name="image1" class="form-control" onchange="changeImg(event)" id="image1" required /><br />
+        <label for="">image 2</label><br />
+        <div id="crop">
+          <img id="imgView2" alt="" style="height: 100px; width: 120px" class="clr" />
+
+          <div class="vald-info" id="info"></div>
+          <h5 class="error_form text-danger" id="image2_error_message"></h5>
+          <div style="display: flex">
+            <div id="image-box2" class="image-container clr" style="height: 300px; width: 20%"></div>
+            <button type="button" class="betaButton" id="crop-btn2" style="
+      margin-top: 10px;
+      display: none;
+      width: 50%;
+      margin: 20rem 0rem 0rem 0rem;
+    ">
+              Crop
+            </button>
+          </div>
+        </div>
+
+
+        <input type="file" name="image2" class="form-control" onchange="changeImg2(event)" id="image2" required /><br />
+        <label for="">image 3</label><br />
+        <div id="crop">
+          <img id="imgView3" alt="" style="height: 100px; width: 120px" class="clr" />
+
+          <div class="vald-info" id="info"></div>
+          <h5 class="error_form text-danger" id="image3_error_message"></h5>
+          <div style="display: flex">
+            <div id="image-box3" class="image-container clr" style="height: 300px; width: 20%"></div>
+            <button type="button" class="betaButton" id="crop-btn3" style="
+      margin-top: 10px;
+      display: none;
+      width: 50%;
+      margin: 20rem 0rem 0rem 0rem;
+    ">
+              Crop
+            </button>
+          </div>
+        </div>
+
+
+        <input type="file" name="image3" class="form-control" onchange="changeImg3(event)" id="image3" required /><br />
+        <label for="">Banner</label><br />
+        <div id="crop">
+          <img id="imgView4" alt="" style="height: 100px; width: 120px" class="clr" />
+
+          <div class="vald-info" id="info"></div>
+          <h5 class="error_form text-danger" id="image4_error_message"></h5>
+          <div style="display: flex">
+            <div id="image-box4" class="image-container clr" style="height: 300px; width: 20%"></div>
+            <button type="button" class="betaButton" id="crop-btn4" style="
+      margin-top: 10px;
+      display: none;
+      width: 50%;
+      margin: 20rem 0rem 0rem 0rem;
+    ">
+              Crop
+            </button>
+          </div>
+        </div>
+
+
+        <input type="file" name="image4" class="form-control" onchange="changeImg4(event)" id="image4" required /><br />
+        {{!--
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
+          <div class="col-md-4">
+            <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+          </div>
+        </div>
+        <center> --}}
+          <button type="submit" class="btn btn-primary mx-5">Save Changes</button>
+          <button class="btn btn-primary mx-5"><a style="color: white;text-decoration:none"
+              href="/admin">Cancel</a></button>
+        </center>
+
+      </form>
     </div>
+  {{!-- </div> --}}
 </div>
 
 
 
 
 
- <script>
-        function changeImg(event){
-       
-            document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
-        }
-         const imagebox1 = document.getElementById("image-box1");
+<script>
+  function changeImg(event) {
+
+    document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+  }
+  const imagebox1 = document.getElementById("image-box1");
   const crop_btn1 = document.getElementById("crop-btn1");
   const input1 = document.getElementById("image1");
- 
+
   // When user uploads the image this event will get triggered
   input1.addEventListener("change", () => {
     // Getting image file object from the input variable
@@ -345,19 +253,19 @@
         document.getElementById("image-box1").style.display = "none";
         // Hide the crop button
         document.getElementById("crop-btn1").style.display = "none";
-          
+
       });
     });
   });
-///////////////////////////////////////////////
-        function changeImg2(event){
-            
-            document.getElementById('imgView2').src = URL.createObjectURL(event.target.files[0])
-        }
-const imagebox2 = document.getElementById("image-box2");
+  ///////////////////////////////////////////////
+  function changeImg2(event) {
+
+    document.getElementById('imgView2').src = URL.createObjectURL(event.target.files[0])
+  }
+  const imagebox2 = document.getElementById("image-box2");
   const crop_btn2 = document.getElementById("crop-btn2");
   const input2 = document.getElementById("image2");
-  
+
   // When user uploads the image this event will get triggered
   input2.addEventListener("change", () => {
     // Getting image file object from the input variable
@@ -408,16 +316,16 @@ const imagebox2 = document.getElementById("image-box2");
         document.getElementById("image-box2").style.display = "none";
         // Hide the crop button
         document.getElementById("crop-btn2").style.display = "none";
-          
+
       });
     });
   });
-/////////////////////////////////////
-   function changeImg3(event){
-            
-            document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[0])
-        }
-const imagebox3 = document.getElementById("image-box3");
+  /////////////////////////////////////
+  function changeImg3(event) {
+
+    document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[0])
+  }
+  const imagebox3 = document.getElementById("image-box3");
   const crop_btn3 = document.getElementById("crop-btn3");
   const input3 = document.getElementById("image3");
   // When user uploads the image this event will get triggered
@@ -470,15 +378,15 @@ const imagebox3 = document.getElementById("image-box3");
         document.getElementById("image-box3").style.display = "none";
         // Hide the crop button
         document.getElementById("crop-btn3").style.display = "none";
-          
+
       });
     });
   });
-  function changeImg4(event){
-            
-            document.getElementById('imgView4').src = URL.createObjectURL(event.target.files[0])
-        }
-const imagebox4 = document.getElementById("image-box4");
+  function changeImg4(event) {
+
+    document.getElementById('imgView4').src = URL.createObjectURL(event.target.files[0])
+  }
+  const imagebox4 = document.getElementById("image-box4");
   const crop_btn4 = document.getElementById("crop-btn4");
   const input4 = document.getElementById("image4");
   // When user uploads the image this event will get triggered
@@ -531,8 +439,8 @@ const imagebox4 = document.getElementById("image-box4");
         document.getElementById("image-box4").style.display = "none";
         // Hide the crop button
         document.getElementById("crop-btn4").style.display = "none";
-          
+
       });
     });
   });
-       </script>
+</script>

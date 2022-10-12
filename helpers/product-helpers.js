@@ -269,4 +269,18 @@ module.exports={
         })
     },
 
+    pageination:(page,limit)=>{
+        console.log(page);
+        console.log(limit);
+        return new Promise(async(resolve,reject)=>{
+
+            let proPage = await db.get().collection(collection.PRODUCT_COLLECTION).find().skip((page - 1) * limit)
+            .limit(limit * 1)
+            .sort({ _id: -1 })
+            .toArray()
+
+            resolve(proPage)
+        })
+    }
+
 }

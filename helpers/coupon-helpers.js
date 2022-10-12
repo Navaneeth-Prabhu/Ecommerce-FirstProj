@@ -7,6 +7,7 @@ const { response } = require('express');
 const collections = require('../config/collections');
 
 
+
 module.exports = {
 
 
@@ -18,13 +19,14 @@ module.exports = {
           .collection(collections.COUPON_COLLECTION)
           .find()
           .toArray();
-        console.log((coupons));
+        // console.log((coupons));
         resolve(coupons);
 
     });
   },
   addCoupon: (data) => {
     return new Promise(async (resolve, reject) => {
+     
       try {
        await db.get().collection(collections.COUPON_COLLECTION).insertOne(data);
       } catch (error) {
@@ -135,6 +137,41 @@ module.exports = {
         })
       }
     })
-  }
+  },
+
+  getCouponsForUser:(userId)=>{
+    return new Promise(async (resolve, reject) => {
+
+      
+      let orderCount =await db.get().collection(collection.ORDER_COLLECTION).countDocuments({userId:objectId(userId)})
+
+
+      console.log(orderCount);
+      // forloop
+     if (orderCount> 5){
+
+      let coupons= db.get().collection(collections.COUPON_COLLECTION).find({max_order:{$gt:5}}).toArray().then((response)=>{
+        console.log("coup",coupons);
+
+        resolve(coupons)
+       })
+     }
+
+    })
+
+  },
+
+  // getcouponsUser:(userId)=>{
+  //   return new Promise(async(resolve,reject)=>{
+      
+  //     db.get().collection(collections.COUPON_COLLECTION).find().toArray().then(async(coupon) => {
+  //       let orderCount =  db.get().collection(collection.ORDER_COLLECTION).countDocuments({userId:objectId(userId)})          
+  //       if(orderCount>coupon)
+
+  //     })
+  //   })
+  // }
+  
+
 
 };

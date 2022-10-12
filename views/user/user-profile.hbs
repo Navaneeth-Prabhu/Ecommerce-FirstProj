@@ -134,7 +134,8 @@ background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%)
 
       </div>
     </div>
-
+ </div>
+</div>
 
 
     <!-- Modal -->
@@ -150,7 +151,7 @@ background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%)
           </div>
           <div class="modal-body">
             <h2 class="text-center">Profile</h2>
-            <form action="/user-profile" method="POST">
+            <form action="/user-profile" method="POST" id="profile" name="profile">
 
 
               <div class="form-group">
@@ -207,196 +208,107 @@ background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%)
           </div>
 
           <div class="modal-body">
-          <form action="/changePass" method="POST">
+            <form action="/changePass" method="POST" id="changePass" name="changePass">
 
-            <div class="form-group">
-              <label for="Password" style="font-size:small">OldPassword</label>
-              <input type="password" name="password" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="" style="font-size:small">NewPassword</label>
-              <input type="password" name="newPassword" class="form-control"required>
-            </div>
-            <div class="form-group">
-              <label for="" style="font-size:small">ConfirmPassword</label>
-              <input type="password" name="confirmPassword" class="form-control" required>
-            </div>
-             <button type="submit" class="btn btn-primary">Save</button>
+              <div class="form-group">
+                <label for="Password" style="font-size:small">OldPassword</label>
+                <input type="password" name="password" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="" style="font-size:small">NewPassword</label>
+                <input type="password" name="newPassword" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="" style="font-size:small">ConfirmPassword</label>
+                <input type="password" name="confirmPassword" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
             </form>
-            {{!-- <div class="form-group row">
-              <label for="Password" style="font-size:small">Password</label>
-              <div class="col-9">
 
-                <input type="password" name="Password" id="" class="form-control" value="{{user.Password}}" readonly>
-              </div>
-              <div class="col-3">
-
-                <button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal"
-                  data-target="#exampleModalCenter">change</button>
-              </div>
-
-            </div> --}}
           </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Send message</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            {{!-- <button type="button" class="btn btn-primary">Send message</button> --}}
           </div> --
         </div>
       </div>
     </div>
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
 
 
- {{!-- <script>
-      function validateoldpassword() {
-        console.log('hihlihihhihihihihihhihhi')
-        let a = document.getElementById('oldpassword').value
-        let b = document.getElementById('oldpassError')
-        if (a.length < 8) {
-          b.innerHTML = 'Password must be greater than 8'
-          return false;
-        }
-        if (!a.match(/^[A-Za-z]*\s{0,1}?[A-Za-z]*\s{0,1}?[A-Za-z]*$/)) {
-          b.innerHTML = "Write Proper name";
-          return false;
-        }
+  <script>
+    $(document).ready(function () {
+      console.log("started");
+      jQuery.validator.addMethod(
+        "testUsername",
+        function (value, element) {
+          return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+        },
+        "Use only alphabets and undersore"
+      );
+      jQuery.validator.addMethod(
+        "testName",
+        function (value, element) {
+          return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
+        },
+        "Use only alphabets"
+      );
 
-        if (a.length == 0 || a == '') {
-          b.innerHTML = "Name cannot be empty";
-          return false;
-        }
-        b.innerHTML = ''
-        return true;
-      }
+      jQuery.validator.addMethod(
+        "minlength",
+        function (value, element, params) {
+          return this.optional(element) || value.trim().length >= params;
+        },
+        jQuery.validator.format("Please enter at least {0} characters.")
+      );
+      $("#changePass").validate({
+        rules: {
 
-      function validcategory() {
-        if (!validateoldpassword() ) {
-          let a = document.getElementById('msg')
-          a.innerHTML = 'Fill the required'
-        }else{
-          changepass()
-          return true;
-        }
-          
-        
-      }
-        function changepass(){
-        console.log("in change ")
-    
-             $.ajax({
-              url: "/changePass",
-              data: $("#changePass").serialize(),
-              method: "POST",
-              success: (response) => {
-                if (response.status) {
-                  alert('Password Changed')
-                } else {
-                  alert('Failed')
-                }
+          passwod: {
+            required: true,
+
+          },
+          newPassword: {
+            required: true,
+            minlength: 8,
+          },
+          confirmPassword: {
+            required: true,
+            minlength: 8,
+          },
+        },
+        submitHandler: function (form) {
+          // form.preventDefault();
+          console.log("recieved");
+          $.ajax({
+            url: "/changePass",
+            data: $("#changePass").serialize(),
+            method: "POST",
+            success: (response) => {
+              if (response.status) {
+                alert('Password Changed')
+              } else {
+                alert('Failed')
               }
+            }
             error: function (err) {
-                err = jQuery.parseJSON(err.responseText);
-                console.log(err.message);
-                $("#error").text(err.message);
-              },
-            });
-       
-      
-}
-
-
-    </script> --}}
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
-    <!-- <script src="/validation.js"></script> -->
-
-   
-    <script>
-      $(document).ready(function () {
-        console.log("started");
-        jQuery.validator.addMethod(
-          "testUsername",
-          function (value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
-          },
-          "Use only alphabets and undersore"
-        );
-        jQuery.validator.addMethod(
-          "testName",
-          function (value, element) {
-            return this.optional(element) || /^[a-zA-Z ]+$/.test(value);
-          },
-          "Use only alphabets"
-        );
-
-        jQuery.validator.addMethod(
-          "minlength",
-          function (value, element, params) {
-            return this.optional(element) || value.trim().length >= params;
-          },
-          jQuery.validator.format("Please enter at least {0} characters.")
-        );
-        $("#changePass").validate({
-          rules: {
-            Name: {
-              required: true,
-              minlength: 4,
-              maxlength: 50,
-              testName: true,
+              err = jQuery.parseJSON(err.responseText);
+              console.log(err.message);
+              $("#error").text(err.message);
             },
-            number: {
-              required: true,
-              minlength: 10,
-              maxlength: 10,
-              number: true,
-            },
-            Email: {
-              required: true,
-              email: true,
-            },
-            passwod: {
-              required: true,
-              minlength: 8,
-            },
-            newPassword: {
-              required: true,
-              minlength: 8,
-            },
-            confirmPassword: {
-              required: true,
-              minlength: 8,
-            },
-          },
-          submitHandler: function (form) {
-            // form.preventDefault();
-            console.log("recieved");
-            $.ajax({
-              url: "/changePass",
-              data: $("#changePass").serialize(),
-              method: "POST",
-              success: (response) => {
-                if (response.status) {
-                  alert('Password Changed')
-                } else {
-                  alert('Failed')
-                }
-              }
-            error: function (err) {
-                err = jQuery.parseJSON(err.responseText);
-                console.log(err.message);
-                $("#error").text(err.message);
-              },
-            });
-          },
-        });
+          });
+        },
       });
-    </script>
-  </div> 
+    });
+  </script>
 
 
+
+  {{!--
   <script>
     // validation example for Login form
     $("#btnLogin").click(function (event) {
@@ -415,4 +327,4 @@ background: linear-gradient(90deg, rgba(83,105,118,1) 0%, rgba(50,57,98,1) 100%)
     });
 
 
-  </script>
+  </script> --}}

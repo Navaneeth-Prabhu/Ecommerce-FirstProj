@@ -70,8 +70,21 @@ const exhbs= hbs.create({
        
         return parseInt(a-(a*(b/100)))
   
-    }
-  }
+    },
+    stringCompaire:function (left,opertor,right){
+     if(opertor == '<'){
+      console.log("----------",left,opertor,right);
+       if(left < right)
+       {
+         return true
+       }else{
+         return false
+       }
+     }
+     
+   }
+  },
+
 
 })
 

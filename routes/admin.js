@@ -32,10 +32,7 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
     let u_no =0
     let order =0
     let report = await userHelper.getAllDeliveredOrder()
-    // console.log("jjjjjj")
-    // await userHelper.getAllUserOrders().then((orders)=>{
-      
-    // })
+
     order_count= await db.get().collection(collection.ORDER_COLLECTION).find().count()
     console.log("order:",order);
     
@@ -83,15 +80,10 @@ router.get('/dashboard',auth.adminCookieJWTAuth, async function (req, res, next)
         await userHelper.getAllUsers().then((users)=>{users.forEach(data => {
      
           u_no++
-         
-     
+             
           });
-        })
-          
-         
-
-            
-            res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no,report,order_count});
+        })       
+         res.render('admin/dashboard',{admin:true,total,users,orders,no,u_no,report,order_count});
           
     });
  
@@ -199,32 +191,6 @@ router.get('/delete-user/',auth.adminCookieJWTAuth, function(req, res) {
     res.redirect('/admin')
   })
 });
-
-// router.get('/edit-user/',async function(req, res) {
-
-//   if(req.session.adminLoggedIn){
-//   let userId=req.query.id;
-//   let user=await userHelpers.getUserDetails(userId)
-//   // console.log(user);
-//   res.render('admin/edit-user', {admin:true, user, adminLoggedIn:req.session.adminLoggedIn})
-//   req.session.edit=true
-//   }else{
-//     res.redirect('/admin')
-//   }
-// });
-
-// router.post('/edit-user', function(req, res){
-//   if(req.session.admin){
-//     console.log(req.body);
-//   let userId=req.params.id
-  // userHelpers.updateUser(userId, req.body,req.session).then(() => {
-//     res.redirect('/admin/view-users')
-//     req.session.edit=null
-//   })
-// }else{
-//   res.redirect('/admin')
-// }
-// })
 
 router.get('/block-user',auth.adminCookieJWTAuth, (req,res) => {
  
@@ -375,14 +341,6 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
   }); 
   
-  // router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
-  //   // console.log(req.body);
-  //   // res.redirect('/admin');
-    
-  //   categoryHelper.addCategory(req.body,(result) => {
-  //     res.render('admin/add-category',{admin:true, adminLoggedIn:req.session.adminLoggedIn})
-  //   })
-  // });
 
   router.post('/add-category',auth.adminCookieJWTAuth, function(req,res) {
     try {
@@ -639,7 +597,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
           console.log("same");
         }else{
 
-          // let off = Number(req.body.off)
+          req.body.max_order = Number(req.body.max_order)
           couponHelper.addCoupon(req.body).catch(()=>{res.redirect('/error')})
             res.redirect("/admin/coupons");
     

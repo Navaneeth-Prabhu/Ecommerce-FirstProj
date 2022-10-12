@@ -148,7 +148,7 @@ module.exports ={
                     }
                  }
 
-            ]).toArray()
+            ]).sort({"date":-1}).toArray()
             console.log("walletTrn",walletTrans);
             resolve(walletTrans)
         })

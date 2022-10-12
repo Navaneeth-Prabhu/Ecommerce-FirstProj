@@ -60,7 +60,7 @@
         <section class="py-5">
         
           <div class="row">
-            <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="col-lg-12 mb-4 mb-lg-0">
               <!-- CART TABLE-->
               <div class="table-responsive mb-4">
                 <table class="table text-nowrap">
@@ -108,7 +108,7 @@
                      
 
                       <td class="p-3 align-middle border-light">
-                        <a class="btn btn-danger" href="/remove-wishlist?id={{this.product._id}}"> Delete</a>
+                        <a class="btn" href="/remove-wishlist?id={{this.product._id}}"> <i class="fas fa-trash-alt small text-muted"></i></a>
                         {{!-- <button onclick="removeWish('{{this.product._id}}')">delete</button> --}}
                       </td>
                     </tr>
@@ -124,27 +124,7 @@
                 </div>
               </div>
             </div>
-            <!-- ORDER TOTAL-->
-            {{!-- <div class="col-lg-4">
-              <div class="card border-0 rounded-0 p-lg-4 bg-light">
-                <div class="card-body">
-                  <h5 class="text-uppercase mb-4">Cart total</h5>
-                  <ul class="list-unstyled mb-0">
-                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li>
-                    <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span id="total">Rs.{{totalAmount}}</span></li>
-                    <li>
-                      <form action="#">
-                        <div class="input-group mb-0">
-                          <input class="form-control" type="text" placeholder="Enter your coupon">
-                          <button class="btn btn-dark btn-sm w-100" type="submit"> <i class="fas fa-gift me-2"></i>Apply coupon</button>
-                        </div>
-                      </form>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div> --}}
+
           </div>
         </section>
       </div>

@@ -1,249 +1,275 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Average&family=Reem+Kufi+Fun:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Average&family=Reem+Kufi+Fun:wght@400;700&display=swap"
+  rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300&display=swap" rel="stylesheet">
 <style>
-
-*{
-  font-family: 'Reem Kufi Fun', sans-serif;
-}
-
+  * {
+    font-family: 'Reem Kufi Fun', sans-serif;
+  }
 </style>
-  {{!-- font-family: 'Average', serif;
+{{!-- font-family: 'Average', serif;
 font-family: 'Reem Kufi Fun', sans-serif; --}}
 
-      <!-- HERO SECTION-->
-      {{!-- {{#each banner}} --}}
-      <div class="container-fluid p-0">
-        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center image fluid" style="background: url(/banner-images/{{banner._id}}.jpg) ; height:42rem "> 
-        {{!-- <section class="hero pb-3 bg-cover bg-center d-flex align-items-center"> <img class="image-fluid"  src="/banner-images/wallpaperflare.com_wallpaper.jpg" alt="..." style="height:100%;width:100%"> --}}
-          <div class="container py-5">
-            <div class="row px-4 px-lg-5">
-              <div class="col-lg-6" style="color: white;">
-                <p class="text-muted small text-uppercase mb-2">New Inspiration 2022</p>
-                <h1 class="h2 text-uppercase mb-3" style="font-size: 62px; font-family: 'Reem Kufi Fun', sans-serif; font-weight:400">TIMELESS ELEGANCE</h1><a class="btn btn-dark" href="view-products">Browse collections</a>
-                {{!-- <h1 class="h2 text-uppercase mb-3" style="font-size: 62px;  font-family: 'Average', serif;">TIMELESS ELEGANCE</h1><a class="btn btn-dark" href="view-products">Browse collections</a> --}}
-              </div>
-            </div>
+<!-- HERO SECTION-->
+{{!-- {{#each banner}} --}}
+<div class="container-fluid p-0">
+  <section class="hero pb-3 bg-cover bg-center d-flex align-items-center image fluid"
+    style="background: url(/banner-images/{{banner._id}}.jpg) ; height:42rem ">
+    {{!-- <section class="hero pb-3 bg-cover bg-center d-flex align-items-center"> <img class="image-fluid"
+        src="/banner-images/wallpaperflare.com_wallpaper.jpg" alt="..." style="height:100%;width:100%"> --}}
+      <div class="container py-5">
+        <div class="row px-4 px-lg-5">
+          <div class="col-lg-6" style="color: white;">
+            <p class="text-muted small text-uppercase mb-2">New Inspiration 2022</p>
+            <h1 class="h2 text-uppercase mb-3"
+              style="font-size: 62px; font-family: 'Reem Kufi Fun', sans-serif; font-weight:400">TIMELESS ELEGANCE</h1>
+            <a class="btn btn-dark" href="view-products">Browse collections</a>
+            {{!-- <h1 class="h2 text-uppercase mb-3" style="font-size: 62px;  font-family: 'Average', serif;">TIMELESS
+              ELEGANCE</h1><a class="btn btn-dark" href="view-products">Browse collections</a> --}}
           </div>
-        </section>
-        {{!-- {{/each}} --}}
-       
-
-        <!-- TRENDING PRODUCTS-->
-        <div class="container">
-
-        <section class="py-5">
-          <header>
-            <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
-            <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
-          </header>
-                <div class="row">
-                  <!-- PRODUCT-->
-                  {{#each trendingPro}}
-                  <div class="col-lg-4 col-sm-6 p-0">
-                    <div class="product text-center">
-                      <div class="mb-3 position-relative">
-                        <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img  src="/product-images/{{this._id}}1.jpg" alt="..." style="height:25rem;widht:25rem"></a>
-                                {{#if ../user}}<div class="like-btns">
-                                 <button
-                                  onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
-                                    id="like{{this._id}}" class="icon-like" src="/images/heart.png"
-                                    alt=""><img id="liked{{this._id}}" class="icon-liked"
-                                    src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}
-                                    {{#if status}}
-
-                                <button id="likebtn{{../this.id}}"
-                                  onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
-                                  class="liked float-right liked{{../../this._id}}"><img class="iconliked "
-                                    src="/images/liked.png" alt=""></button>
-                                {{/if}}
-                                {{/iff}}{{/each}}
-                              </div>{{/if}}
-                        <div class="product-overlay">
-                          <ul class="mb-0 list-inline">
-                               {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
-                            {{!-- <li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark" onclick="addToWishlist('{{this._id}}')"><i class="far fa-heart"></i></button></li> --}}
-                            {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="/add-to-cart/{{this._id}}">Add to cart</a></li>/ --}}
-                            <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
-                            {{!-- <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> --}}
-                          </ul>
-                        </div>
-                      </div>
-                      <h6> <a class="reset-anchor" href="detail.html">{{this.product_title}}</a></h6>
-                      <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
-                    </div>
-                  </div>
-                  {{!-- {{#for 0 10 2}}
-    <span>helo</span>
-{{/for}} --}}
-                    {{/each}}
-                    
-            
-            <!-- PRODUCT-->
-
-            
-
-          </div>
-        </section>
         </div>
-        <!-- SERVICES-->
-        <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row text-center gy-3">
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                    <svg class="svg-icon svg-icon-big svg-icon-light">
-                      <use xlink:href="#delivery-time-1"> </use>
-                    </svg>
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">Free shipping</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
+      </div>
+    </section>
+    {{!-- {{/each}} --}}
+
+
+    <!-- TRENDING PRODUCTS-->
+    <div class="container">
+
+      <section class="py-5">
+        <header>
+          <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+          <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
+        </header>
+        <div class="row">
+          <!-- PRODUCT-->
+          {{#each trendingPro}}
+          <div class="col-lg-4 col-sm-6 p-0">
+            <div class="product text-center">
+              <div class="mb-3 position-relative">
+                <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img
+                    src="/product-images/{{this._id}}1.jpg" alt="..." style="height:25rem;widht:25rem"></a>
+                {{#if ../user}}<div class="like-btns">
+                  <button onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
+                      id="like{{this._id}}" class="icon-like" src="/images/heart.png" alt=""><img id="liked{{this._id}}"
+                      class="icon-liked" src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this
+                  ../this._id}}
+                  {{#if status}}
+
+                  <button id="likebtn{{../this.id}}" onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                    class="liked float-right liked{{../../this._id}}"><img class="iconliked " src="/images/liked.png"
+                      alt=""></button>
+                  {{/if}}
+                  {{/iff}}{{/each}}
+                </div>{{/if}}
+                <div class="product-overlay">
+                  <ul class="mb-0 list-inline">
+                    {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark"
+                        href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
+                    {{!-- <li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark"
+                        onclick="addToWishlist('{{this._id}}')"><i class="far fa-heart"></i></button></li> --}}
+                    {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
+                        href="/add-to-cart/{{this._id}}">Add to cart</a></li>/ --}}
+                    <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
+                        onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
+                    {{!-- <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView"
+                        data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> --}}
+                  </ul>
                 </div>
               </div>
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                    <svg class="svg-icon svg-icon-big svg-icon-light">
-                      <use xlink:href="#helpline-24h-1"> </use>
-                    </svg>
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">24 x 7 service</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-end">
-                    <svg class="svg-icon svg-icon-big svg-icon-light">
-                      <use xlink:href="#label-tag-1"> </use>
-                    </svg>
-                    <div class="text-start ms-3">
-                      <h6 class="text-uppercase mb-1">Festivaloffers</h6>
-                      <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
-                    </div>
-                  </div>
+              <h6> <a class="reset-anchor" href="detail.html">{{this.product_title}}</a></h6>
+              <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
+            </div>
+          </div>
+          {{!-- {{#for 0 10 2}}
+          <span>helo</span>
+          {{/for}} --}}
+          {{/each}}
+
+
+          <!-- PRODUCT-->
+
+
+
+        </div>
+      </section>
+    </div>
+    <!-- SERVICES-->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row text-center gy-3">
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <svg class="svg-icon svg-icon-big svg-icon-light">
+                  <use xlink:href="#delivery-time-1"> </use>
+                </svg>
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">Free shipping</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <svg class="svg-icon svg-icon-big svg-icon-light">
+                  <use xlink:href="#helpline-24h-1"> </use>
+                </svg>
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">24 x 7 service</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-inline-block">
+              <div class="d-flex align-items-end">
+                <svg class="svg-icon svg-icon-big svg-icon-light">
+                  <use xlink:href="#label-tag-1"> </use>
+                </svg>
+                <div class="text-start ms-3">
+                  <h6 class="text-uppercase mb-1">Festivaloffers</h6>
+                  <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="container">
+    <div class="container">
 
- <section class="py-5">
-          <header>
-            <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
-            <h2 class="h5 text-uppercase mb-4">NEW PRODUCTS</h2>
-          </header>
+      <section class="py-5">
+        <header>
+          <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+          <h2 class="h5 text-uppercase mb-4">NEW PRODUCTS</h2>
+        </header>
 
-   <div class="row">
-                      {{#each newProducts}}
-                  <div class="col-lg-4 col-sm-6 p-0">
-                    <div class="product text-center">
-                      <div class="mb-3 position-relative">
-                        <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img  src="/product-images/{{this._id}}1.jpg" alt="..." style="height:25rem;widht:25rem"></a>
-                                               {{#if ../user}}<div class="like-btns">
-                                 <button
-                                  onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
-                                    id="like{{this._id}}" class="icon-like" src="/images/heart.png"
-                                    alt=""><img id="liked{{this._id}}" class="icon-liked"
-                                    src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this ../this._id}}
-                                    {{#if status}}
+        <div class="row">
+          {{#each newProducts}}
+          <div class="col-lg-4 col-sm-6 p-0">
+            <div class="product text-center">
+              <div class="mb-3 position-relative">
+                <div class="badge text-white bg-"></div><a class="d-block" href="/productDetails?id={{this._id}}"><img
+                    src="/product-images/{{this._id}}1.jpg" alt="..." style="height:25rem;widht:25rem"></a>
+                {{#if ../user}}<div class="like-btns">
+                  <button onclick="wishList('{{../user._id}}','{{this._id}}')" class="like float-right  "><img
+                      id="like{{this._id}}" class="icon-like" src="/images/heart.png" alt=""><img id="liked{{this._id}}"
+                      class="icon-liked" src="/images/liked.png" alt=""></button>{{#each ../wishlist }}{{#iff this
+                  ../this._id}}
+                  {{#if status}}
 
-                                <button id="likebtn{{../this.id}}"
-                                  onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
-                                  class="liked float-right liked{{../../this._id}}"><img class="iconliked "
-                                    src="/images/liked.png" alt=""></button>
-                                {{/if}}
-                                {{/iff}}{{/each}}
-                              </div>{{/if}}
-                        <div class="product-overlay">
-                          <ul class="mb-0 list-inline">
-                               {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="/add-to-wishlist/{{this._id}}"><i class="far fa-heart"></i></a></li> --}}
-                            {{!-- <li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark" onclick="addToWishlist('{{this._id}}')"><i class="far fa-heart"></i></button></li> --}}
-                            {{!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="/add-to-cart/{{this._id}}">Add to cart</a></li>/ --}}
-                            <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark" onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
-                            {{!-- <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="/" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> --}}
-                          </ul>
-                        </div>
-                      </div>
-                      <h6> <a class="reset-anchor" href="/">{{this.product_title}}</a></h6>
-                      <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
-                    </div>
-                  </div>
-                  {{!-- {{#for 0 10 2}}
-    <span>helo</span>
-{{/for}} --}}
-                    {{/each}}
-   </div>
-</section>
+                  <button id="likebtn{{../this.id}}" onclick="unWish('{{../../../user._id}}','{{../../this._id}}')"
+                    class="liked float-right liked{{../../this._id}}"><img class="iconliked " src="/images/liked.png"
+                      alt=""></button>
+                  {{/if}}
+                  {{/iff}}{{/each}}
+                </div>{{/if}}
+                <div class="product-overlay">
+                  <ul class="mb-0 list-inline">
+                    
+                    <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
+                        onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
+                    {{!-- <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="/"
+                        data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> --}}
+                  </ul>
+                </div>
+              </div>
+              <h6> <a class="reset-anchor" href="/">{{this.product_title}}</a></h6>
+              <p class="small text-muted"><span class="font-weight-bold">₹</span> {{this.price}}</p>
+            </div>
+          </div>
+          {{!-- {{#for 0 10 2}}
+          <span>helo</span>
+          {{/for}} --}}
+          {{/each}}
+        </div>
+      </section>
+    </div>
+
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row text-center gy-3">
+          <div class="col-md-3" >
+            <img src="/images/img3.jpg" alt=""  style="height: 22rem">
+          </div>
+          <div class="col-md-3">
+            <img src="/images/img2.jpeg" alt="" style="height: 22rem">
+          </div>
+          <div class="col-md-3">
+            <img src="/images/img1.jpg" alt="" style="height: 22rem">
+          </div>
+          <div class="col-md-3">
+            <img src="/images/img4.jpg" alt="" style="height: 22rem">
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- NEWSLETTER-->
+    <section class="py-5">
+      <div class="container p-0">
+        <div class="row gy-3">
+          <div class="col-lg-6">
+            <h5 class="text-uppercase">Let's be friends!</h5>
+            <p class="text-sm text-muted mb-0"></p>
+          </div>
+          <div class="col-lg-6">
+            <form action="#">
+              <div class="input-group">
+                <input class="form-control form-control-lg" type="email" placeholder="Enter your email address"
+                  aria-describedby="button-addon2">
+                <button class="btn btn-dark" id="button-addon2" type="submit">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
 </div>
 
 
 
 
-        <!-- NEWSLETTER-->
-        <section class="py-5">
-          <div class="container p-0">
-            <div class="row gy-3">
-              <div class="col-lg-6">
-                <h5 class="text-uppercase">Let's be friends!</h5>
-                <p class="text-sm text-muted mb-0"></p>
-              </div>
-              <div class="col-lg-6">
-                <form action="#">
-                  <div class="input-group">
-                    <input class="form-control form-control-lg" type="email" placeholder="Enter your email address" aria-describedby="button-addon2">
-                    <button class="btn btn-dark" id="button-addon2" type="submit">Subscribe</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+<!-- JavaScript files-->
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/glightbox/js/glightbox.min.js"></script>
+<script src="vendor/nouislider/nouislider.min.js"></script>
+<script src="vendor/swiper/swiper-bundle.min.js"></script>
+<script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="javascript/front.js"></script>
+<script>
+  // ------------------------------------------------------- //
+  //   Inject SVG Sprite - 
+  //   see more here 
+  //   https://css-tricks.com/ajaxing-svg-sprite/
+  // ------------------------------------------------------ //
+  function injectSvgSprite(path) {
 
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", path, true);
+    ajax.send();
+    ajax.onload = function (e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+    }
+  }
+  // this is set to BootstrapTemple website as you cannot 
+  // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+  // while using file:// protocol
+  // pls don't forget to change to your domain :)
+  injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
 
-
-
-      <!-- JavaScript files-->
-      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="vendor/nouislider/nouislider.min.js"></script>
-      <script src="vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
-      <script src="javascript/front.js"></script>
-      <script>
-        // ------------------------------------------------------- //
-        //   Inject SVG Sprite - 
-        //   see more here 
-        //   https://css-tricks.com/ajaxing-svg-sprite/
-        // ------------------------------------------------------ //
-        function injectSvgSprite(path) {
-        
-            var ajax = new XMLHttpRequest();
-            ajax.open("GET", path, true);
-            ajax.send();
-            ajax.onload = function(e) {
-            var div = document.createElement("div");
-            div.className = 'd-none';
-            div.innerHTML = ajax.responseText;
-            document.body.insertBefore(div, document.body.childNodes[0]);
-            }
-        }
-        // this is set to BootstrapTemple website as you cannot 
-        // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
-        // while using file:// protocol
-        // pls don't forget to change to your domain :)
-        injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
-        
-      </script>
-      <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    </div>
+</script>
+<!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</div>
