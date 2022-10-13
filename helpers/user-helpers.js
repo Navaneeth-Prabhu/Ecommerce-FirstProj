@@ -632,7 +632,7 @@ module.exports = {
           // date:date,
         };
       }
-      console.log(products);
+      // console.log(products);
       products.forEach((element) => {
         // db.get().collection(collection.PRODUCT_COLLECTION).find({_id:element.item}).then((response)=>{})
         // console.log(element);
@@ -648,8 +648,6 @@ module.exports = {
           );
       });
 
-      // cart=db.get().collection(collection.CART_COLLECTION).find({user:objectId(order.userId)})
-      // console.log("cart: ",cart);
     
       db.get()
         .collection(collection.ORDER_COLLECTION)
@@ -792,6 +790,7 @@ module.exports = {
   },
 
   cancelOrder: (body, details) => {
+    console.log("details",details);
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.ORDER_COLLECTION)
@@ -822,13 +821,27 @@ module.exports = {
                     wall_amount: order.totalAmount,
                   };
                 }
-                console.log(price, "price");
+                // console.log(price, "price");
                 walletHelpers.addtoWallet(price, order.userId);
+
+                order.products.forEach((element) => {
+        
+                  db.get()
+                    .collection(collection.PRODUCT_COLLECTION)
+                    .updateOne(
+                      { _id: element.item },
+                      {
+                        $inc: {
+                          stock: Number(element.quantity),
+                        },
+                      }
+                    );
+                });
               }
             });
           resolve();
-          console.log(details);
-          console.log("in updateStatus");
+          // console.log(details);
+          // console.log("in updateStatus");
         });
     });
   },
@@ -851,7 +864,7 @@ module.exports = {
             .collection(collection.ORDER_COLLECTION)
             .findOne({ _id: objectId(details) })
             .then((order) => {
-              console.log("order", order);
+              // console.log("order", order);
               if (order.status == "Cancelled" || order.status == "Return") {
                 console.log("inside if");
                 let price = 0;
@@ -864,8 +877,22 @@ module.exports = {
                     wall_amount: order.totalAmount,
                   };
                 }
-                console.log(price, "price");
+                // console.log(price, "price");
                 walletHelpers.addtoWallet(price, order.userId);
+
+                order.products.forEach((element) => {
+        
+                  db.get()
+                    .collection(collection.PRODUCT_COLLECTION)
+                    .updateOne(
+                      { _id: element.item },
+                      {
+                        $inc: {
+                          stock: Number(element.quantity),
+                        },
+                      }
+                    );
+                });
               }
             });
           resolve();

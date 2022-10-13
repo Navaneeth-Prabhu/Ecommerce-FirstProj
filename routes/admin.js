@@ -123,12 +123,11 @@ router.get('/dashboard/category',auth.adminCookieJWTAuth,async (req,res)=>{
 
 
 router.get('/login',auth.adminLoggedIn, function(req,res) {
-  console.log("-----------/log");
+  
   if(req.session.adminLoggedIn){
     res.redirect('/admin')
   }else{
-    console.log("---------------not loggedin")
-    res.render('admin/login-admin',{admin:false, loginError:req.session.adminLoginError, adminLoggedIn:req.session.adminLoggedIn})
+    res.render('admin/login-admin',{admin:false, loginError:req.session.adminLoginError, adminLoggedIn:req.session.adminLoggedIn,noPartial:true})
     req.session.adminLoginError = null
   }
 });
@@ -161,10 +160,8 @@ router.post('/login', function(req, res) {
 });
             
 router.get('/logout', function(req, res) {
-
-
   res.clearCookie('admintoken')
-  res.render('admin/login-admin');
+  res.render('admin/login-admin',{noPartial:true});
 })
 
 router.get('/add-user',auth.adminCookieJWTAuth, function(req,res) {
@@ -438,12 +435,9 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 
       
       let products= await userHelpers.getOrderProducts(req.params.id)
-      // console.log(products);
-      // res.send("hiiii")
-      res.render('admin/order-pro',{products})
+   
+      res.render('admin/order-pro',{products,admin:true})
     
-      // console.log('in view order products');
-
   })
 
   ////////////////////BANNER//////////////

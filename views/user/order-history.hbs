@@ -50,38 +50,18 @@
               {{#each orders}}
               <tr>
 
-              
-                {{!-- <th class="ps-0 py-3 border-light" scope="row">
 
-                  <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link"
-                      href="detail.html"><img src="/product-images/{{this.product._id}}.jpg" alt="..." width="70" /></a>
-                    <div class="ms-3"><strong class="h6"><a class="reset-anchor animsition-link"
-                          href="detail.html">{{this.product.product_title}}</a></strong></div>
-                  </div>
-                </th> --}}
-                <td> <a href="/order-pro/{{this._id}}" class="btn btn-primary">view products</a></td>
-                <!-- Vertically centered scrollable modal -->
-{{!-- <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-  ...
-</div> --}}
+                <td> <a href="/prooooo/{{this._id}}" class="btn btn-primary">view products</a></td>
 
-                {{!-- <td>{{this.delivery_details.address}}</td> --}}
                 <td>{{this.paymentMethod}}</td>
-                {{!-- <td class="p-3 align-middle border-light">
-                  <p class="mb-0 small">${{this.name}}</p>
-                </td> --}}
 
-
-                {{!-- <td class="p-3 align-middle border-light">
-                  <p class="mb-0 small">$ {{this.totalAmount}}</p>
-                </td> --}}
                 {{#if this.offerPrice}}
                 <td>
-                  <p class="mb-0 small">$ {{this.offerPrice}}</p>
+                  <p class="mb-0 small">₹ {{this.offerPrice}}</p>
                 </td>
                 {{else}}
                 <td>
-                  <p class="mb-0 small">$ {{this.totalAmount}}</p>
+                  <p class="mb-0 small">₹ {{this.totalAmount}}</p>
                 </td>
                 {{/if}}
                 {{!-- <td>{{this.paymentMethod}}</td> --}}

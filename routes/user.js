@@ -244,7 +244,7 @@ router.get("/view-products", async function (req, res, next) {
     console.log(page);
   }
   console.log(page);
-  const limit = 6;
+  const limit = 9;
 
   let user = req.session.user;
   let cartCount = null;
@@ -267,19 +267,14 @@ router.get("/view-products", async function (req, res, next) {
     .sort({ _id: -1 })
     .toArray();
   productHelper.pageination(page, limit);
-  // console.log(proPage);
 
-  // productHelper.getAllProducts().then((product) => {
-  // console.log("pro:",product);
   res.render("user/view-products", {
-    // proPage,
     user,
     product,
     cartCount,
     wishCount,
     wishlist,
   });
-  // });
 });
 
 /////////////MEN////////////////
@@ -298,7 +293,6 @@ router.get("/mens", async function (req, res, next) {
   }
 
   productHelper.getMenWatch().then((product) => {
-    // console.log("pro:",product);
     res.render("user/mens", { user, product, cartCount, wishCount, wishlist });
   });
 });
@@ -318,7 +312,6 @@ router.get("/womens", async function (req, res, next) {
   }
 
   productHelper.getWomenWatch().then((product) => {
-    // console.log("pro:",product);
     res.render("user/womens", {
       user,
       product,
@@ -334,7 +327,6 @@ router.get("/womens", async function (req, res, next) {
 // router.use(verifyLoggin)
 
 router.get("/productDetails", async function (req, res) {
-  //  let user=req.session.user
   let cartCount = null;
   let wishCount = null;
   let wishlist = null;
@@ -369,16 +361,14 @@ router.get("/productDetails", async function (req, res) {
   });
 });
 
-router.get("/cart", async function (req, res) {
-  if (req.session.loggedIn) {
-    let cartCount = null;
-    let wishCount = null;
-    // let wishlist = null
+router.get("/cart", verifyLoggin, async function (req, res) {
+  let cartCount = null;
+  let wishCount = null;
 
-    cartCount = await userHelpers.getCartCount(req.session.user._id);
-    wishCount = await userHelpers.getWishCount(req.session.user._id);
+  cartCount = await userHelpers.getCartCount(req.session.user._id);
+  wishCount = await userHelpers.getWishCount(req.session.user._id);
 
-    // try {
+  try {
     let total = 0;
     await userHelpers
       .getCartProduct(req.session.user._id)
@@ -413,279 +403,104 @@ router.get("/cart", async function (req, res) {
         });
       });
     // .catch((error)=>{
-    //   console.log(error,"hi");
+
     //   res.redirect('/error')});
-  } else {
-    res.redirect("/login");
-  }
-  // } catch (err) {
-  //   console.log(err,"hey");
-  //   res.redirect('/error')
-  // }
-});
-
-router.get("/add-to-cart/:id", (req, res) => {
-  if (req.session.loggedIn) {
-    console.log("api calling");
-    userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
-      res.json({ status: true });
-    });
-  } else {
-    res.redirect("/login");
-  }
-});
-
-// router.post("/change-product-quantity", (req, res, next) => {
-//   try {
-//     let price = 0;
-//     let offerPrice = 0;
-//     let total = 0;
-//     productHelper
-//       .getProductDetails(req.body.product)
-//       .then((response) => {
-//         price = response.price;
-//         offerPrice = response?.offerPrice;
-//       })
-//       .catch(() => {
-//         res.redirect("/error");
-//       });
-
-//     // console.log(price);
-//     userHelpers.changeProductQuantity(req.body).then(async (response) => {
-
-//       let products = await userHelpers.getCartProduct(req.session.user._id);
-//       products.forEach((data) => {
-//         // if(Number(data.quantity) < Number(data.product.stock))
-//         // {
-//           try {
-
-//             if (data.product.offerPrice) {
-//               data.subTotal =
-//                 Number(data.quantity) * Number(data.product.offerPrice);
-//             } else {
-//               data.subTotal = Number(data.quantity) * Number(data.product.price);
-//             }
-//             total += data.subTotal;
-//           } catch (error) {
-//             data.subTotal = Number(data.quantity) * Number(data.product.price);
-
-//             total += data.subTotal;
-//           }
-//         // }
-//         // else{
-//         //  response.status = false
-//         // }
-//       });
-
-//       response.total = total;
-//       response.price = price;
-//       response.offerPrice = offerPrice;
-//       res.json(response);
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     console.log(req.body);
-//     res.redirect("/login");
-//   }
-// });
-
-// router.post("/change-product-quantity", async(req, res, next) => {
-//   try {
-//     let price = 0;
-//     let offerPrice = 0;
-//     let total = 0;
-//     productHelper
-//       .getProductDetails(req.body.product)
-//       .then((response) => {
-//         price = response.price;
-//         offerPrice = response?.offerPrice;
-//       })
-//       .catch(() => {
-//         res.redirect("/error");
-//       });
-
-//     // console.log(price);
-//     let products = await userHelpers.getCartProduct(req.session.user._id);
-//     for(data of products){
-//     // products.forEach((data) => {
-
-//         userHelpers.changeProductQuantity(req.body,data).then(async (response) => {
-//         // if(Number(data.quantity) < Number(data.product.stock))
-//         // {
-//           if(response.status){
-
-//             try {
-
-//               if (data.product.offerPrice) {
-//                 data.subTotal =
-//                   Number(data.quantity) * Number(data.product.offerPrice);
-//               } else {
-//                 data.subTotal = Number(data.quantity) * Number(data.product.price);
-//               }
-//               total += data.subTotal;
-//             } catch (error) {
-//               data.subTotal = Number(data.quantity) * Number(data.product.price);
-
-//               total += data.subTotal;
-//             }
-//           }else{
-//             response.status = false
-//             console.log("in else");
-//           }
-//         });
-//         // }
-//         // else{
-//         //  response.status = false
-//         // }
-
-//       response.total = total;
-//       response.price = price;
-//       response.offerPrice = offerPrice;
-//       res.json(response);
-//     // });
-//       }
-//   } catch (err) {
-//     console.log(err);
-//     console.log(req.body);
-//     res.redirect("/login");
-//   }
-// });
-
-router.post("/change-product-quantity",verifyLoggin, async (req, res, next) => {
-  console.log(req.body);
-
-  try {
-    let price = 0;
-    let offerPrice = 0;
-    let total = 0;
-    let productId = req.body.product;
-    let quantity = req.body.quantity;
-    let count = req.body.count;
-    console.log("count", count);
-    productHelper
-      .getProductDetails(req.body.product)
-      .then((response) => {
-        price = response.price;
-        offerPrice = response?.offerPrice;
-      })
-      .catch(() => {
-        console.log("in offer price");
-        res.redirect("/error");
-      });
-
-    //-------------------------------------------------------------------
-    console.log("-----got it-----");
-
-    await userHelpers.getMaxStock(productId).then(async (product) => {
-  
-      console.log("quaan", quantity);
-      // console.log("stock", product);
-      // let products = await userHelpers.getCartProduct(req.session.user._id);
-
-      if (count == 1) {
-        if (Number(quantity) == Number(product.stock)) {
-          console.log("in ifff");
-          res.json({ updation: false });
-        } else {
-      
-          await userHelpers.changeProductQuantity(req.body).then(async(response) => {
-
-            let products = await userHelpers.getCartProduct(req.session.user._id);
-            userHelpers.cartTotal(req.session.user._id,products).then((total)=>{
-              console.log("--------inc-----",total);
-              
-            response.total = total;
-            response.price = price;
-            response.offerPrice = offerPrice;
-
-
-            response.updation= true;
-            // console.log(response,'responserer')
-
-            res.json(response);
-            })
-          });
-        }
-      } else {
-        
-        // let products = await userHelpers.getCartProduct(req.session.user._id);
-      
-        await userHelpers.changeProductQuantity(req.body).then(async(response) => {
-          let products = await userHelpers.getCartProduct(req.session.user._id);
-          userHelpers.cartTotal(req.session.user._id,products).then((total)=>{
-            console.log("--------dec-----",total);
-            
-          response.total = total;
-          response.price = price;
-          response.offerPrice = offerPrice;
-
-
-          response.updation= true;
-          // console.log(response,'responserer')
-
-          res.json(response);
-          })
-        });
-      }
-    });
-
-    //-------------------------------------------------------------------
-
-    // console.log(price);
-    // let products = await userHelpers.getCartProduct(req.session.user._id);
-    // let response ={}
-    // // console.log("-----------------",products);
-    // // products.forEach(async(data) => {
-    //   for(data of products){
-
-    //   if (Number(data.quantity) < Number(data.product.stock) || req.body.count == -1) {
-    //     // updateQuantity(data)
-    // userHelpers.changeProductQuantity(req.body,data).then(async (values) => {
-    //       let values = await userHelpers.changeProductQuantity(req.body)
-
-    //       try {
-    //         if (data.product.offerPrice) {
-    //           data.subTotal =
-    //             Number(data.quantity) * Number(data.product.offerPrice);
-    //         } else {
-    //           data.subTotal =
-    //             Number(data.quantity) * Number(data.product.price);
-    //         }
-    //         total += data.subTotal;
-    //       } catch (error) {
-    //         data.subTotal = Number(data.quantity) * Number(data.product.price);
-
-    //         total += data.subTotal;
-    //       }
-
-    //       let val =  values.status
-    //       response.status = val
-    //       console.log(val,'vallllllllllllllll')
-    //       console.log("status",response.status);
-
-    //     // });
-    //     // console.log("555555555555555555");
-
-    //   } else {
-    //     response.status = false;
-    //     // res.json(response);
-    //     console.log("2222222222222222222");
-    //   }
-
-    // }
-    // // });
-    // console.log(response,'responserer11111111')
-    // response.total = total;
-    // response.price = price;
-    // response.offerPrice = offerPrice;
-    // // console.log(response,'responserer')
-    // res.json({updation:false});
   } catch (err) {
-    console.log(err);
-    // console.log("3333333333333333333333333");
-    res.redirect("/login");
+    console.log(err, "hey");
+    res.redirect("/error");
   }
 });
+
+router.get("/add-to-cart/:id", verifyLoggin, (req, res) => {
+  console.log("api calling");
+  userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
+    res.json({ status: true });
+  });
+});
+
+router.post(
+  "/change-product-quantity",
+  verifyLoggin,
+  async (req, res, next) => {
+    console.log(req.body);
+
+    try {
+      let price = 0;
+      let offerPrice = 0;
+      let total = 0;
+      let productId = req.body.product;
+      let quantity = req.body.quantity;
+      let count = req.body.count;
+      console.log("count", count);
+      productHelper
+        .getProductDetails(req.body.product)
+        .then((response) => {
+          price = response.price;
+          offerPrice = response?.offerPrice;
+        })
+        .catch(() => {
+          console.log("in offer price");
+          res.redirect("/error");
+        });
+
+      //-------------------------------------------------------------------
+
+      await userHelpers.getMaxStock(productId).then(async (product) => {
+        if (count <= 1) {
+          if (Number(quantity) == Number(product.stock)) {
+            res.json({ updation: false });
+          } else {
+            await userHelpers
+              .changeProductQuantity(req.body)
+              .then(async (response) => {
+                let products = await userHelpers.getCartProduct(
+                  req.session.user._id
+                );
+                userHelpers
+                  .cartTotal(req.session.user._id, products)
+                  .then((total) => {
+                    // console.log("--------inc-----",total);
+
+                    response.total = total;
+                    response.price = price;
+                    response.offerPrice = offerPrice;
+
+                    response.updation = true;
+
+                    res.json(response);
+                  });
+              });
+          }
+        } else {
+          await userHelpers
+            .changeProductQuantity(req.body)
+            .then(async (response) => {
+              let products = await userHelpers.getCartProduct(
+                req.session.user._id
+              );
+              userHelpers
+                .cartTotal(req.session.user._id, products)
+                .then((total) => {
+                  console.log("--------dec-----", total);
+
+                  response.total = total;
+                  response.price = price;
+                  response.offerPrice = offerPrice;
+
+                  response.updation = true;
+
+                  res.json(response);
+                });
+            });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+
+      res.redirect("/login");
+    }
+  }
+);
 
 router.post("/delete-cart-product", verifyLoggin, (req, res, next) => {
   console.log(req.body);
@@ -796,7 +611,7 @@ router.get("/check-wishlist", verifyLoggin, (req, res) => {
 
 /////////////   checkout /////////////////
 
-router.get("/checkout/", async (req, res) => {
+router.get("/checkout/", verifyLoggin, async (req, res) => {
   try {
     let cartCount = null;
     let wishCount = null;
@@ -850,14 +665,9 @@ router.get("/checkout/", async (req, res) => {
   }
 });
 
-router.post("/checkout", async (req, res) => {
+router.post("/checkout", verifyLoggin, async (req, res) => {
   try {
-    // console.log("Checkout form body", req.body);
-
     let products = await userHelpers.getCartProductList(req.session.user._id);
-    // if(products=='no'){
-    //   res.redirect('/index')
-    // }else{
 
     let user = await userHelpers
       .getUserDetails(req.session.user._id)
@@ -965,7 +775,6 @@ router.get("/orderSucessfull", verifyLoggin, async (req, res) => {
   wishCount = await userHelpers.getWishCount(req.session.user._id);
   let userDetails = await userHelpers.getUserDetails(userId);
 
-  // console.log('order: ',order)
   res.render("user/orderSucessfull", {
     user: req.session.user,
     userDetails,
@@ -976,67 +785,48 @@ router.get("/orderSucessfull", verifyLoggin, async (req, res) => {
 
 ///////////////////Order histroy //////////////////////
 
-router.get("/order-history", async (req, res) => {
-  if (req.session.loggedIn) {
-    let cartCount = null;
-    let wishCount = null;
+router.get("/order-history", verifyLoggin, async (req, res) => {
+  let cartCount = null;
+  let wishCount = null;
 
-    cartCount = await userHelpers.getCartCount(req.session.user._id);
-    wishCount = await userHelpers.getWishCount(req.session.user._id);
-    let pro = userHelpers.getOrderProducts(req.session.user._id);
-    let orders = await userHelpers.getUserOrders(req.session.user._id);
-    orders.forEach((element) => {
-      if (element.status == "Delivered") {
-        element.delivered = true;
-      } else if (element.status == "Shipped") {
-        element.shipped = true;
-      } else if (element.status == "Cancelled") {
-        element.cancelled = true;
-      } else if (element.status == "Return") {
-        element.Return = true;
-      }
-    });
-    res.render("user/order-history", {
-      user: req.session.user,
-      orders,
-      pro,
-      cartCount,
-      wishCount,
-    });
-    // console.log('in order histroy:',pro);
-  } else {
-    res.redirect("/login");
-  }
+  cartCount = await userHelpers.getCartCount(req.session.user._id);
+  wishCount = await userHelpers.getWishCount(req.session.user._id);
+  let pro = userHelpers.getOrderProducts(req.session.user._id);
+  let orders = await userHelpers.getUserOrders(req.session.user._id);
+  orders.forEach((element) => {
+    if (element.status == "Delivered") {
+      element.delivered = true;
+    } else if (element.status == "Shipped") {
+      element.shipped = true;
+    } else if (element.status == "Cancelled") {
+      element.cancelled = true;
+    } else if (element.status == "Return") {
+      element.Return = true;
+    }
+  });
+  res.render("user/order-history", {
+    user: req.session.user,
+    orders,
+    pro,
+    cartCount,
+    wishCount,
+  });
 });
 
-router.get("/cancel-order/:data", async (req, res) => {
-  if (req.session.loggedIn) {
-    await userHelpers
-      .cancelOrder(req.body, req.params.data)
-      .then((response) => {
-        res.redirect("/order-history");
-      });
-  } else {
-    res.redirect("/login");
-  }
+router.get("/cancel-order/:data", verifyLoggin, async (req, res) => {
+  await userHelpers.cancelOrder(req.body, req.params.data).then((response) => {
+    res.redirect("/order-history");
+  });
 });
-router.get("/return-order/:data", async (req, res) => {
-  if (req.session.loggedIn) {
-    await userHelpers
-      .returnOrder(req.body, req.params.data)
-      .then((response) => {
-        res.redirect("/order-history");
-      });
-  } else {
-    res.redirect("/login");
-  }
+router.get("/return-order/:data", verifyLoggin, async (req, res) => {
+  await userHelpers.returnOrder(req.body, req.params.data).then((response) => {
+    res.redirect("/order-history");
+  });
 });
 
-router.get("/order-pro/:id", verifyLoggin, async (req, res) => {
-  // if (req.session.loggedIn) {
-  // console.log("param",req.params.id);
+router.get("/prooooo/:id", verifyLoggin, async (req, res) => {
   let products = await userHelpers.getOrderProducts(req.params.id);
-  // let order= await userHelpers.getUserOrders(req.session.user._id)
+
   let order = await userHelpers.getvViewOrders(
     req.session.user._id,
     req.params.id
@@ -1058,23 +848,19 @@ router.get("/order-pro/:id", verifyLoggin, async (req, res) => {
     order.return = true;
   }
 
-  res.render("user/order-pro", {
+  res.render("user/prooooo", {
     user: req.session.user,
     products,
     order,
     id: req.params.id,
+ 
   });
-  console.log("pro", products);
-  // console.log('in view order products');
-  // } else {
-  //   res.redirect("/login");
-  // }
+  // console.log("pro", products);
 });
 
 ///////////////////////PROFILE ?/////////////
 
 router.get("/user-profile", verifyLoggin, async (req, res) => {
-  // if(req.session.loggedIn){
   let cartCount = null;
   let wishCount = null;
 
@@ -1093,67 +879,42 @@ router.get("/user-profile", verifyLoggin, async (req, res) => {
   req.session.changePasswordError = null;
   req.session.success = null;
   req.session.failed = null;
-  // }else{
-  //   res.redirect('/login')
-  // }
 });
 
 router.post("/user-profile", async (req, res) => {
   console.log("in post");
-  // let wallet=db.get().collection(collection.WALLET_COLLECTION)
   console.log("body", req.body);
   await userHelpers.updateUser(req.session.user, req.body).then(() => {
     req.session.user.Name = req.body.Name;
     req.session.user.number = req.body.number;
-    // console.log(req.session.user);
     res.redirect("/user-profile");
   });
 });
 
 /////////////////////    Address    ///////////////////////
 
-router.get("/add-address", async (req, res) => {
-  if (req.session.loggedIn) {
-    address = await userHelpers.viewAddress(req.session.user._id);
-    res.render("user/add-address", {
-      user: req.session.user,
-      profile: true,
-      address,
-    });
-  } else {
-    res.redirect("/login");
-  }
+router.get("/add-address", verifyLoggin, async (req, res) => {
+  address = await userHelpers.viewAddress(req.session.user._id);
+  res.render("user/add-address", {
+    user: req.session.user,
+    profile: true,
+    address,
+  });
 });
 
 router.post("/add-address", verifyLoggin, async (req, res) => {
-  // if(req.session.loggedIn){
   await userHelpers.addAddress(req.session.user._id, req.body).then(() => {
     res.redirect("/add-address");
   });
-  // }else{
-  //   res.redirect('/login')
-  // }
 });
 
 router.post("/edit-address", verifyLoggin, async function (req, res) {
-  // if(req.session.loggedIn){
-
   let id = req.query.id;
   await userHelpers.updateAddress(id, req.body).then(() => {
     res.redirect("/add-address");
     console.log(req.query.id);
   });
-  // }else{
-  //   res.redirect('/login')
-  // }
 });
-
-// router.get('/view-address',async(req,res)=>{
-// userHelpers.viewAddress(req.query.userId).then((response)=>{
-//   console.log(response);
-//   res.render('user/view-address',{address:response,user:req.session.user,profile:true})
-// })
-// })
 
 router.get("/edit-address", verifyLoggin, async function (req, res) {
   let userId = req.query.id;
@@ -1162,13 +923,6 @@ router.get("/edit-address", verifyLoggin, async function (req, res) {
   res.render("user/edit-address", { address, user: req.session.user });
 });
 
-router.post("/edit-address", verifyLoggin, async function (req, res) {
-  let id = req.query.id;
-  await userHelpers.updateAddress(req.query.id, req.body).then(() => {
-    res.redirect("/view-address");
-    console.log(req.query.id);
-  });
-});
 
 router.get("/delete-address", verifyLoggin, function (req, res) {
   let userId = req.query.id;
@@ -1207,13 +961,12 @@ router.post("/changePass", verifyLoggin, async function (req, res) {
       });
     } else {
       req.session.failed = true;
-      // res.json({status:false})
+
       res.redirect("/user-profile");
     }
   } else {
     req.session.changePasswordError = "entered wrong password";
     res.redirect("/user-profile");
-    // res.json({status:false})
   }
 
   // }
@@ -1237,11 +990,9 @@ router.post("/api/orders/:orderId/capture", async (req, res) => {
 /////////////////Download Invoice/////////////////
 
 router.get("/invoice/:id", verifyLoggin, async function (req, res) {
-  // console.log(products,'+++++++++++++++++++++')
-
   let products = await userHelpers.getOrderProducts(req.params.id);
   console.log(products);
-  // let order= await userHelpers.getUserOrders(req.session.user._id)
+
   let order = await userHelpers.getvViewOrders(
     req.session.user._id,
     req.params.id
@@ -1268,9 +1019,7 @@ router.get("/invoice/:id", verifyLoggin, async function (req, res) {
     noPartial: true,
   });
   console.log("pro", products);
-  // console.log('in view order products');
 });
-// })
 
 /////////////////Wallet////////////
 router.get("/wallet", verifyLoggin, async (req, res) => {
@@ -1334,8 +1083,6 @@ router.get("/view-coupon", verifyLoggin, async (req, res) => {
     .get()
     .collection(collection.ORDER_COLLECTION)
     .countDocuments({ userId: objectId(req.session.user._id) });
-  // coupon= await couponHelpers.getCouponsForUser(req.session.user._id)
-  // couponHelpers.getCouponsForUser(req.session.user._id).then((coupon)=>{
   console.log(coupon);
   couponHelpers.getCoupons().then((coupon) => {
     res.render("user/view-coupon", {
@@ -1344,7 +1091,6 @@ router.get("/view-coupon", verifyLoggin, async (req, res) => {
       wishCount,
       orderCount,
     });
-    // });
   });
 });
 

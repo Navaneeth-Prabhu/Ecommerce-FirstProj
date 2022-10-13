@@ -1,180 +1,199 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    
+  <!-- Bootstrap CSS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
-    <link rel="stylesheet" href="/public/stylesheet/product-details.css">
-
-
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
-/>
+  <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
 
- <!-- gLightbox gallery-->
-    <link rel="stylesheet" href="vendor/glightbox/css/glightbox.min.css">
-    <!-- Range slider-->
-    <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css">
-    <!-- Choices CSS-->
-    <link rel="stylesheet" href="vendor/choices.js/public/assets/styles/choices.min.css">
-    <!-- Swiper slider-->
-    <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
-    <!-- Google fonts-->
+  <link rel="stylesheet" href="/public/stylesheet/product-details.css">
 
-    <link rel="stylesheet" href="/stylesheet/custom.css">
-    {{!-- <link rel="stylesheet" href="/font/CinzelDecorative-Black.ttf">
-    <link rel="stylesheet" href="/font/CinzelDecorative-Regular.ttf"> --}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300&display=swap" rel="stylesheet">
-    <!-- theme stylesheet-->
-    <link rel="stylesheet" href="stylesheet/style.default.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="stylesheet/style.violet.css">
-<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+
+
+  <!-- gLightbox gallery-->
+  <link rel="stylesheet" href="vendor/glightbox/css/glightbox.min.css">
+  <!-- Range slider-->
+  <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css">
+  <!-- Choices CSS-->
+  <link rel="stylesheet" href="vendor/choices.js/public/assets/styles/choices.min.css">
+  <!-- Swiper slider-->
+  <link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
+  <!-- Google fonts-->
+
+  <link rel="stylesheet" href="/stylesheet/custom.css">
+<!--font-->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300&display=swap" rel="stylesheet">
+  <!-- theme stylesheet-->
+  <link rel="stylesheet" href="stylesheet/style.default.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <link rel="stylesheet" href="stylesheet/style.violet.css">
+
+  {{!-- data table --}}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+  {{!-- image cropper --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css">
-    <!--admin-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!--admin-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
- {{!-- <link href="stylesheet/sb-admin-2.min.css" rel="stylesheet"> --}}
- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  {{!--
+  <link href="stylesheet/sb-admin-2.min.css" rel="stylesheet"> --}}
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
- <script src="https://www.paypal.com/sdk/js?client-id=Adxgm1q1wJ4O9ela1AN5_j-0qsEumhQonSeSHqvu8gBdn90nNxjMm6eTl1WjclPtbudIeOmKGtGT2on8&currency=USD"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=Adxgm1q1wJ4O9ela1AN5_j-0qsEumhQonSeSHqvu8gBdn90nNxjMm6eTl1WjclPtbudIeOmKGtGT2on8&currency=USD"></script>
 
 
-{{!-- table export --}}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 
-    <title>Sample</title>
-  </head>
-  <body>
+
+  {{!-- table export --}}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
+  <title>Sample</title>
+</head>
+
+<body>
   {{#if noPartial}}
   {{else}}
-      {{#if admin}}
-      {{> admin-header}}
-      {{else}}
-      
-      {{>user-header}}
-      {{/if}}
-
-
-      {{#if profile}}
-      {{>profile-sidebar}}
-      {{/if}}
+  {{#if admin}}
+  {{> admin-header}}
+  {{else}}
+  {{>user-header}}
   {{/if}}
-      {{{body}}}
+  {{/if}}
 
-{{#if user}}
+  {{!-- ---------------body -------------- --}}
+  {{{body}}}
+
+  {{#if user}}
   {{#if noPartial}}
   {{else}}
-      {{>footer}}
+  {{>footer}}
   {{/if}}
-{{/if}}
-    <!-- Optional JavaScript -->
-    <script>
-      $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-    </script>
+  {{/if}}
+  <!-- Optional JavaScript -->
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+    });
+  </script>
 
 
 
-{{!--------------------- invoice ---------------------}}
+  {{!--------------------- invoice ---------------------}}
 
-{{!-- <script src="html2pdf.bundle.min.js"></script> --}}
+  {{!--
+  <script src="html2pdf.bundle.min.js"></script> --}}
 
   <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
-   <script src="https://unpkg.com/pdfjs-dist/build/pdf.min.js"></script>
-    <script src="https://unpkg.com/pdfjs-dist/build/pdf.worker.min.js"></scri
+  <script src="https://unpkg.com/pdfjs-dist/build/pdf.min.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist/build/pdf.worker.min.js"></scri
 
-    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
-    
-    {{!-- <script src="/public/javascript/app.js"></script> --}}
+      < script src = "//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
 
-    <script src="/javascript/script.js"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    {{!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    {{!-- <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script> --}}
-      <script src="javascript/front.js"></script>
+  {{!--
+  <script src="/public/javascript/app.js"></script> --}}
 
-{{!-- <script src="javascript/sb-admin-2.min.js"></script> --}}
+  <script src="/javascript/script.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  {{!--
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script> --}}
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  {{!--
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script> --}}
+  <script src="javascript/front.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-      <!-- JavaScript files-->
-      <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      {{!-- <script src="/public/bootstrap/js/bootstrap.bundle.js"></script> --}}
-      <script src="/vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="/vendor/nouislider/nouislider.min.js"></script>
-      <script src="/vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
-      {{!-- <script src="/vendor/javascript/front.js"></script> --}}
+  {{!--
+  <script src="javascript/sb-admin-2.min.js"></script> --}}
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <!-- JavaScript files-->
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  {{!--
+  <script src="/public/bootstrap/js/bootstrap.bundle.js"></script> --}}
+  <script src="/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/vendor/nouislider/nouislider.min.js"></script>
+  <script src="/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+  {{!--
+  <script src="/vendor/javascript/front.js"></script> --}}
 
 
-      {{!-- expoert table --}}
-      <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-      <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-      <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-      <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+  {{!-- expoert table --}}
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
-      <script>
-        
-        // ------------------------------------------------------- //
-        //   Inject SVG Sprite - 
-        //   see more here 
-        //   https://css-tricks.com/ajaxing-svg-sprite/
-        // ------------------------------------------------------ //
-        function injectSvgSprite(path) {
-        
-            var ajax = new XMLHttpRequest();
-            ajax.open("GET", path, true);
-            ajax.send();
-            ajax.onload = function(e) {
-            var div = document.createElement("div");
-            div.className = 'd-none';
-            div.innerHTML = ajax.responseText;
-            document.body.insertBefore(div, document.body.childNodes[0]);
-            }
+  <script>
+
+      // ------------------------------------------------------- //
+      //   Inject SVG Sprite - 
+      //   see more here 
+      //   https://css-tricks.com/ajaxing-svg-sprite/
+      // ------------------------------------------------------ //
+      function injectSvgSprite(path) {
+
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", path, true);
+        ajax.send();
+        ajax.onload = function (e) {
+          var div = document.createElement("div");
+          div.className = 'd-none';
+          div.innerHTML = ajax.responseText;
+          document.body.insertBefore(div, document.body.childNodes[0]);
         }
-        // this is set to BootstrapTemple website as you cannot 
-        // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
-        // while using file:// protocol
-        // pls don't forget to change to your domain :)
-        injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
-        
-      </script>
-      <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    </div>
-  </body>
+      }
+    // this is set to BootstrapTemple website as you cannot 
+    // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+    // while using file:// protocol
+    // pls don't forget to change to your domain :)
+    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
+
+  </script>
+  <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  </div>
+</body>
+
 </html>
