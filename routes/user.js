@@ -557,21 +557,21 @@ router.get("/wishlist", verifyLoggin, async (req, res) => {
   }
 });
 
-router.get("/remove-wish", verifyLoggin, (req, res, next) => {
-  try {
-    userHelpers
-      .removeWish(req.session.user._id, req.query.id)
-      .then((response) => {
-        res.json({ status: true });
-      })
-      .catch(() => {
-        res.redirect("/error");
-      });
-  } catch (err) {
-    console.log(err);
-    res.redirect("/error");
-  }
-});
+// router.get("/remove-wish", verifyLoggin, (req, res, next) => {
+//   try {
+//     userHelpers
+//       .removeWish(req.session.user._id, req.query.id)
+//       .then((response) => {
+//         res.json({ status: true });
+//       })
+//       .catch(() => {
+//         res.redirect("/error");
+//       });
+//   } catch (err) {
+//     console.log(err);
+//     res.redirect("/error");
+//   }
+// });
 router.get("/remove-wishlist", verifyLoggin, (req, res, next) => {
   try {
     userHelpers
@@ -813,16 +813,22 @@ router.get("/order-history", verifyLoggin, async (req, res) => {
   });
 });
 
+//////////////////////////Cancel Order ////////////////////////////
+
 router.get("/cancel-order/:data", verifyLoggin, async (req, res) => {
   await userHelpers.cancelOrder(req.body, req.params.data).then((response) => {
     res.redirect("/order-history");
   });
 });
+
+//////////////////////////Retrun Order //////////////////////////
+
 router.get("/return-order/:data", verifyLoggin, async (req, res) => {
   await userHelpers.returnOrder(req.body, req.params.data).then((response) => {
     res.redirect("/order-history");
   });
 });
+
 
 router.get("/prooooo/:id", verifyLoggin, async (req, res) => {
   let products = await userHelpers.getOrderProducts(req.params.id);
@@ -853,12 +859,12 @@ router.get("/prooooo/:id", verifyLoggin, async (req, res) => {
     products,
     order,
     id: req.params.id,
- 
+    noPartial:true
   });
   // console.log("pro", products);
 });
 
-///////////////////////PROFILE ?/////////////
+///////////////////////PROFILE ?///////////////////////////////
 
 router.get("/user-profile", verifyLoggin, async (req, res) => {
   let cartCount = null;

@@ -431,7 +431,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
     })
   })
 
-  router.get('/order-products/:id',async(req,res)=>{
+  router.get('/order-pro/:id',async(req,res)=>{
 
       
       let products= await userHelpers.getOrderProducts(req.params.id)

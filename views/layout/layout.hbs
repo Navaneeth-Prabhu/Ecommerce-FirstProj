@@ -72,6 +72,7 @@
 
 
 
+<link href="https://fonts.googleapis.com/css2?family=Goldman&display=swap" rel="stylesheet">
 
   {{!-- table export --}}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
@@ -80,12 +81,14 @@
   <title>Sample</title>
 </head>
 
+
 <body>
   {{#if noPartial}}
   {{else}}
   {{#if admin}}
   {{> admin-header}}
   {{else}}
+
   {{>user-header}}
   {{/if}}
   {{/if}}
@@ -94,6 +97,11 @@
   {{{body}}}
 
   {{#if user}}
+  <style>
+  * {
+    font-family: 'Goldman', cursive;
+  }
+</style>
   {{#if noPartial}}
   {{else}}
   {{>footer}}
