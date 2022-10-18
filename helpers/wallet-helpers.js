@@ -91,21 +91,15 @@ module.exports ={
             
         } else{
             details.userId= objectId(details.userId)
-             db.get().collection(collection.WALLET_COLLECTION).insertOne(details.userId).then((response)=>{
+           
                 db.get()
                 .collection(collection.WALLET_COLLECTION)
-                .updateOne(
-                  { userId: userId },
-                  {
-                    $push: { walletobj },
-                  }
+                .insertOne(
+                  { userId: details.userId, wall_amount: details.wall_amount, walletobj : [walletobj] },
                 ).then(()=>{
                resolve(response)
                 })
-           })
         }
-          
-           
        })
     },
 

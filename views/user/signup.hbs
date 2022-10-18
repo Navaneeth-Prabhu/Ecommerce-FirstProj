@@ -3,10 +3,9 @@
         <div class="container mt-5 pl-5">
             <h2 class="text-center">Create new Account</h2>
                 <form action="/signup" method="post" id="signup" name="signup">
-                    <div class="form-group">
-                    
-                {{!-- <div class="alert alert-danger" role="alert"> --}}
-                    
+                <center><div class="bg-danger" role="alert" id="alert"></div></center>
+
+                    <div class="form-group">      
 
                         <label for="Password">Name</label>
                         <input type="text" name="Name" id="" class="form-control" placeholder="Enter name">
@@ -101,6 +100,9 @@
             if(response.status == "error"){
               let a = document.getElementById('error')
               a.innerHTML = 'invalid referal'
+            }else if(response.creationFailed == 'invalid email'){
+              let a = document.getElementById('alert')
+              a.innerHTML = 'email already exist'
             }else{
               location.href = '/login'
             }

@@ -92,12 +92,13 @@ router.get("/signup", function (req, res) {
 });
 
 router.post("/signup", function (req, res) {
-  console.log(req.session.fromAdmin);
+  // console.log(req.session.fromAdmin);
   userHelpers.doSignup(req.body).then((response) => {
     // console.log(response);
     console.log(req.body);
     if (response == false) {
-      creationFailed = "Signup failed! Email Id exists";
+      console.log('false');
+      res.json({creationFailed :"invalid email"});
     } else if (response == "invalid referal") {
       console.log("invalid");
       res.json({ status: "error" });
@@ -909,6 +910,7 @@ router.get("/add-address", verifyLoggin, async (req, res) => {
 });
 
 router.post("/add-address", verifyLoggin, async (req, res) => {
+  console.log("address",req.body);
   await userHelpers.addAddress(req.session.user._id, req.body).then(() => {
     res.redirect("/add-address");
   });

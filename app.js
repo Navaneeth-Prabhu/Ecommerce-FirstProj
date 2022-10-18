@@ -32,6 +32,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.get('/error',(req,res)=>{
+  res.render('error',{ noPartial: true });
+})
+
 app.use(fileUpload());
 app.use(session({secret:"Key", cookie:{maxAge:600000}}))
 
@@ -44,9 +50,9 @@ app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
 const exhbs= hbs.create({
   extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/',
@@ -67,12 +73,7 @@ const exhbs= hbs.create({
         
       }
     },
-    off:function (a,b,options){
-     
-    
-      
-     
-       
+    off:function (a,b,options){  
         return parseInt(a-(a*(b/100)))
   
     },
@@ -89,8 +90,6 @@ const exhbs= hbs.create({
      
    }
   },
-
-
 })
 
 
@@ -104,19 +103,11 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error',{ noPartial: true });
 });
 
 
 
-// app.get('/error',(req,res)=>{
-//   if (req.session.admin) {
-//     res.render('error',{admin:true});
-//   }
-//   else{
-//     res.render('error');
-//   }
-// })
 
 
 module.exports = app;

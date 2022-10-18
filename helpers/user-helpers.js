@@ -12,6 +12,7 @@ const walletHelpers = require("./wallet-helpers");
 const couponHelpers = require("./coupon-helpers");
 const shortid = require("shortid");
 const { ObjectID } = require("bson");
+const { addtoWallet } = require("./wallet-helpers");
 // import fetch from "node-fetch";
 // import "dotenv/config"; // loads env variables from .env file
 
@@ -23,70 +24,108 @@ var instance = new Razorpay({
 module.exports = {
   doSignup: function (userData) {
     return new Promise(async function (resolve, reject) {
-      console.log("usd: ", userData);
+      // console.log("usd: ", userData);
 
       let isThere = await db
         .get()
         .collection(collection.USER_COLLECTION)
         .findOne({ Email: userData.Email });
-      let isref = "a";
-      console.log(userData.referal_code);
-      if (userData.referal_code) {
-        isref = await db
-          .get()
-          .collection(collection.USER_COLLECTION)
-          .findOne({ referal_code: userData.referal_code });
-      }
-      if (isref) {
-        wallet = await db
-          .get()
-          .collection(collection.WALLET_COLLECTION)
-          .findOne({ userId: objectId(isref._id) });
-
-        console.log("userid: ", isref._id);
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = mm + "-" + dd + "-" + yyyy;
-        date = today;
-        walletobj = {
-          transactionamount: 100,
-          isDebit: false,
-          date: date,
-          message: "credited for referal !",
-        };
-
-        db.get()
-          .collection(collection.WALLET_COLLECTION)
-          .updateOne(
-            { userId: isref._id },
-            {
-              $push: { walletobj },
-            }
-          )
-          .then(() => {
-            // console.log("id",{objectId(isref._id)});
-            let total = Number(wallet.wall_amount) + 100;
+        let refValid = false;
+        if(!isThere){
+          let isref ;
+          console.log('::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::'+userData.referal_code);
+          if (userData.referal_code) {
+            isref = await db
+              .get()
+              .collection(collection.USER_COLLECTION)
+              .findOne({ referal_code: userData.referal_code });
+              isref ? refValid = true : null
+          }
+          console.log("***", isref, userData.referal_code, refValid, isThere)
+          if(userData.referal_code) {
+            if (refValid) {
+              console.log("refral code is valid ", refValid, isref)
+            wallet = await db
+              .get()
+              .collection(collection.WALLET_COLLECTION)
+              .findOne({ userId: objectId(isref._id) });
+    
+            console.log("userid: ", isref._id);
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, "0");
+            var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+            var yyyy = today.getFullYear();
+    
+            today = mm + "-" + dd + "-" + yyyy;
+            date = today;
+            walletobj = {
+              transactionamount: 100,
+              isDebit: false,
+              date: date,
+              message: "credited for referal !",
+            };
+    
             db.get()
               .collection(collection.WALLET_COLLECTION)
               .updateOne(
-                { userId: objectId(isref._id) },
+                { userId: isref._id },
                 {
-                  $set: {
-                    wall_amount: total,
-                  },
+                  $push: { walletobj },
                 }
-              );
+              )
+              .then(async () => {
+                // console.log("id",{objectId(isref._id)});
+                let total = Number(wallet.wall_amount) + 100;
+                db.get()
+                  .collection(collection.WALLET_COLLECTION)
+                  .updateOne(
+                    { userId: objectId(isref._id) },
+                    {
+                      $set: {
+                        wall_amount: total,
+                      },
+                    }
+                  );
+                let referal_code = shortid.generate();
+                userData.referal_code = referal_code;
+                // userData.wallet=wallet
+                userData.Password = await bcrypt.hash(userData.Password, 10);
+                userData.blocked = false;
+                db.get()
+                  .collection(collection.USER_COLLECTION)
+                  .insertOne(userData)
+                  .then((data) => {
+                    // console.log(data);
+                    addtoWallet({wall_amount : 0}, data.insertedId.toString())
+                    resolve(data);
+                  });
+              });
+             
+          } else {
+            resolve("invalid referal");
+          }
+          } else {
+            console.log("refral code is not present", isref)
+            let referal_code = shortid.generate();
+        userData.referal_code = referal_code;
+        // userData.wallet=wallet
+        userData.Password = await bcrypt.hash(userData.Password, 10);
+        userData.blocked = false;
+        db.get()
+          .collection(collection.USER_COLLECTION)
+          .insertOne(userData)
+          .then((data) => {
+            console.log(data);
+            addtoWallet({wall_amount : 0}, data.insertedId.toString())
+            resolve(data);
           });
-      } else {
-        resolve("invalid referal");
-      }
-      console.log(isref);
-      if (isThere) {
+          }
+          // console.log(isref);
+        }
+      else if (isThere) {
         resolve(false);
       } else {
+        console.log("the anonymouse else condition ", isref)
         // let wallet = 0
         let referal_code = shortid.generate();
         userData.referal_code = referal_code;
@@ -98,6 +137,7 @@ module.exports = {
           .insertOne(userData)
           .then((data) => {
             // console.log(data);
+            addtoWallet({wall_amount : 0}, data.insertedId.toString())
             resolve(data);
           });
       }
