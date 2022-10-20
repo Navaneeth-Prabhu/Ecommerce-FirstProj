@@ -3,11 +3,11 @@
   {{!-- <div class="col-md-12 m-auto"> --}}
     <div class="container mt-5 pl-5">
       <h2 class="text-center">ADD Product Data</h2>
+      <form action="/admin/add-product/" method="post" enctype="multipart/form-data" style="width: 100%;">
 <div class="row">
-      <form action="/admin/add-product/" method="post" enctype="multipart/form-data">
 
    
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="col-md-4 control-label" for="product_weight">TITLE</label>
           <div class="col-md">
             <input id="product_title" name="product_title" placeholder="TITLE" class="form-control input-md" required=""
@@ -17,8 +17,8 @@
         </div>
 
         <!-- Textarea -->
-        <div class="form-group">
-          <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
+        <div class="form-group col-6">
+          <label class="col-md-12 control-label" for="product_description">PRODUCT DESCRIPTION</label>
           <div class="col-md">
             <textarea class="form-control" id="product_description" name="product_description"></textarea>
           </div>
@@ -26,7 +26,7 @@
 
 
         <!-- Text input-->
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="col-md-4 control-label" for="stock_alert">STOCK</label>
           <div class="col-md">
             <input id="stock" name="stock" placeholder="STOCK" class="form-control input-md" required="" type="number">
@@ -36,7 +36,7 @@
 
 
         <!-- Text input-->
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="col-md-4 control-label" for="stock_alert">PRICE</label>
           <div class="col-md">
             <input id="price" name="price" placeholder="PRICE" class="form-control input-md" required="" type="number">
@@ -44,7 +44,7 @@
           </div>
         </div>
         <!-- Text input-->
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="col-md-4 control-label" for="stock_alert">proOff</label>
           <div class="col-md">
             <input id="proOff" name="proOff" placeholder="Offer" class="form-control input-md" required=""
@@ -56,7 +56,7 @@
 
         <!-- Category -->
         <div>
-          <label class="col-md-4 control-label" for="stock_alert">CATEGORY</label>
+          <label class="col-md-12 control-label" for="stock_alert">CATEGORY</label>
           <select name="Category" class="form-group form-select" aria-label="Default select example">
             <div class="col-md">
               <label for="catogery">Category</label><br />
@@ -74,7 +74,7 @@
 
         <!--Sub-Category -->
         <div>
-          <label class="col-md-4 control-label" for="stock_alert">SUB-CATEGORY</label>
+          <label class="col-md-12 control-label" for="stock_alert">SUB-CATEGORY</label>
           <select name="SubCategory" class="form-group form-select" aria-label="Default select example">
             <div class="col-md">
               <option selected>Select category</option>
@@ -185,8 +185,8 @@
               href="/admin">Cancel</a></button>
         </center>
 
-      </form>
     </div>
+      </form>
   {{!-- </div> --}}
 </div>
 

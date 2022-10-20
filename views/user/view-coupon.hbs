@@ -204,7 +204,7 @@ Follow me on Codepen
 <div class="container my-5">
   <h2>Coupons</h2>
   <div class="row my-4">
-    {{orderCount}}
+    {{!-- {{orderCount}} --}}
     {{#each coupon}}
       {{#if this.max_order}}
         {{#if (stringCompaire this.max_order '<' ../orderCount)}} <div class="col-md-4">
@@ -219,6 +219,7 @@ Follow me on Codepen
 
                 <p><span class="cpnBtn" id="cpnBtn">COPY CODE</span></p>
               </di>
+              <p>GET A MAXIMMUM OF Rs{{this.CapAmount}}</p>
               <p>Valid Till: {{this.date_end}}</p>
               <div class="circle1"></div>
               <div class="circle2"></div>

@@ -6,6 +6,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
+<link rel="apple-touch-icon" sizes="180x180" href="/images/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="/images/favicon_io/site.webmanifest">
+
   <!-- Bootstrap CSS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -76,6 +82,8 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 
+  
+
   <title>KRONOS</title>
 </head>
 
@@ -93,17 +101,17 @@
 
   {{!-- ---------------body -------------- --}}
   {{{body}}}
-
+ 
   {{#if user}}
-  <style>
-  * {
-    font-family: 'Goldman', cursive;
-  }
-</style>
-  {{#if noPartial}}
-  {{else}}
-  {{>footer}}
+
+
+
+
   {{/if}}
+    {{#if noPartial}}
+  {{else}}
+{{>footer}}
+
   {{/if}}
   <!-- Optional JavaScript -->
   <script>

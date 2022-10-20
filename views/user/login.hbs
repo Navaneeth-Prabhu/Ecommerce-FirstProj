@@ -1,4 +1,174 @@
-<div class="container-fluid align-self-center 100hv">
+<style>
+  body {
+  background-color: #fff;
+  font-family: 'Karla', sans-serif; }
+
+.intro-section {
+  background-image: url(/images/loginnn1.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 75px 95px;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  color: #ffffff; }
+  @media (max-width: 991px) {
+    .intro-section {
+      padding-left: 50px;
+      padding-rigth: 50px; } }
+  @media (max-width: 767px) {
+    .intro-section {
+      padding: 28px; } }
+  @media (max-width: 575px) {
+    .intro-section {
+      min-height: auto; } }
+
+.brand-wrapper .logo {
+  height: 35px; }
+
+@media (max-width: 767px) {
+  .brand-wrapper {
+    margin-bottom: 35px; } }
+
+.intro-content-wrapper {
+  width: 410px;
+  max-width: 100%;
+  margin-top: auto;
+  margin-bottom: auto; }
+  .intro-content-wrapper .intro-title {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 17px; }
+  .intro-content-wrapper .intro-text {
+    font-size: 19px;
+    line-height: 1.37; }
+  .intro-content-wrapper .btn-read-more {
+    background-color: #fff;
+    padding: 13px 30px;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000; }
+    .intro-content-wrapper .btn-read-more:hover {
+      background-color: transparent;
+      border: 1px solid #fff;
+      color: #fff; }
+
+@media (max-width: 767px) {
+  .intro-section-footer {
+    margin-top: 35px; } }
+
+.intro-section-footer .footer-nav a {
+  font-size: 20px;
+  font-weight: bold;
+  color: inherit; }
+  @media (max-width: 767px) {
+    .intro-section-footer .footer-nav a {
+      font-size: 14px; } }
+  .intro-section-footer .footer-nav a + a {
+    margin-left: 30px; }
+
+.form-section {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center; }
+  @media (max-width: 767px) {
+    .form-section {
+      padding: 35px; } }
+
+.login-wrapper {
+  width: 300px;
+  max-width: 100%; }
+  @media (max-width: 575px) {
+    .login-wrapper {
+      width: 100%; } }
+  .login-wrapper .form-control {
+    border: 0;
+    border-bottom: 1px solid #e7e7e7;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 15px 10px;
+    margin-bottom: 7px; }
+    .login-wrapper .form-control::-webkit-input-placeholder {
+      color: #b0adad; }
+    .login-wrapper .form-control::-moz-placeholder {
+      color: #b0adad; }
+    .login-wrapper .form-control:-ms-input-placeholder {
+      color: #b0adad; }
+    .login-wrapper .form-control::-ms-input-placeholder {
+      color: #b0adad; }
+    .login-wrapper .form-control::placeholder {
+      color: #b0adad; }
+
+.login-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px; }
+
+.login-btn {
+  padding: 13px 30px;
+  background-color: #000;
+  border-radius: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff; }
+  .login-btn:hover {
+    border: 1px solid #000;
+    background-color: transparent;
+    color: #000; }
+
+.forgot-password-link {
+  font-size: 14px;
+  color: #080808;
+  text-decoration: underline; }
+
+.social-login-title {
+  font-size: 15px;
+  color: #919aa3;
+  display: -webkit-box;
+  display: flex;
+  margin-bottom: 23px; }
+  .social-login-title::before, .social-login-title::after {
+    content: "";
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#f4f4f4));
+    background-image: linear-gradient(#f4f4f4, #f4f4f4);
+    -webkit-box-flex: 1;
+            flex-grow: 1;
+    background-size: calc(100% - 20px) 1px;
+    background-repeat: no-repeat; }
+  .social-login-title::before {
+    background-position: center left; }
+  .social-login-title::after {
+    background-position: center right; }
+
+.social-login-links {
+  text-align: center;
+  margin-bottom: 32px; }
+
+.social-login-link img {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: contain;
+     object-fit: contain; }
+
+.social-login-link + .socia-login-link {
+  margin-left: 16px; }
+
+.login-wrapper-footer-text {
+  font-size: 14px;
+  text-align: center; }
+
+
+</style>
+{{!-- <div class="container-fluid align-self-center 100hv">
 
 <div class="container" >
 
@@ -42,152 +212,58 @@
     </div>
 </div>
 </div>
-</div>
+</div> --}}
 
-{{!-- <div class="container">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6 col-md-7 intro-section">
+          <div class="brand-wrapper">
+            {{!-- <h1>KROMOS TIMES</h1> --}}
+            <img src="/images/logork-removebg-preview.png" alt="" style="height: 80px;width:80px">
+          </div>
+          <div class="intro-content-wrapper">
+            <h1 class="intro-title">Welcome to website !</h1>
+            <p class="intro-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna</p>
+            {{!-- <a href="#!" class="btn btn-read-more">Read more</a> --}}
+          </div>
 
-
-<!-- Pills navs -->
-<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
-      aria-controls="pills-login" aria-selected="true">Login</a>
-  </li>
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
-      aria-controls="pills-register" aria-selected="false">Register</a>
-  </li>
-</ul>
-<!-- Pills navs -->
-
-<!-- Pills content -->
-<div class="tab-content">
-  <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-    <form>
-      <div class="text-center mb-3">
-        <p>Sign in with:</p>
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-facebook-f"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-google"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-twitter"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-github"></i>
-        </button>
-      </div>
-
-      <p class="text-center">or:</p>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="loginName" class="form-control" />
-        <label class="form-label" for="loginName">Email or username</label>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="loginPassword" class="form-control" />
-        <label class="form-label" for="loginPassword">Password</label>
-      </div>
-
-      <!-- 2 column grid layout -->
-      <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Checkbox -->
-          <div class="form-check mb-3 mb-md-0">
-            <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
-            <label class="form-check-label" for="loginCheck"> Remember me </label>
+        </div>
+        <div class="col-sm-6 col-md-5 form-section ">
+          <div class="login-wrapper">
+            <h2 class="login-title">Sign in</h2>
+            <form action="/login" method="post">
+                {{#if loginErr}}
+                <div class="alert alert-danger" role="alert">
+                    {{loginErr}}
+                </div>
+                {{/if}}
+                {{#if blocked}}
+                <div class="alert alert-danger" role="alert">
+                    User Blocked
+                </div>
+                {{/if}}
+                {{#if creationFailed}}
+                <div class="alert alert-danger" role="alert">
+                    {{creationFailed}}
+                </div>
+                {{/if}}
+              <div class="form-group">
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" name="Email" id="email" class="form-control" placeholder="Email">
+              </div>
+              <div class="form-group mb-3">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" name="Password" id="password" class="form-control" placeholder="Password">
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-5">
+                <input name="login" id="login" class="btn login-btn" type="submit" value="Login">
+                {{!-- <a href="#!" class="forgot-password-link">Password?</a> --}}
+              </div>
+            </form>           
+            <p class="login-wrapper-footer-text">Need an account? <a href="/signup" class="text-reset">Signup here</a></p>
           </div>
         </div>
-
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Simple link -->
-          <a href="#!">Forgot password?</a>
-        </div>
       </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-      <!-- Register buttons -->
-      <div class="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
-      </div>
-    </form>
-  </div>
-  <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-    <form>
-      <div class="text-center mb-3">
-        <p>Sign up with:</p>
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-facebook-f"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-google"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-twitter"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-github"></i>
-        </button>
-      </div>
-
-      <p class="text-center">or:</p>
-
-      <!-- Name input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control" />
-        <label class="form-label" for="registerName">Name</label>
-      </div>
-
-      <!-- Username input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerUsername" class="form-control" />
-        <label class="form-label" for="registerUsername">Username</label>
-      </div>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="registerEmail" class="form-control" />
-        <label class="form-label" for="registerEmail">Email</label>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerPassword" class="form-control" />
-        <label class="form-label" for="registerPassword">Password</label>
-      </div>
-
-      <!-- Repeat Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerRepeatPassword" class="form-control" />
-        <label class="form-label" for="registerRepeatPassword">Repeat password</label>
-      </div>
-
-      <!-- Checkbox -->
-      <div class="form-check d-flex justify-content-center mb-4">
-        <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-          aria-describedby="registerCheckHelpText" />
-        <label class="form-check-label" for="registerCheck">
-          I have read and agree to the terms
-        </label>
-      </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
-    </form>
-  </div>
-</div>
-<!-- Pills content -->
-</div> --}}
+    </div>
+ 

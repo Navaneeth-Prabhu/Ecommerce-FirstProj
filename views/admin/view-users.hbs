@@ -11,7 +11,13 @@
             {{/if}} --}}
             <a href="/admin/add-user" class="btn btn-primary ml-auto m-3">Add User</a>
         </div>
-        <table class="table mt-5" id="myTable" style="background-color: rgb(255, 255, 255); ">
+                       <div class="searchbox ">
+  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+      <a class="search-btn"href="#" >
+           <i class="fa fa-search" aria-hidden="true"></i>
+      </a>
+    </div>
+        <table class="table mt-5" id="mytable" >
             <thead>
                 <tr >
                     <th scope="col">Name</th>
@@ -48,7 +54,22 @@
 </section>
 
 <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("mytable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>

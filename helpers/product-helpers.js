@@ -281,6 +281,42 @@ module.exports={
 
             resolve(proPage)
         })
-    }
+    },
+
+    pageinationOrder:(page,limit)=>{
+        console.log(page);
+        console.log(limit);
+        return new Promise(async(resolve,reject)=>{
+
+            let proPage = await db.get().collection(collection.ORDER_COLLECTION).find().skip((page - 1) * limit)
+            .limit(limit * 1)
+            .sort({ _id: -1 })
+            .toArray()
+
+            resolve(proPage)
+        })
+    },
+
+    search: (val) => {
+        return new Promise(async (resolve, reject) => {
+          try {
+         
+          let data = await db
+            .get()
+            .collection(collections.PRODUCT_COLLECTION)
+            .find({
+              productname: {
+                $regex: val,
+                $options: "$i"
+              }
+            })
+            .toArray();
+          resolve(data);
+             
+        } catch (error) {
+            reject()
+        }
+        });
+      },
 
 }

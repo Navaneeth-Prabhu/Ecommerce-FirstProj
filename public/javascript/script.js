@@ -222,3 +222,7 @@ function addToCartWish(productId){
 
   }
 
+
+
+
+

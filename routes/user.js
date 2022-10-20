@@ -242,10 +242,12 @@ router.get("/view-products", async function (req, res, next) {
   let page = req.params.page || 1;
   if (req.query.page) {
     page = req.query.page;
-    console.log(page);
   }
-  console.log(page);
   const limit = 9;
+
+  let pages= await db.get().collection(collection
+    .PRODUCT_COLLECTION).count()
+    pageLimit = Math.ceil(pages/limit)
 
   let user = req.session.user;
   let cartCount = null;
@@ -275,6 +277,7 @@ router.get("/view-products", async function (req, res, next) {
     cartCount,
     wishCount,
     wishlist,
+    currentPage:page,pageLimit,
   });
 });
 
@@ -380,7 +383,7 @@ router.get("/cart", verifyLoggin, async function (req, res) {
             if (data.product.offerPrice) {
               data.subTotal =
                 Number(data.quantity) * Number(data.product.offerPrice);
-              console.log(Number(data.product.offerPrice));
+              // console.log(Number(data.product.offerPrice));
             } else {
               data.subTotal =
                 Number(data.quantity) * Number(data.product.price);
@@ -413,7 +416,7 @@ router.get("/cart", verifyLoggin, async function (req, res) {
 });
 
 router.get("/add-to-cart/:id", verifyLoggin, (req, res) => {
-  console.log("api calling");
+
   userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
     res.json({ status: true });
   });
@@ -432,6 +435,7 @@ router.post(
       let productId = req.body.product;
       let quantity = req.body.quantity;
       let count = req.body.count;
+      let diff = 0;
       console.log("count", count);
       productHelper
         .getProductDetails(req.body.product)
@@ -465,7 +469,6 @@ router.post(
                     response.total = total;
                     response.price = price;
                     response.offerPrice = offerPrice;
-
                     response.updation = true;
 
                     res.json(response);
@@ -487,7 +490,7 @@ router.post(
                   response.total = total;
                   response.price = price;
                   response.offerPrice = offerPrice;
-
+                  // response.diff = total-offerPrice
                   response.updation = true;
 
                   res.json(response);
@@ -504,10 +507,7 @@ router.post(
 );
 
 router.post("/delete-cart-product", verifyLoggin, (req, res, next) => {
-  console.log(req.body);
-  console.log("delete-pro");
   userHelpers.deleteCartProduct(req.query.id, req.body).then((response) => {
-    console.log("deleted");
     res.json(response);
     // res.redirect('user/cart')
   });
@@ -675,7 +675,7 @@ router.post("/checkout", verifyLoggin, async (req, res) => {
       .catch(() => {
         res.redirect("/error");
       });
-
+    let total =0;
     let offerPrice = 0;
     await userHelpers
       .getCartProduct(req.session.user._id)
@@ -685,21 +685,27 @@ router.post("/checkout", verifyLoggin, async (req, res) => {
             if (data.product.offerPrice) {
               data.subTotal =
                 Number(data.quantity) * Number(data.product.offerPrice);
+                // console.log("--------",Number(data.product.offerPrice));
               // offerPrice=
+              console.log("data.sub",data.subTotal);
             } else {
               data.subTotal =
                 Number(data.quantity) * Number(data.product.price);
+                console.log("in else");
             }
-            total += data.subTotal;
+      
+            total = total + data.subTotal;
+            console.log("total-----------",total);
           } catch (error) {
+            console.log("in catch");
             data.subTotal = Number(data.quantity) * Number(data.product.price);
-
             offerPrice += data.subTotal;
           }
           if (req.body.coupon) {
             let off = Number(req.body.coupon);
-            offerPrice = offerPrice - offerPrice * (off / 100);
+            total = total - total * (off / 100);
           }
+          console.log("-------------------off",total);
         });
       })
       .catch(() => {
@@ -708,11 +714,13 @@ router.post("/checkout", verifyLoggin, async (req, res) => {
 
     let totalPrice = await userHelpers.getTotalAmount(req.body.userId);
     req.body.UserId = req.session.user._id;
+    console.log("total",totalPrice);
+    console.log("off",total);
     await userHelpers
       .placeOrder(
         req.body,
         products,
-        offerPrice,
+        total,
         totalPrice,
         req.session.user._id
       )

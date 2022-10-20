@@ -140,9 +140,14 @@ module.exports ={
                         date:1,
                         message:1
                     }
+                 },
+                 {
+                    $sort:{
+                        date:-1
+                    }
                  }
 
-            ]).sort({"date":-1}).toArray()
+            ]).toArray()
             console.log("walletTrn",walletTrans);
             resolve(walletTrans)
         })

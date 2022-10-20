@@ -237,3 +237,22 @@
 .hide-like-btn {
   display: none;
 }
+
+.search:focus {
+  width: 80%;
+}
+.searchbox:hover > .navbar-brand {
+  display: none;
+}
+.searchbox:hover > .search {
+  transition: 1s;
+  left: 0;
+  width: 80%;
+}
+.searchbox:hover > .search-btn {
+  background-color: red;
+  color: white;
+  margin-right: 3px;
+  animation-delay: 10ms;
+  right: 10px;
+}

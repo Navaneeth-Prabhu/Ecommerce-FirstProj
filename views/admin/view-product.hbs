@@ -1,20 +1,32 @@
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <section class="content">
     <div class="container">
         <h2>PRODUCTS</h2>
         <div class="row ">
-            {{!-- {{#if addUser === false}}
-                <div class="alert alert-danger" role="alert">
-                    Email Id exits! 
-                </div>
-            {{/if}} --}}
             <a href="/admin/add-product" class="btn btn-primary ml-auto m-3">Add Product</a>
         </div>
-        <table class="table mt-5" id="myTable">
+
+
+     <div class="search-div" >
+  <div class="row" id="search-div">
+       
+   </div>
+</div>
+               <div class="searchbox ">
+  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+      <a class="search-btn"href="#" >
+           <i class="fa fa-search" aria-hidden="true"></i>
+      </a>
+    </div>
+{{!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name"> --}}
+
+        <table class="table table-striped" id="mytable">
             <thead>
-                <tr>
+                <tr id="matchKey">
                     <th scope="col">DATE</th>
                     {{!-- <th scope="col">Last</th> --}}
                     <th scope="col">Name</th>
@@ -34,41 +46,113 @@
                 <tr>
                     <td>{{this.Date}}</td>
                     {{!-- <td>{{this.lastEdit}}</td> --}}
-                    <td>{{this.product_title}}</td>
+                    <td id="subjectName">{{this.product_title}}</td>
                     {{!-- <td>{{this.product_description}}</td> --}}
                     <td>{{this.stock}}</td>
                     <td>{{this.Category}}</td>
                     <td>{{this.SubCategory}}</td>
                     <td>{{this.price}}</td>
-                    {{!-- <td><img src="/public/product-images/[object Object].jpg" alt="" style="width:10px;height: 10px; "></td> --}}
-                    
-                    {{!-- <td>{{this.Password}}</td> --}}
-                    {{!-- <td><img class=" w-25 h-25 p-0" src="/product-image/{{this.image}}.jpg"></td> --}}
+
                     <td><img style="height:50px" src="/product-images/{{this._id}}1.jpg" alt=""></td>
                     <td><a href="/admin/edit-product?id={{this._id}}" class="btn btn-primary">Edit</a></td>
 
-                    <td><a href="/admin/delete-product?id={{this._id}}" class="btn btn-danger" onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td>
+                    <td><a href="/admin/delete-product?id={{this._id}}" class="btn btn-danger"
+                            onclick="return confirm('Do you want to delete user : {{this.Name}}  ?')">Delete</a></td>
                 </tr>
                 {{/each}}
             </tbody>
+
         </table>
+
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center justify-content-lg-end">
+                <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+                {{#times '1' pageLimit}}
+                <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+                {{/times}}
+                <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
+
+            </ul>
+        </nav>
+
+
+        {{!-- <div class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+                {{#times '1' pageLimit}}
+                <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+                {{/times}}
+                <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
+            </ul>
+        </div> --}}
+
+
     </div>
 </section>
 
-<script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-</script>
+
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-    var buttons = document.querySelectorAll(".btn");
-    buttons.forEach(function(button){
-      	button.addEventListener("click", function(e){
-          	var btn = new bootstrap.Button(e.target);
-            btn.toggle();
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("mytable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
+
+
+{{!--
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script> --}}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var buttons = document.querySelectorAll(".btn");
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function (e) {
+                var btn = new bootstrap.Button(e.target);
+                btn.toggle();
+            });
         });
     });
-});
 </script>
+{{!-- <script>
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script> --}}

@@ -124,6 +124,8 @@
                     {{!-- <li class="border-bottom my-2"></li> --}}
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span id="orginal">{{total}}</span></li><br>
                     <li class="d-flex align-items-center justify-content-between d-none d-print-block"><strong class="text-uppercase small fw-bold">Total</strong><span id="off">{{total}}</span></li ><br>
+
+                    <li class="d-flex align-items-center justify-content-between"  ><strong class="text-uppercase small fw-bold" id="couponHide" ></strong><span id="couponAdd"></span></li>
                     <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Offer</strong><span id="total">{{total}}</span></li>
                      
                     <li>
@@ -357,7 +359,8 @@ paypal
                  let coupon = document.getElementById('couponvalue')
                 let couponname = document.getElementById('applycoup').value   
                   let couponusing = document.getElementById('couponusing')
-              
+              let coupAdd = document.getElementById('couponAdd')
+              let coupHide = document.getElementById('couponHide')
       
           
                 $.ajax({
@@ -373,9 +376,7 @@ paypal
                             let error = document.getElementById('msg')
                             error.innerHTML = 'Enter valid Promocode'
                         } else {
-                          
-                         // document.getElementById('applycoup').readOnly=true
-                      //    document.getElementById('applyButton').style.display='none'
+
                           document.getElementById('msg').style.display='none'
                             Swal.fire({
                                 position: 'top-end',
@@ -385,6 +386,8 @@ paypal
                                 timer: 1500
                             })
                             
+                            coupHide.innerHTML = 'Coupon'
+                            coupAdd.innerHTML ='-'+ Number(response.coupon.off)+'%'
                             if( Number(orginal)-(Number(orginal)*(Number(response.coupon.off)/100)) > Number(response.coupon.CapAmount))
                             {
                               document.getElementById('total').innerHTML =  Number(orginal)-Number(response.coupon.CapAmount);

@@ -605,7 +605,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let { couponId } = order;
       console.log("id", couponId);
-      console.log("userid", userId);
+      console.log("offprice", offerPrice);
 
       var today = new Date();
       var orderDate = new Date();
@@ -634,18 +634,14 @@ module.exports = {
           delivery_details: {
             date: order.Date,
             name: order.name,
-            // mobile:order.number,
             address: order.address,
-            // city:order.city,
-            // state:order.state,
-            // pin:order.pin,
           },
           // address:objectIdorder.address,
           userId: objectId(order.userId),
           paymentMethod: order["payment-method"],
           products: products,
           totalAmount: totalPrice,
-          // offerPrice:order.offerp,
+          offerPrice:offerPrice,
           status: status,
           date: today,
           // date:date,
@@ -661,12 +657,12 @@ module.exports = {
             // state:order.state,
             // pin:order.pin,
           },
-          // address:objectIdorder.address,
+         
           userId: objectId(order.userId),
           paymentMethod: order["payment-method"],
           products: products,
           totalAmount: totalPrice,
-          offerPrice: order.offerp,
+          offerPrice: offerPrice,
           status: status,
           date: today,
           // date:date,
@@ -674,8 +670,7 @@ module.exports = {
       }
       // console.log(products);
       products.forEach((element) => {
-        // db.get().collection(collection.PRODUCT_COLLECTION).find({_id:element.item}).then((response)=>{})
-        // console.log(element);
+       
         db.get()
           .collection(collection.PRODUCT_COLLECTION)
           .updateOne(
@@ -849,6 +844,7 @@ module.exports = {
             .findOne({ _id: objectId(details) })
             .then((order) => {
               console.log("order", order);
+              if(order.paymentMethod != "COD"){
               if (order.status == "Cancelled" || order.status == "Return") {
                 console.log("inside if");
                 let price = 0;
@@ -878,6 +874,7 @@ module.exports = {
                     );
                 });
               }
+            }
             });
           resolve();
           // console.log(details);

@@ -224,14 +224,35 @@ router.get('/view-users',auth.adminCookieJWTAuth, function(req,res){
 //////////////////product////////////////
 
 
-router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
+router.get('/view-product',auth.adminCookieJWTAuth, async function (req,res,next){
+  let page = req.params.page || 1;
+  if (req.query.page) {
+    page = req.query.page;
+    // console.log(page);
+  }
+  // console.log(page);
 
+  const limit = 10;
 
-    productHelper.getAllProducts().then((product) => {
-      console.log(product);
-      res.render('admin/view-product', {admin: true,product, adminLoggedIn:req.session.adminLoggedIn});
+  let pages= await db.get().collection(collection
+    .PRODUCT_COLLECTION).count()
+
+    pageLimit = Math.ceil(pages/limit)
+    // console.log("pagelimit",pageLimit);
+  let product = await db
+    .get()
+    .collection(collection.PRODUCT_COLLECTION)
+    .find()
+    .skip((page - 1) * limit)
+    .limit(limit * 1)
+    .sort({ _id: -1 })
+    .toArray();
+  productHelper.pageination(page, limit);
+
+   
+      res.render('admin/view-product', {admin: true,product, adminLoggedIn:req.session.adminLoggedIn,currentPage:page,pageLimit});
       req.session.edit=null
-    })
+    
 
   })
   
@@ -398,8 +419,32 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
 /////////////////////ORDER///////////////////////
 
 
-    router.get('/view-orders',auth.adminCookieJWTAuth,(req,res)=>{
-      userHelper.getAllUserOrders().then((order) => {
+    router.get('/view-orders',auth.adminCookieJWTAuth,async(req,res)=>{
+      let page = req.params.page || 1;
+      if (req.query.page) {
+        page = req.query.page;
+        console.log(page);
+      }
+      console.log(page);
+    
+      const limit = 10;
+    
+      let pages= await db.get().collection(collection
+        .ORDER_COLLECTION).count()
+    
+        pageLimit = Math.ceil(pages/limit)
+        console.log("pagelimit",pageLimit);
+      let order = await db
+        .get()
+        .collection(collection.ORDER_COLLECTION)
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit * 1)
+        .sort({ _id: -1 })
+        .toArray();
+      productHelper.pageinationOrder(page, limit);
+
+      // userHelper.getAllUserOrders().then((order) => {
         order.forEach(element => {
           if(element.status == "Delivered") {
             element.delivered = true;
@@ -414,8 +459,8 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
           }
         });
         // console.log(order);
-        res.render('admin/view-orders',{admin:true,order})
-      })
+        res.render('admin/view-orders',{admin:true,order,currentPage:page,pageLimit})
+      // })
     });
 
 
@@ -631,6 +676,19 @@ router.get('/view-product',auth.adminCookieJWTAuth, function(req,res,next){
       }
     })
   
+///////////////Search ////////////////////
+
+router.get("/search", auth.adminCookieJWTAuth,function(req,res){
+
+  try {
+    productHelper.search(req.query.val).then((data) => {
+      res.json(data);
+    }).catch(()=>{res.redirect('/error')});;
+  } catch (err) {
+    console.log(err);
+  }
+})
+
 
 
   

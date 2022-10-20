@@ -12,7 +12,7 @@
             {{/if}} --}}
             {{!-- <a href="/admin/add-product" class="btn btn-primary ml-auto m-3">Add Product</a> --}}
         </div>
-        <table class="table mt-5" id="myTable" style="font-size: .7rem;">
+        <table class="table mt-5" style="font-size: .7rem;">
             <thead>
                 <tr>
                     {{!-- <th scope="col">DATE</th> --}}
@@ -96,6 +96,18 @@
                 {{/each}}
             </tbody>
         </table>
+
+                <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center justify-content-lg-end">
+                <li class="page-item"><a class="page-link" href="?page={{math currentPage '+' '-1'}}">Previous</a></li>
+                {{#times '1' pageLimit}}
+                <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+                {{/times}}
+                <li class="page-item"><a class="page-link" href="?page={{inc currentPage}}">Next</a></li>
+
+            </ul>
+        </nav>
+        
     </div>
 </section>
 
