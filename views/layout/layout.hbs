@@ -102,17 +102,24 @@
   {{!-- ---------------body -------------- --}}
   {{{body}}}
  
-  {{#if user}}
+{{#if noPartial}}
+{{else}}
+{{#if user}}
+ {{>footer}}
+{{/if}}
+{{/if}}
 
-
-
-
-  {{/if}}
+  {{!-- {{#if user}}
     {{#if noPartial}}
+
   {{else}}
-{{>footer}}
+  {{>footer}}
 
   {{/if}}
+
+
+  {{/if}} --}}
+
   <!-- Optional JavaScript -->
   <script>
     $(document).ready(function () {
