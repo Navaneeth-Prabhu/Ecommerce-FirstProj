@@ -153,7 +153,7 @@ router.post("/login", function (req, res) {
 
 router.get("/user_otp", function (req, res) {
   // console.log('got it');
-  res.render("user/user_otp");
+  res.render("user/user_otp",{noPartial:true});
 });
 
 router.post("/user_otp", function (req, res) {

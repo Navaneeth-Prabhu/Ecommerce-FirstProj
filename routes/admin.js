@@ -165,16 +165,12 @@ router.get('/logout', function(req, res) {
 })
 
 router.get('/add-user',auth.adminCookieJWTAuth, function(req,res) {
- 
   res.render('admin/add-user')
   req.session.fromAdmin = true;
 
 }); 
 
 router.post('/add-user',auth.adminCookieJWTAuth, function(req,res) {
-  // console.log(req.body);
-  // res.redirect('/admin');
-  
   userHelper.addUser(req.body,(result) => {
     res.render('admin/add-user',{admin:true})
   })
@@ -210,15 +206,32 @@ router.get('/unblock-user',auth.adminCookieJWTAuth, (req,res) => {
 
 
 //////admin view user//
-router.get('/view-users',auth.adminCookieJWTAuth, function(req,res){
+router.get('/view-users',auth.adminCookieJWTAuth,async function(req,res){
+  let page = req.params.page || 1;
+  if (req.query.page) {
+    page = req.query.page;
+    // console.log(page);
+  }
+  // console.log(page);
 
+  const limit = 10;
 
-  userHelper.getAllUsers().then((users) => {
-    // console.log(users);
-    res.render('admin/view-users', {admin: true,users, adminLoggedIn:req.session.adminLoggedIn});
+  let pages= await db.get().collection(collection
+    .USER_COLLECTION).count()
+
+    pageLimit = Math.ceil(pages/limit)
+  let users = await db
+    .get()
+    .collection(collection.USER_COLLECTION)
+    .find()
+    .skip((page - 1) * limit)
+    .limit(limit * 1)
+    .sort({ _id: -1 })
+    .toArray();
+
+    res.render('admin/view-users', {admin: true,users, adminLoggedIn:req.session.adminLoggedIn,currentPage:page,pageLimit});
     req.session.edit=null
-  })
-  console.log("here admin")
+
 })
 
 //////////////////product////////////////
@@ -238,7 +251,7 @@ router.get('/view-product',auth.adminCookieJWTAuth, async function (req,res,next
     .PRODUCT_COLLECTION).count()
 
     pageLimit = Math.ceil(pages/limit)
-    // console.log("pagelimit",pageLimit);
+    // console.log("pagelimit",pageLimit);vi
   let product = await db
     .get()
     .collection(collection.PRODUCT_COLLECTION)

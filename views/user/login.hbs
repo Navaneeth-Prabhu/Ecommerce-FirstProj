@@ -1,94 +1,134 @@
 <style>
   body {
-  background-color: #fff;
-  font-family: 'Karla', sans-serif; }
+    background-color: #fff;
+    font-family: 'Karla', sans-serif;
+  }
 
-.intro-section {
-  background-image: url(/images/loginnn1.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  padding: 75px 95px;
-  min-height: 100vh;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-          flex-direction: column;
-  color: #ffffff; }
+  .intro-section {
+    background-image: url(/images/loginnn1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 75px 95px;
+    min-height: 100vh;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    color: #ffffff;
+  }
+
   @media (max-width: 991px) {
     .intro-section {
       padding-left: 50px;
-      padding-rigth: 50px; } }
+      padding-rigth: 50px;
+    }
+  }
+
   @media (max-width: 767px) {
     .intro-section {
-      padding: 28px; } }
+      padding: 28px;
+    }
+  }
+
   @media (max-width: 575px) {
     .intro-section {
-      min-height: auto; } }
+      min-height: auto;
+    }
+  }
 
-.brand-wrapper .logo {
-  height: 35px; }
+  .brand-wrapper .logo {
+    height: 35px;
+  }
 
-@media (max-width: 767px) {
-  .brand-wrapper {
-    margin-bottom: 35px; } }
+  @media (max-width: 767px) {
+    .brand-wrapper {
+      margin-bottom: 35px;
+    }
+  }
 
-.intro-content-wrapper {
-  width: 410px;
-  max-width: 100%;
-  margin-top: auto;
-  margin-bottom: auto; }
+  .intro-content-wrapper {
+    width: 410px;
+    max-width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
   .intro-content-wrapper .intro-title {
     font-size: 40px;
     font-weight: bold;
-    margin-bottom: 17px; }
+    margin-bottom: 17px;
+  }
+
   .intro-content-wrapper .intro-text {
     font-size: 19px;
-    line-height: 1.37; }
+    line-height: 1.37;
+  }
+
   .intro-content-wrapper .btn-read-more {
     background-color: #fff;
     padding: 13px 30px;
     border-radius: 0;
     font-size: 16px;
     font-weight: bold;
-    color: #000; }
-    .intro-content-wrapper .btn-read-more:hover {
-      background-color: transparent;
-      border: 1px solid #fff;
-      color: #fff; }
+    color: #000;
+  }
 
-@media (max-width: 767px) {
-  .intro-section-footer {
-    margin-top: 35px; } }
+  .intro-content-wrapper .btn-read-more:hover {
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+  }
 
-.intro-section-footer .footer-nav a {
-  font-size: 20px;
-  font-weight: bold;
-  color: inherit; }
+  @media (max-width: 767px) {
+    .intro-section-footer {
+      margin-top: 35px;
+    }
+  }
+
+  .intro-section-footer .footer-nav a {
+    font-size: 20px;
+    font-weight: bold;
+    color: inherit;
+  }
+
   @media (max-width: 767px) {
     .intro-section-footer .footer-nav a {
-      font-size: 14px; } }
-  .intro-section-footer .footer-nav a + a {
-    margin-left: 30px; }
+      font-size: 14px;
+    }
+  }
 
-.form-section {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center; }
+  .intro-section-footer .footer-nav a+a {
+    margin-left: 30px;
+  }
+
+  .form-section {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+  }
+
   @media (max-width: 767px) {
     .form-section {
-      padding: 35px; } }
+      padding: 35px;
+    }
+  }
 
-.login-wrapper {
-  width: 300px;
-  max-width: 100%; }
+  .login-wrapper {
+    width: 300px;
+    max-width: 100%;
+  }
+
   @media (max-width: 575px) {
     .login-wrapper {
-      width: 100%; } }
+      width: 100%;
+    }
+  }
+
   .login-wrapper .form-control {
     border: 0;
     border-bottom: 1px solid #e7e7e7;
@@ -96,174 +136,201 @@
     font-size: 14px;
     font-weight: bold;
     padding: 15px 10px;
-    margin-bottom: 7px; }
-    .login-wrapper .form-control::-webkit-input-placeholder {
-      color: #b0adad; }
-    .login-wrapper .form-control::-moz-placeholder {
-      color: #b0adad; }
-    .login-wrapper .form-control:-ms-input-placeholder {
-      color: #b0adad; }
-    .login-wrapper .form-control::-ms-input-placeholder {
-      color: #b0adad; }
-    .login-wrapper .form-control::placeholder {
-      color: #b0adad; }
+    margin-bottom: 7px;
+  }
 
-.login-title {
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 30px; }
+  .login-wrapper .form-control::-webkit-input-placeholder {
+    color: #b0adad;
+  }
 
-.login-btn {
-  padding: 13px 30px;
-  background-color: #000;
-  border-radius: 0;
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff; }
+  .login-wrapper .form-control::-moz-placeholder {
+    color: #b0adad;
+  }
+
+  .login-wrapper .form-control:-ms-input-placeholder {
+    color: #b0adad;
+  }
+
+  .login-wrapper .form-control::-ms-input-placeholder {
+    color: #b0adad;
+  }
+
+  .login-wrapper .form-control::placeholder {
+    color: #b0adad;
+  }
+
+  .login-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  .login-btn {
+    padding: 13px 30px;
+    background-color: #000;
+    border-radius: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+  }
+
   .login-btn:hover {
     border: 1px solid #000;
     background-color: transparent;
-    color: #000; }
+    color: #000;
+  }
 
-.forgot-password-link {
-  font-size: 14px;
-  color: #080808;
-  text-decoration: underline; }
+  .forgot-password-link {
+    font-size: 14px;
+    color: #080808;
+    text-decoration: underline;
+  }
 
-.social-login-title {
-  font-size: 15px;
-  color: #919aa3;
-  display: -webkit-box;
-  display: flex;
-  margin-bottom: 23px; }
-  .social-login-title::before, .social-login-title::after {
+  .social-login-title {
+    font-size: 15px;
+    color: #919aa3;
+    display: -webkit-box;
+    display: flex;
+    margin-bottom: 23px;
+  }
+
+  .social-login-title::before,
+  .social-login-title::after {
     content: "";
     background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#f4f4f4));
     background-image: linear-gradient(#f4f4f4, #f4f4f4);
     -webkit-box-flex: 1;
-            flex-grow: 1;
+    flex-grow: 1;
     background-size: calc(100% - 20px) 1px;
-    background-repeat: no-repeat; }
+    background-repeat: no-repeat;
+  }
+
   .social-login-title::before {
-    background-position: center left; }
+    background-position: center left;
+  }
+
   .social-login-title::after {
-    background-position: center right; }
+    background-position: center right;
+  }
 
-.social-login-links {
-  text-align: center;
-  margin-bottom: 32px; }
+  .social-login-links {
+    text-align: center;
+    margin-bottom: 32px;
+  }
 
-.social-login-link img {
-  width: 40px;
-  height: 40px;
-  -o-object-fit: contain;
-     object-fit: contain; }
+  .social-login-link img {
+    width: 40px;
+    height: 40px;
+    -o-object-fit: contain;
+    object-fit: contain;
+  }
 
-.social-login-link + .socia-login-link {
-  margin-left: 16px; }
+  .social-login-link+.socia-login-link {
+    margin-left: 16px;
+  }
 
-.login-wrapper-footer-text {
-  font-size: 14px;
-  text-align: center; }
-
-
+  .login-wrapper-footer-text {
+    font-size: 14px;
+    text-align: center;
+  }
 </style>
 {{!-- <div class="container-fluid align-self-center 100hv">
 
-<div class="container" >
+  <div class="container">
 
-<div class="row">
-    <div class="col-md-5 m-auto">
+    <div class="row">
+      <div class="col-md-5 m-auto">
         <div class="container mt-5 pl-5">
-            <h2 class="text-center">Login</h2>
-                <form action="/login" method="post">
-                {{#if loginErr}}
-                <div class="alert alert-danger" role="alert">
-                    {{loginErr}}
-                </div>
-                {{/if}}
-                {{#if blocked}}
-                <div class="alert alert-danger" role="alert">
-                    User Blocked
-                </div>
-                {{/if}}
-                {{#if creationFailed}}
-                <div class="alert alert-danger" role="alert">
-                    {{creationFailed}}
-                </div>
-                {{/if}}
-                    <div class="form-group">
-                        <label for="">Email Address</label>
-                        <input type="email" name="Email" id="" class="form-control" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                        <label for="Password">Password</label>
-                        <input type="password" name="Password" id="" class="form-control" placeholder="Password">
-                    </div>
-                    <div class="d-flex justify-content-between">
+          <h2 class="text-center">Login</h2>
+          <form action="/login" method="post">
+            {{#if loginErr}}
+            <div class="alert alert-danger" role="alert">
+              {{loginErr}}
+            </div>
+            {{/if}}
+            {{#if blocked}}
+            <div class="alert alert-danger" role="alert">
+              User Blocked
+            </div>
+            {{/if}}
+            {{#if creationFailed}}
+            <div class="alert alert-danger" role="alert">
+              {{creationFailed}}
+            </div>
+            {{/if}}
+            <div class="form-group">
+              <label for="">Email Address</label>
+              <input type="email" name="Email" id="" class="form-control" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="Password">Password</label>
+              <input type="password" name="Password" id="" class="form-control" placeholder="Password">
+            </div>
+            <div class="d-flex justify-content-between">
 
-                    <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/signup">Create new Account</a>
-                    <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/user_otp">signin using otp</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary float-right">Login</button>
-                </form>
-            
-        </div>
-    </div>
-</div>
-</div>
-</div> --}}
+              <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/signup">Create new
+                Account</a>
+              <a class="float-left h5 text-center mt-2" style="color: rgb(0, 106, 255);" href="/user_otp">signin using
+                otp</a>
+            </div>
+            <button type="submit" class="btn btn-primary float-right">Login</button>
+          </form>
 
-  <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-6 col-md-7 intro-section">
-          <div class="brand-wrapper">
-            {{!-- <h1>KROMOS TIMES</h1> --}}
-            <img src="/images/logork-removebg-preview.png" alt="" style="height: 80px;width:80px">
-          </div>
-          <div class="intro-content-wrapper">
-            <h1 class="intro-title">Welcome to website !</h1>
-            <p class="intro-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna</p>
-            {{!-- <a href="#!" class="btn btn-read-more">Read more</a> --}}
-          </div>
-
-        </div>
-        <div class="col-sm-6 col-md-5 form-section ">
-          <div class="login-wrapper">
-            <h2 class="login-title">Sign in</h2>
-            <form action="/login" method="post">
-                {{#if loginErr}}
-                <div class="alert alert-danger" role="alert">
-                    {{loginErr}}
-                </div>
-                {{/if}}
-                {{#if blocked}}
-                <div class="alert alert-danger" role="alert">
-                    User Blocked
-                </div>
-                {{/if}}
-                {{#if creationFailed}}
-                <div class="alert alert-danger" role="alert">
-                    {{creationFailed}}
-                </div>
-                {{/if}}
-              <div class="form-group">
-                <label for="email" class="sr-only">Email</label>
-                <input type="email" name="Email" id="email" class="form-control" placeholder="Email">
-              </div>
-              <div class="form-group mb-3">
-                <label for="password" class="sr-only">Password</label>
-                <input type="password" name="Password" id="password" class="form-control" placeholder="Password">
-              </div>
-              <div class="d-flex justify-content-between align-items-center mb-5">
-                <input name="login" id="login" class="btn login-btn" type="submit" value="Login">
-                {{!-- <a href="#!" class="forgot-password-link">Password?</a> --}}
-              </div>
-            </form>           
-            <p class="login-wrapper-footer-text">Need an account? <a href="/signup" class="text-reset">Signup here</a></p>
-          </div>
         </div>
       </div>
     </div>
- 
+  </div>
+</div> --}}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6 col-md-7 intro-section">
+      <div class="brand-wrapper">
+        {{!-- <h1>KROMOS TIMES</h1> --}}
+        <img src="/images/logork-removebg-preview.png" alt="" style="height: 80px;width:80px">
+      </div>
+      <div class="intro-content-wrapper">
+        <h1 class="intro-title">Welcome to KRONOS </h1>
+        <p class="intro-text">Enjoy luxury in every second</p>
+        {{!-- <a href="#!" class="btn btn-read-more">Read more</a> --}}
+      </div>
+
+    </div>
+    <div class="col-sm-6 col-md-5 form-section ">
+      <div class="login-wrapper">
+        <h2 class="login-title">Sign in</h2>
+        <form action="/login" method="post">
+          {{#if loginErr}}
+          <div class="alert alert-danger" role="alert">
+            {{loginErr}}
+          </div>
+          {{/if}}
+          {{#if blocked}}
+          <div class="alert alert-danger" role="alert">
+            User Blocked
+          </div>
+          {{/if}}
+          {{#if creationFailed}}
+          <div class="alert alert-danger" role="alert">
+            {{creationFailed}}
+          </div>
+          {{/if}}
+          <div class="form-group">
+            <label for="email" class="sr-only">Email</label>
+            <input type="email" name="Email" id="email" class="form-control" placeholder="Email">
+          </div>
+          <div class="form-group mb-3">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="Password" id="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-5">
+            <input name="login" id="login" class="btn login-btn" type="submit" value="Login">
+            {{!-- <a href="#!" class="forgot-password-link">Password?</a> --}}
+          </div>
+        </form>
+        <p class="login-wrapper-footer-text">Need an account? <a href="/signup" class="text-reset">Signup here</a></p>
+        <p class="login-wrapper-footer-text"><a href="/user_otp" class="text-reset">Login with Otp</a></p>
+      </div>
+    </div>
+  </div>
+</div>
