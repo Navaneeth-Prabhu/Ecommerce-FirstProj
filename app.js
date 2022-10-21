@@ -47,10 +47,7 @@ db.connect(function (err) {
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+
 
 const exhbs = hbs.create({
   extname: "hbs",
@@ -110,6 +107,11 @@ const exhbs = hbs.create({
 });
 
 app.engine("hbs", exhbs.engine);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
 // error handler
 app.use(function (err, req, res, next) {

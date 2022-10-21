@@ -63,6 +63,10 @@
                       {{else}}
                       <p class="lead"><strong>₹{{product.price}}</strong></p>
                       {{/if}}
+                      {{#if (stringCompaire product.stock '<' '10')}} 
+                      <p class="text-danger"><strong>only {{product.stock}} left !!</strong></p>
+                      {{/if}}
+                      {{!-- <p>{{product.stock}}</p> --}}
 
               {{!-- <p class="text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.</p> --}}
               <div class="row align-items-stretch mb-4">
