@@ -42,14 +42,6 @@
                     <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
 
                       <li class="list-inline-item">
-                        {{!-- <select class="selectpicker" data-customclass="form-control form-control-sm"
-                          onchange="location = this.value">
-                          <option value="" id="select">Sort By </option>
-                          <option id="sortBy" value="/view-products">Default sorting </option>
-                          <option id="sortBy" value="/view-products/popularity">Popularity </option>
-                          <option id="sortBy" value="/view-products/lowTohigh">Price: Low to High </option>
-                          <option id="sortBy" value="/view-products/hightTolow">Price: High to Low </option>
-                        </select> --}}
 
                       </li>
                     </ul>
@@ -90,12 +82,6 @@
                             <li class="list-inline-item m-0 p-0"><button class="btn tbn-sm btn-dark"
                                 onclick="addToCart('{{this._id}}')">Add to Cart</button></li>
 
-
-                            {{#if ../user}}
-                            <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark"
-                                href="/productDetails?id={{this._id}}" data-bs-toggle="modal"><i
-                                  class="fas fa-expand"></i></a></li>
-                            {{/if}}
                           </ul>
                         </div>
                       </div>
@@ -128,20 +114,6 @@
                     </div>
                   </div>
                   {{/each}}
-
-
-                  <!-- PAGINATION-->
-                  {{!-- <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center justify-content-lg-end">
-                      <li class="page-item mx-1"><a class="page-link" href="#!" aria-label="Previous"><span
-                            aria-hidden="true">«</span></a></li>
-                      <li class="page-item mx-1 active"><a class="page-link" href="#!">1</a></li>
-                      <li class="page-item mx-1"><a class="page-link" href="#!">2</a></li>
-                      <li class="page-item mx-1"><a class="page-link" href="#!">3</a></li>
-                      <li class="page-item ms-1"><a class="page-link" href="#!" aria-label="Next"><span
-                            aria-hidden="true">»</span></a></li>
-                    </ul>
-                  </nav> --}}
                 </div>
               </div>
             </div>
